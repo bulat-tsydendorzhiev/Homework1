@@ -32,7 +32,7 @@ int iterativeFibonacci(int number)
 	}
 	else
 	{
-		int firstPrevious = 1, secondPrevious = 1; // для сохранения двух предыдущих результатов 
+		int firstPrevious = 1, secondPrevious = 1; // РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ РґРІСѓС… РїСЂРµРґС‹РґСѓС‰РёС… СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ 
 		int result;
 		for (int i = 0; i < number - 2; ++i)
 		{
@@ -59,27 +59,27 @@ int recursiveFibonacci(int number)
 
 int testForRecursiveFibonacci(void)
 {
-	// Тест 1: Проверка первого числа Фибоначчи
+	// РўРµСЃС‚ 1: РџСЂРѕРІРµСЂРєР° РїРµСЂРІРѕРіРѕ С‡РёСЃР»Р° Р¤РёР±РѕРЅР°С‡С‡Рёv
 	if (recursiveFibonacci(0) != 0) {
 		return 1;
 	}
 
-	// Тест 2: Проверка второго числа Фибоначчи
+	// РўРµСЃС‚ 2: РџСЂРѕРІРµСЂРєР° РІС‚РѕСЂРѕРіРѕ С‡РёСЃР»Р° Р¤РёР±РѕРЅР°С‡С‡Рё
 	if (recursiveFibonacci(1) != 1) {
 		return 2;
 	}
 
-	// Тест 3: Проверка третьего числа Фибоначчи
+	// РўРµСЃС‚ 3: РџСЂРѕРІРµСЂРєР° С‚СЂРµС‚СЊРµРіРѕ С‡РёСЃР»Р° Р¤РёР±РѕРЅР°С‡С‡Рё
 	if (recursiveFibonacci(2) != 1) {
 		return 3;
 	}
 
-	// Тест 4: Проверка пятого числа Фибоначчи
+	// РўРµСЃС‚ 4: РџСЂРѕРІРµСЂРєР° РїСЏС‚РѕРіРѕ С‡РёСЃР»Р° Р¤РёР±РѕРЅР°С‡С‡Рё
 	if (recursiveFibonacci(4) != 3) {
 		return 4;
 	}
 
-	// Тест 5: Проверка десятого числа Фибоначчи
+	// РўРµСЃС‚ 5: РџСЂРѕРІРµСЂРєР° РґРµСЃСЏС‚РѕРіРѕ С‡РёСЃР»Р° Р¤РёР±РѕРЅР°С‡С‡Рё
 	if (recursiveFibonacci(9) != 34) {
 		return 5;
 	}
@@ -89,27 +89,27 @@ int testForRecursiveFibonacci(void)
 
 int testForIterativeFibonacci(void)
 {
-	// Тест 1: Проверка первого числа Фибоначчи
+	// РўРµСЃС‚ 1: РџСЂРѕРІРµСЂРєР° РїРµСЂРІРѕРіРѕ С‡РёСЃР»Р° Р¤РёР±РѕРЅР°С‡С‡Рё
 	if (iterativeFibonacci(0) != 0) {
 		return 1;
 	}
 
-	// Тест 2: Проверка второго числа Фибоначчи
+	// РўРµСЃС‚ 2: РџСЂРѕРІРµСЂРєР° РІС‚РѕСЂРѕРіРѕ С‡РёСЃР»Р° Р¤РёР±РѕРЅР°С‡С‡Рё
 	if (iterativeFibonacci(1) != 1) {
 		return 2;
 	}
 
-	// Тест 3: Проверка третьего числа Фибоначчи
+	// РўРµСЃС‚ 3: РџСЂРѕРІРµСЂРєР° С‚СЂРµС‚СЊРµРіРѕ С‡РёСЃР»Р° Р¤РёР±РѕРЅР°С‡С‡Рё
 	if (iterativeFibonacci(2) != 1) {
 		return 3;
 	}
 
-	// Тест 4: Проверка пятого числа Фибоначчи
+	// РўРµСЃС‚ 4: РџСЂРѕРІРµСЂРєР° РїСЏС‚РѕРіРѕ С‡РёСЃР»Р° Р¤РёР±РѕРЅР°С‡С‡Рё
 	if (iterativeFibonacci(4) != 3) {
 		return 4;
 	}
 
-	// Тест 5: Проверка десятого числа Фибоначчи
+	// РўРµСЃС‚ 5: РџСЂРѕРІРµСЂРєР° РґРµСЃСЏС‚РѕРіРѕ С‡РёСЃР»Р° Р¤РёР±РѕРЅР°С‡С‡Рё
 	if (iterativeFibonacci(9) != 34) {
 		return 5;
 	}
@@ -119,7 +119,7 @@ int testForIterativeFibonacci(void)
 
 int tests(void)
 {
-	// проверка на ошибку у рекурсивного метода
+	// РїСЂРѕРІРµСЂРєР° РЅР° РѕС€РёР±РєСѓ Сѓ СЂРµРєСѓСЂСЃРёРІРЅРѕРіРѕ РјРµС‚РѕРґР°
 	const int errorRecursiveTest = testForRecursiveFibonacci();
 	if (errorRecursiveTest)
 	{
@@ -127,7 +127,7 @@ int tests(void)
 		return errorRecursiveTest;
 	}
 
-	// проверка на ошибку у итеративного метода
+	// РїСЂРѕРІРµСЂРєР° РЅР° РѕС€РёР±РєСѓ Сѓ РёС‚РµСЂР°С‚РёРІРЅРѕРіРѕ РјРµС‚РѕРґР°
 	const int errorIterativeTest = testForRecursiveFibonacci();
 	if (errorIterativeTest)
 	{
@@ -138,25 +138,25 @@ int tests(void)
 
 void timeCompare(void)
 {
-	// сравниваем время рекурсивного и итеративного способов
+	// СЃСЂР°РІРЅРёРІР°РµРј РІСЂРµРјСЏ СЂРµРєСѓСЂСЃРёРІРЅРѕРіРѕ Рё РёС‚РµСЂР°С‚РёРІРЅРѕРіРѕ СЃРїРѕСЃРѕР±РѕРІ
 	clock_t start, end;
 	double timeForRecursive, timeForIterative;
 
 	for (int i = 0; i < 50; ++i)
 	{
-		// считаем время для рекурсивного способа
+		// СЃС‡РёС‚Р°РµРј РІСЂРµРјСЏ РґР»СЏ СЂРµРєСѓСЂСЃРёРІРЅРѕРіРѕ СЃРїРѕСЃРѕР±Р°
 		start = clock();
 		recursiveFibonacci(i);
 		end = clock();
 		timeForRecursive = ((double)(end - start)) / CLOCKS_PER_SEC;
 
-		// считаем время для итеративного способа
+		// СЃС‡РёС‚Р°РµРј РІСЂРµРјСЏ РґР»СЏ РёС‚РµСЂР°С‚РёРІРЅРѕРіРѕ СЃРїРѕСЃРѕР±Р°
 		start = clock();
 		iterativeFibonacci(i);
 		end = clock();
 		timeForIterative = ((double)(end - start)) / CLOCKS_PER_SEC;
 
-		//выводим их время
-		printf("%d Fibonacci number took for iterative took %lf and took for recursive \n", i, timeForRecursive, timeForIterative);
+		//РІС‹РІРѕРґРёРј РёС… РІСЂРµРјСЏ
+		printf("%d Fibonacci number took for iterative took %lf and took for recursive \n", i + 1, timeForRecursive, timeForIterative);
 	}
 }
