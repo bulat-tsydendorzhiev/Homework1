@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<locale.h>
-
+// проверка
 void swap(int* number1, int* number2);
 void halfQsort(int* arrayOfNumbers, int left, int right);
 void printArray(int* arrayOfNumbers, int length);
