@@ -17,7 +17,7 @@ int main(void)
 	const int errorSortTest = sortTest();
 	if (!errorSortTest)
 	{
-		// создаем 2 массива для замера времени работы сортировок
+		// СЃРѕР·РґР°РµРј 2 РјР°СЃСЃРёРІР° РґР»СЏ Р·Р°РјРµСЂР° РІСЂРµРјРµРЅРё СЂР°Р±РѕС‚С‹ СЃРѕСЂС‚РёСЂРѕРІРѕРє
 		int testArray1[100000] = { 0 };
 		int testArray2[100000] = { 0 };
 		for (int i = 0; i < 100000; ++i)
@@ -26,7 +26,7 @@ int main(void)
 			testArray2[i] = testArray1[i];
 		}
 
-		// печатаем затраченное на сортировки время
+		// РІС‹РІРѕРґРёРј РЅР° СЌРєСЂР°РЅ Р·Р°С‚СЂР°С‡РµРЅРЅРѕРµ РЅР° СЃРѕСЂС‚РёСЂРѕРІРєРё РІСЂРµРјСЏ
 		measureSortingTime(&testArray1, 100000, &testArray2, 100000);
 		return 0;
 	}
@@ -42,7 +42,7 @@ void swap(int* number1, int* number2)
 
 void bubbleSort(int* arrayOfNumbers, int length)
 {
-	int noSwaps; // для проверки свапа элементов
+	int noSwaps; // РґР»СЏ РїСЂРѕРІРµСЂРєРё СЃРІР°РїР° СЌР»РµРјРµРЅС‚РѕРІ
 	for (int i = 0; i < length; ++i)
 	{
 		noSwaps = 1;
@@ -54,7 +54,7 @@ void bubbleSort(int* arrayOfNumbers, int length)
 				noSwaps = 0;
 			}
 		}
-		if (noSwaps) // проверка на отсортированный массив
+		if (noSwaps) // РїСЂРѕРІРµСЂРєР° РЅР° РѕС‚СЃРѕСЂС‚РёСЂРѕРІР°РЅРЅС‹Р№ РјР°СЃСЃРёРІ
 		{
 			break;
 		}
@@ -63,7 +63,7 @@ void bubbleSort(int* arrayOfNumbers, int length)
 
 void countingSort(int* arrayOfNumbers, int length)
 {
-	// ищем максимальный и минимальный элементы для вычисления длины вспомогательного массива
+	// РёС‰РµРј РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ Рё РјРёРЅРёРјР°Р»СЊРЅС‹Р№ СЌР»РµРјРµРЅС‚С‹ РґР»СЏ РІС‹С‡РёСЃР»РµРЅРёСЏ РґР»РёРЅС‹ РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅРѕРіРѕ РјР°СЃСЃРёРІР°
 	int maxElement = 0, minElement = 0;
 	for (int i = 0; i < length; ++i)
 	{
@@ -79,13 +79,13 @@ void countingSort(int* arrayOfNumbers, int length)
 
 	int newArrayLength = maxElement - minElement + 1;
 	int* amountOfNumbers = calloc(newArrayLength, sizeof(int));
-	// сохраняем количество встреченных чисел в amountOfNumbers
+	// СЃРѕС…СЂР°РЅСЏРµРј РєРѕР»РёС‡РµСЃС‚РІРѕ РІСЃС‚СЂРµС‡РµРЅРЅС‹С… С‡РёСЃРµР» РІ amountOfNumbers
 	for (int i = 0; i < length; ++i)
 	{
 		amountOfNumbers[arrayOfNumbers[i] - minElement]++;
 	}
 
-	// сортируем массив, заменяя j-ый элемент на i + minElement
+	// СЃРѕСЂС‚РёСЂСѓРµРј РјР°СЃСЃРёРІ, Р·Р°РјРµРЅСЏСЏ j-С‹Р№ СЌР»РµРјРµРЅС‚ РЅР° i + minElement
 	for (int i = 0, j = 0; i < newArrayLength; ++i)
 	{
 		while (amountOfNumbers[i] > 0)
@@ -98,7 +98,7 @@ void countingSort(int* arrayOfNumbers, int length)
 
 int bubbleSortTest(void)
 {
-	// Тест 1: Одноэлементный массив
+	// РўРµСЃС‚ 1: РћРґРЅРѕСЌР»РµРјРµРЅС‚РЅС‹Р№ РјР°СЃСЃРёРІ
 	int array1[] = { 5 };
 	int length1 = sizeof(array1) / sizeof(array1[0]);
 	bubbleSort(array1, length1);
@@ -106,7 +106,7 @@ int bubbleSortTest(void)
 		return 1;
 	}
 
-	// Тест 2: Массив с повторяющимися элементами
+	// РўРµСЃС‚ 2: РњР°СЃСЃРёРІ СЃ РїРѕРІС‚РѕСЂСЏСЋС‰РёРјРёСЃСЏ СЌР»РµРјРµРЅС‚Р°РјРё
 	int array2[] = { 3, 2, 4, 2, 1 };
 	int length2 = sizeof(array2) / sizeof(array2[0]);
 	bubbleSort(array2, length2);
@@ -114,7 +114,7 @@ int bubbleSortTest(void)
 		return 2;
 	}
 
-	// Тест 3: Упорядоченный в обратном порядке массив
+	// РўРµСЃС‚ 3: РЈРїРѕСЂСЏРґРѕС‡РµРЅРЅС‹Р№ РІ РѕР±СЂР°С‚РЅРѕРј РїРѕСЂСЏРґРєРµ РјР°СЃСЃРёРІ
 	int array3[] = { 9, 7, 5, 3, 1 };
 	int length3 = sizeof(array3) / sizeof(array3[0]);
 	bubbleSort(array3, length3);
@@ -127,7 +127,7 @@ int bubbleSortTest(void)
 
 int countingSortTest(void)
 {
-	// Тест 1: Одноэлементный массив
+	// РўРµСЃС‚ 1: РћРґРЅРѕСЌР»РµРјРµРЅС‚РЅС‹Р№ РјР°СЃСЃРёРІ
 	int array1[] = { 5 };
 	int length1 = sizeof(array1) / sizeof(array1[0]);
 	bubbleSort(array1, length1);
@@ -135,7 +135,7 @@ int countingSortTest(void)
 		return 1;
 	}
 
-	// Тест 2: Массив с повторяющимися элементами
+	// РўРµСЃС‚ 2: РњР°СЃСЃРёРІ СЃ РїРѕРІС‚РѕСЂСЏСЋС‰РёРјРёСЃСЏ СЌР»РµРјРµРЅС‚Р°РјРё
 	int array2[] = { 3, 2, 4, 2, 1 };
 	int length2 = sizeof(array2) / sizeof(array2[0]);
 	bubbleSort(array2, length2);
@@ -143,7 +143,7 @@ int countingSortTest(void)
 		return 2;
 	}
 
-	// Тест 3: Упорядоченный в обратном порядке массив
+	// РўРµСЃС‚ 3: РЈРїРѕСЂСЏРґРѕС‡РµРЅРЅС‹Р№ РІ РѕР±СЂР°С‚РЅРѕРј РїРѕСЂСЏРґРєРµ РјР°СЃСЃРёРІ
 	int array3[] = { 9, 7, 5, 3, 1 };
 	int length3 = sizeof(array3) / sizeof(array3[0]);
 	bubbleSort(array3, length3);
@@ -158,25 +158,25 @@ void measureSortingTime(int* array1, int array1Length, int* array2, int array2Le
 {
 	clock_t startOfBubbleSort, endOfBubbleSort;
 	clock_t startOfCountingSort, endOfCountingSort;
-	double timeUseForBubbleSort, timeUseForCountingSort;
+	double timeUsedForBubbleSort, timeUsedForCountingSort;
 
-	// вычисление затраченного времени в секундах на сортировку массива "Пузырьком"
+	// РІС‹С‡РёСЃР»РµРЅРёРµ Р·Р°С‚СЂР°С‡РµРЅРЅРѕРіРѕ РІСЂРµРјРµРЅРё РІ СЃРµРєСѓРЅРґР°С… РЅР° СЃРѕСЂС‚РёСЂРѕРІРєСѓ РјР°СЃСЃРёРІР° "РџСѓР·С‹СЂСЊРєРѕРј"
 	startOfBubbleSort = clock();
 	bubbleSort(array1, array1Length);
 	endOfBubbleSort = clock();
-	timeUseForBubbleSort = ((double)(endOfBubbleSort - startOfBubbleSort)) / CLOCKS_PER_SEC;
+	timeUsedForBubbleSort = ((double)(endOfBubbleSort - startOfBubbleSort)) / CLOCKS_PER_SEC;
 
-	// выводим затраченное время
-	printf("Сортировка пузырьком заняла %f секунд\n", timeUseForBubbleSort);
+	// РІС‹РІРѕРґРёРј Р·Р°С‚СЂР°С‡РµРЅРЅРѕРµ РІСЂРµРјСЏ
+	printf("РЎРѕСЂС‚РёСЂРѕРІРєР° РїСѓР·С‹СЂСЊРєРѕРј Р·Р°РЅСЏР»Р° %f СЃРµРєСѓРЅРґ\n", timeUsedForBubbleSort);
 
-	// вычисление затраченного времени в секундах на сортировку массива "Подсчетом"
+	// РІС‹С‡РёСЃР»РµРЅРёРµ Р·Р°С‚СЂР°С‡РµРЅРЅРѕРіРѕ РІСЂРµРјРµРЅРё РІ СЃРµРєСѓРЅРґР°С… РЅР° СЃРѕСЂС‚РёСЂРѕРІРєСѓ РјР°СЃСЃРёРІР° "РџРѕРґСЃС‡РµС‚РѕРј"
 	startOfBubbleSort = clock();
 	bubbleSort(array2, array2Length);
 	endOfBubbleSort = clock();
-	timeUseForCountingSort = ((double)(endOfBubbleSort - startOfBubbleSort)) / CLOCKS_PER_SEC;
+	timeUsedForCountingSort = ((double)(endOfBubbleSort - startOfBubbleSort)) / CLOCKS_PER_SEC;
 
-	// выводим затраченное время
-	printf("Сортировка подсчетом заняла %f секунд\n", timeUseForCountingSort);
+	// РІС‹РІРѕРґРёРј Р·Р°С‚СЂР°С‡РµРЅРЅРѕРµ РІСЂРµРјСЏ
+	printf("РЎРѕСЂС‚РёСЂРѕРІРєР° РїРѕРґСЃС‡РµС‚РѕРј Р·Р°РЅСЏР»Р° %f СЃРµРєСѓРЅРґ\n", timeUsedForCountingSort);
 }
 
 int sortTest(void)
@@ -184,13 +184,13 @@ int sortTest(void)
 	const int errorBubbleSortTest = bubbleSortTest();
 	if (errorBubbleSortTest)
 	{
-		printf("Ошибка пузырькойвой сортировки");
+		printf("РћС€РёР±РєР° РїСѓР·С‹СЂСЊРєРѕР№РІРѕР№ СЃРѕСЂС‚РёСЂРѕРІРєРё");
 		return errorBubbleSortTest;
 	}
 	const int errorcountingSortTest = countingSortTest();
 	if (errorcountingSortTest)
 	{
-		printf("Ошибка сортировки подсчетом");
+		printf("РћС€РёР±РєР° СЃРѕСЂС‚РёСЂРѕРІРєРё РїРѕРґСЃС‡РµС‚РѕРј");
 		return errorcountingSortTest;
 	}
 }
