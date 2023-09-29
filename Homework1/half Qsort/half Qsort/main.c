@@ -134,7 +134,8 @@ int halfQsortTests(void)
 	int array1[] = { 5 };
 	int expected1[] = { 5 };
 	halfQsort(&array1, 0, 0);
-	if (!arraysEqual(&array1, &expected1, 1)) {
+	if (!arraysEqual(&array1, &expected1, 1))
+	{
 		return 1;
 	}
 
@@ -142,7 +143,8 @@ int halfQsortTests(void)
 	int array2[] = { 7,3,5,3,2 };
 	int expected2[] = { 2,3,3,5,7 };
 	halfQsort(&array2, 0, 4);
-	if (!arraysEqual(&array2, &expected2, 5)) {
+	if (!arraysEqual(&array2, &expected2, 5))
+	{
 		return 2;
 	}
 
@@ -150,7 +152,8 @@ int halfQsortTests(void)
 	int array3[] = { 1,2,3,4,5 };
 	int expected3[] = { 1,2,3,4,5 };
 	halfQsort(&array3, 0, 4);
-	if (!arraysEqual(&array3, &expected3, 5)) {
+	if (!arraysEqual(&array3, &expected3, 5))
+	{
 		return 3;
 	}
 
@@ -158,7 +161,8 @@ int halfQsortTests(void)
 	int array4[] = { 5,4,3,2,1 };
 	int expected4[] = { 1,2,3,4,5 };
 	halfQsort(&array4, 0, 4);
-	if (!arraysEqual(&array4, &expected4, 5)) {
+	if (!arraysEqual(&array4, &expected4, 5))
+	{
 		return 4;
 	}
 
@@ -166,7 +170,8 @@ int halfQsortTests(void)
 	int array5[] = { 9,4,7,2,1 };
 	int expected5[] = { 1,4,2,7,9 };
 	halfQsort(&array5, 0, 4);
-	if (!arraysEqual(&array5, &expected5, 5)) {
+	if (!arraysEqual(&array5, &expected5, 5))
+	{
 		return 5;
 	}
 
@@ -174,7 +179,8 @@ int halfQsortTests(void)
 	int array6[] = { 6,3,8,2 };
 	int expected6[] = { 2,3,8,6 };
 	halfQsort(&array6, 0, 3);
-	if (!arraysEqual(&array6, &expected6, 4)) {
+	if (!arraysEqual(&array6, &expected6, 4))
+	{
 		return 6;
 	}
 
