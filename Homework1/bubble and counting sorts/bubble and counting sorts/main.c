@@ -102,7 +102,8 @@ int bubbleSortTest(void)
 	int array1[] = { 5 };
 	int length1 = sizeof(array1) / sizeof(array1[0]);
 	bubbleSort(array1, length1);
-	if (array1[0] != 5) {
+	if (array1[0] != 5)
+	{
 		return 1;
 	}
 
@@ -110,7 +111,8 @@ int bubbleSortTest(void)
 	int array2[] = { 3, 2, 4, 2, 1 };
 	int length2 = sizeof(array2) / sizeof(array2[0]);
 	bubbleSort(array2, length2);
-	if (array2[0] != 1 || array2[1] != 2 || array2[2] != 2 || array2[3] != 3 || array2[4] != 4) {
+	if (array2[0] != 1 || array2[1] != 2 || array2[2] != 2 || array2[3] != 3 || array2[4] != 4)
+	{
 		return 2;
 	}
 
@@ -118,7 +120,8 @@ int bubbleSortTest(void)
 	int array3[] = { 9, 7, 5, 3, 1 };
 	int length3 = sizeof(array3) / sizeof(array3[0]);
 	bubbleSort(array3, length3);
-	if (array3[0] != 1 || array3[1] != 3 || array3[2] != 5 || array3[3] != 7 || array3[4] != 9) {
+	if (array3[0] != 1 || array3[1] != 3 || array3[2] != 5 || array3[3] != 7 || array3[4] != 9)
+	{
 		return 3;
 	}
 
@@ -131,7 +134,8 @@ int countingSortTest(void)
 	int array1[] = { 5 };
 	int length1 = sizeof(array1) / sizeof(array1[0]);
 	bubbleSort(array1, length1);
-	if (array1[0] != 5) {
+	if (array1[0] != 5)
+	{
 		return 1;
 	}
 
@@ -139,7 +143,8 @@ int countingSortTest(void)
 	int array2[] = { 3, 2, 4, 2, 1 };
 	int length2 = sizeof(array2) / sizeof(array2[0]);
 	bubbleSort(array2, length2);
-	if (array2[0] != 1 || array2[1] != 2 || array2[2] != 2 || array2[3] != 3 || array2[4] != 4) {
+	if (array2[0] != 1 || array2[1] != 2 || array2[2] != 2 || array2[3] != 3 || array2[4] != 4)
+	{
 		return 2;
 	}
 
@@ -147,7 +152,8 @@ int countingSortTest(void)
 	int array3[] = { 9, 7, 5, 3, 1 };
 	int length3 = sizeof(array3) / sizeof(array3[0]);
 	bubbleSort(array3, length3);
-	if (array3[0] != 1 || array3[1] != 3 || array3[2] != 5 || array3[3] != 7 || array3[4] != 9) {
+	if (array3[0] != 1 || array3[1] != 3 || array3[2] != 5 || array3[3] != 7 || array3[4] != 9)
+	{
 		return 3;
 	}
 
