@@ -133,27 +133,32 @@ double fastPow(double number, int power)
 int testPower(void)
 {
 	// Тест 1: Возведение в степень 0
-	if ((int)pow(5, 0) != 1) {
+	if ((int)pow(5, 0) != 1)
+	{
 		return 1;
 	}
 
 	// Тест 2: Возведение в положительную степень
-	if ((int)pow(2, 4) != 16) {
+	if ((int)pow(2, 4) != 16)
+	{
 		return 2;
 	}
 
 	// Тест 3: Возведение в отрицательную степень
-	if (pow(2, -2) != 0.250000) {
+	if (pow(2, -2) != 0.250000)
+	{
 		return 3;
 	}
 
 	// Тест 4: Возведение в степень 1
-	if ((int)pow(7, 1) != 7) {
+	if ((int)pow(7, 1) != 7)
+	{
 		return 4;
 	}
 
 	// Тест 5: Возведение в степень больше 1
-	if ((int)pow(4, 3) != 64) {
+	if ((int)pow(4, 3) != 64)
+	{
 		return 5;
 	}
 
@@ -163,27 +168,32 @@ int testPower(void)
 int testFastPower(void)
 {
 	// Тест 1: Возведение в степень 0
-	if ((int)fastPow(5, 0) != 1) {
+	if ((int)fastPow(5, 0) != 1)
+	{
 		return 1;
 	}
 
 	// Тест 2: Возведение в положительную степень
-	if ((int)fastPow(2, 4) != 16) {
+	if ((int)fastPow(2, 4) != 16)
+	{
 		return 2;
 	}
 
 	// Тест 3: Возведение в отрицательную степень
-	if (fastPow(2, -2) != 0.250000) {
+	if (fastPow(2, -2) != 0.250000)
+	{
 		return 3;
 	}
 
 	// Тест 4: Возведение в степень 1
-	if ((int)fastPow(7, 1) != 7) {
+	if ((int)fastPow(7, 1) != 7)
+	{
 		return 4;
 	}
 
 	// Тест 5: Возведение в степень больше 1
-	if ((int)fastPow(4, 3) != 64) {
+	if ((int)fastPow(4, 3) != 64)
+	{
 		return 5;
 	}
 
