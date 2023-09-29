@@ -60,27 +60,32 @@ int recursiveFibonacci(int number)
 int testForRecursiveFibonacci(void)
 {
 	// Тест 1: Проверка первого числа Фибоначчиv
-	if (recursiveFibonacci(0) != 0) {
+	if (recursiveFibonacci(0) != 0)
+	{
 		return 1;
 	}
 
 	// Тест 2: Проверка второго числа Фибоначчи
-	if (recursiveFibonacci(1) != 1) {
+	if (recursiveFibonacci(1) != 1)
+	{
 		return 2;
 	}
 
 	// Тест 3: Проверка третьего числа Фибоначчи
-	if (recursiveFibonacci(2) != 1) {
+	if (recursiveFibonacci(2) != 1)
+	{
 		return 3;
 	}
 
 	// Тест 4: Проверка пятого числа Фибоначчи
-	if (recursiveFibonacci(4) != 3) {
+	if (recursiveFibonacci(4) != 3)
+	{
 		return 4;
 	}
 
 	// Тест 5: Проверка десятого числа Фибоначчи
-	if (recursiveFibonacci(9) != 34) {
+	if (recursiveFibonacci(9) != 34)
+	{
 		return 5;
 	}
 
@@ -90,27 +95,32 @@ int testForRecursiveFibonacci(void)
 int testForIterativeFibonacci(void)
 {
 	// Тест 1: Проверка первого числа Фибоначчи
-	if (iterativeFibonacci(0) != 0) {
+	if (iterativeFibonacci(0) != 0)
+	{
 		return 1;
 	}
 
 	// Тест 2: Проверка второго числа Фибоначчи
-	if (iterativeFibonacci(1) != 1) {
+	if (iterativeFibonacci(1) != 1)
+	{
 		return 2;
 	}
 
 	// Тест 3: Проверка третьего числа Фибоначчи
-	if (iterativeFibonacci(2) != 1) {
+	if (iterativeFibonacci(2) != 1)
+	{
 		return 3;
 	}
 
 	// Тест 4: Проверка пятого числа Фибоначчи
-	if (iterativeFibonacci(4) != 3) {
+	if (iterativeFibonacci(4) != 3)
+	{
 		return 4;
 	}
 
 	// Тест 5: Проверка десятого числа Фибоначчи
-	if (iterativeFibonacci(9) != 34) {
+	if (iterativeFibonacci(9) != 34)
+	{
 		return 5;
 	}
 
