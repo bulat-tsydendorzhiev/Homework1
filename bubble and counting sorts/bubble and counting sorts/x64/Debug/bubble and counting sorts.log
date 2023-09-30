@@ -1,0 +1,9 @@
+﻿  main.c
+C:\Homework\Homework1\bubble and counting sorts\bubble and counting sorts\main.c(30,22): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[100000]"
+C:\Homework\Homework1\bubble and counting sorts\bubble and counting sorts\main.c(30,22): warning C4024: measureSortingTime: различные типы для формального и фактического параметров 1
+C:\Homework\Homework1\bubble and counting sorts\bubble and counting sorts\main.c(30,43): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[100000]"
+C:\Homework\Homework1\bubble and counting sorts\bubble and counting sorts\main.c(30,43): warning C4024: measureSortingTime: различные типы для формального и фактического параметров 3
+C:\Homework\Homework1\bubble and counting sorts\bubble and counting sorts\main.c(160,31): warning C4101: endOfCountingSort: неиспользованная локальная переменная
+C:\Homework\Homework1\bubble and counting sorts\bubble and counting sorts\main.c(160,10): warning C4101: startOfCountingSort: неиспользованная локальная переменная
+C:\Homework\Homework1\bubble and counting sorts\bubble and counting sorts\main.c(196): warning C4715: sortTest: значение возвращается не при всех путях выполнения
+  bubble and counting sorts.vcxproj -> C:\Homework\Homework1\bubble and counting sorts\x64\Debug\bubble and counting sorts.exe
