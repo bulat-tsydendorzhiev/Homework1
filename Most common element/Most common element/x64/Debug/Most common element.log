@@ -1,0 +1,6 @@
+﻿  main.c
+C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Most common element\Most common element\main.c(36,30): warning C4473: "scanf_s": передано недостаточно аргументов для строки формата
+C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Most common element\Most common element\main.c(36,30): message : заполнители и их параметры ожидают переменное число аргументов в количестве 3, но было предоставлено 2
+C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Most common element\Most common element\main.c(36,30): message : отсутствующий вариативный аргумент "3" требуется для строки форматирования "%c"
+C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Most common element\Most common element\main.c(36,30): message : этот аргумент используется в качестве размера буфера
+  Most common element.vcxproj -> C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Most common element\x64\Debug\Most common element.exe
