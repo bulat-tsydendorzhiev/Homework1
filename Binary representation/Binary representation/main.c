@@ -27,7 +27,7 @@ int writeData(int* number1, int* number2)
     return 0;
 }
 
-void showBinaryRepresentation(int numberOfDigits, int* binaryNumber)
+void printBinaryRepresentation(int numberOfDigits, int* binaryNumber)
 {
     for (int i = 0; i < numberOfDigits; ++i)
     {
@@ -50,7 +50,20 @@ void convertToBinary(int number, int* binaryNumber, int numberOfDigits)
         i--;
     }
 
-    showBinaryRepresentation(numberOfDigits, binaryNumber);
+    printBinaryRepresentation(numberOfDigits, binaryNumber);
+}
+
+void convertToDecimal(int *binaryNumber, int numberOfDigits)
+{
+    // переводит число из двоичной системы счисления в десятичную и выводит его в консоль
+    int result = 0;
+    int j = 1;
+
+    for (int i = numberOfDigits - 1; i > -1; --i)
+    {
+        result += binaryNumber[i] * j;
+        j = j << 1;
+    }
 }
 
 int main(void)
@@ -70,6 +83,7 @@ int main(void)
         convertToBinary(number1, binaryNumber1, numberOfDigits1);
         convertToBinary(number2, binaryNumber2, numberOfDigits2);
 
+        convertToDecimal(binaryNumber1, numberOfDigits1);
         free(binaryNumber1);
         free(binaryNumber2);
         return 0;
