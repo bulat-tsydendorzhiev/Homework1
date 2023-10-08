@@ -1,14 +1,12 @@
 #include <stdio.h>
 #include <locale.h>
-#include <stdlib.h>
-#include <math.h>
 
 int writeData(int* number1, int* number2)
 {
     int amountOfValues;
     char check;
 
-    printf("Введите первое число: ");
+    printf("Введите первое десятичное число: ");
     amountOfValues = scanf_s("%d%c", number1, &check);
     if (amountOfValues != 2 || check != '\n')
     {
@@ -16,7 +14,7 @@ int writeData(int* number1, int* number2)
         return 1;
     }
 
-    printf("Введите второе число: ");
+    printf("Введите второе десятичное число: ");
     amountOfValues = scanf_s("%d%c", number2, &check);
     if (amountOfValues != 2 || check != '\n')
     {
@@ -27,43 +25,73 @@ int writeData(int* number1, int* number2)
     return 0;
 }
 
-void printBinaryRepresentation(int numberOfDigits, int* binaryNumber)
+void convertDecimalToBinary(int number, int* binary)
 {
-    for (int i = 0; i < numberOfDigits; ++i)
+    int i = 0;
+    while (i < 32)
     {
-        printf("%d", binaryNumber[i]);
+        binary[31 - i] = (number >> i) & 1; // Получение i-го бита числа
+        i++;
+    }
+
+    printf("число %d двоичном виде выглядит вот так: ", number);
+    for (int i = 0; i < 32; ++i)
+    {
+        printf("%d", binary[i]);
     }
     printf("\n");
 }
 
-void convertToBinary(int number, int* binaryNumber, int numberOfDigits)
-{
-    // переводим число в двоичную систему счисления
-    int i = numberOfDigits - 1;
+void convertBinaryToDecimal(int* binary) {
+    int decimal = 0; // Искомое число
+    int i = 32;
+    int power = 1; // Степень двойки
 
-    // выводим надпись, чтобы number сохранило свое значение перед сбросом до нуля
-    printf("число %d в двоичной системе счисления выглядит так: ", number);
-    while (number > 0)
-    {
-        binaryNumber[i] = number % 2;
-        number /= 2;
+    // Если число отрицательное, устанавливаем старший бит в 1
+    if (binary[i] == 1) {
+        decimal = -power;
+    }
+
+    i--;
+
+    while (i >= 0) {
+        decimal += binary[i] * power;
+        power *= 2;
         i--;
     }
 
-    printBinaryRepresentation(numberOfDigits, binaryNumber);
+    printf("%d\n", decimal);
 }
 
-void convertToDecimal(int *binaryNumber, int numberOfDigits)
+void addBinaryColumn(int* binary1, int* binary2)
 {
-    // переводит число из двоичной системы счисления в десятичную и выводит его в консоль
-    int result = 0;
-    int j = 1;
+    int carry = 0; // Перенос
+    int result[32]; // Результат
 
-    for (int i = numberOfDigits - 1; i > -1; --i)
-    {
-        result += binaryNumber[i] * j;
-        j = j << 1;
+    // Складываем числа по разрядам
+    for (int i = 31; i >= 0; i--) {
+        int bit1 = binary1[i]; // Получаем текущий бит первого числа
+        int bit2 = binary2[i]; // Получаем текущий бит второго числа
+
+        // Складываем биты с учетом переноса
+        int sum = bit1 ^ bit2 ^ carry;
+
+        // Обновляем перенос
+        carry = (bit1 & bit2) | (bit1 & carry) | (bit2 & carry);
+
+        // Сохраняем результат в обратном порядке
+        result[i] = sum;
     }
+
+    // Выводим результат в двоичном и десятичном видах
+    printf("Результат сложения в двоичном виде: ");
+    for (int i = 0; i < 32; i++) {
+        printf("%d", result[i]);
+    }
+    printf("\n");
+
+    printf("Результат сложения в десятичном виде: ");
+    convertBinaryToDecimal(result);
 }
 
 int main(void)
@@ -71,22 +99,15 @@ int main(void)
     setlocale(LC_ALL, "Rus");
     int number1, number2;
 
-    const int errorWriteData = writeData(&number1, &number2);
-    if (!errorWriteData)
+    const int errorWirteData = writeData(&number1, &number2);
+    if (!errorWirteData) // защита от дурака
     {
-        // создаем массивы, длина которых равна количеству разрядов в их двоичном виде
-        int numberOfDigits1 = (int)log2(number1) + 1;
-        int numberOfDigits2 = (int)log2(number2) + 1;
-        int* binaryNumber1 = (int*)calloc(numberOfDigits1, sizeof(int));
-        int* binaryNumber2 = (int*)calloc(numberOfDigits1, sizeof(int));
+        int binary1[32], binary2[32];
+        convertDecimalToBinary(number1, binary1);
+        convertDecimalToBinary(number2, binary2);
 
-        convertToBinary(number1, binaryNumber1, numberOfDigits1);
-        convertToBinary(number2, binaryNumber2, numberOfDigits2);
-
-        convertToDecimal(binaryNumber1, numberOfDigits1);
-        free(binaryNumber1);
-        free(binaryNumber2);
+        addBinaryColumn(binary1, binary2);
         return 0;
     }
-    return errorWriteData;
+    return errorWirteData;
 }
