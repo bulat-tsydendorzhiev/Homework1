@@ -18,8 +18,22 @@
     <ClCompile Include="main.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="EmptyTestFile.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="PhoneBookFile.txt" />
+    <Text Include="PhoneBookFile.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="testSaveDataFile1.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="testSaveDataFile2.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="testFile.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
   </ItemGroup>
 </Project>
