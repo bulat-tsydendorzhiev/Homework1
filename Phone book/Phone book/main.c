@@ -18,7 +18,7 @@ int loadData(PhoneBook* phoneBook, int* numberOfContacts, const char* filename)
 	fopen_s(&file, filename, "r");
 	if (file == NULL)
 	{
-		return 1;
+		return 404;
 	}
 	
 	// Записываем данные в структуру phoneBook
@@ -70,7 +70,7 @@ void printContacts(PhoneBook* phoneBook, int numberOfContacts) {
 
 int* findPhoneNumber(PhoneBook* phoneBook, int numberOfContacts, const char* name)
 {
-	int* suitableNumbers = malloc(sizeof(int) * MAX_CONTACTS);
+	int* suitableNumbers = calloc(MAX_CONTACTS + 1, sizeof(int));
 	int j = 0;
 
 	if (numberOfContacts == 0)
@@ -86,12 +86,13 @@ int* findPhoneNumber(PhoneBook* phoneBook, int numberOfContacts, const char* nam
 			++j;
 		}
 	}
+	suitableNumbers[j] = NULL;
 	return suitableNumbers;
 }
 
 int* findName(PhoneBook* phoneBook, int numberOfContacts, const char* phoneNumber)
 {
-	int* suitableNumbers = malloc(sizeof(int) * MAX_CONTACTS);
+	int* suitableNumbers = calloc(MAX_CONTACTS + 1, sizeof(int));
 	int j = 0;
 
 	if (numberOfContacts == 0)
@@ -107,7 +108,26 @@ int* findName(PhoneBook* phoneBook, int numberOfContacts, const char* phoneNumbe
 			++j;
 		}
 	}
+	suitableNumbers[j] = NULL;
 	return suitableNumbers;
+}
+
+void printSuitableNumbers(PhoneBook* phoneBook, int* suitableNumbers, const char* partOfContact)
+{
+	if (suitableNumbers[0] == NULL)
+	{
+		printf("Людей с такими данными в телефонной книжке нет\n");
+		printf("\n");
+	}
+	else
+	{
+		printf(strcmp("name", partOfContact) ? "\nВладельцы с таким номером телефона:\n" : "\nВладельцы номеров телефонов с таким именем:\n");
+		for (int i = 0; suitableNumbers[i] != NULL; ++i)
+		{
+			printf("%s: %s\n", phoneBook[suitableNumbers[i]].name, phoneBook[suitableNumbers[i]].phoneNumber);
+		}
+		printf("\n");
+	}
 }
 
 int saveData(PhoneBook* phoneBook, int numberOfContacts, const char* filename)
@@ -282,14 +302,18 @@ int tests(void)
 int main()
 {
 	system("chcp 1251 > nul");
-	PhoneBook phoneBook[MAX_CONTACTS];
-	int numberOfContacts = 0;
 	
+	// Прогоняем тесты
 	const int errorCode = tests();
 	if (!errorCode)
 	{
+		// Создаем телефонную книжку, количество записанных контактов, suitableNumbers, name и phoneNumber нужны как временные переменные для функций 3 и 4
+		PhoneBook phoneBook[MAX_CONTACTS];
+		int numberOfContacts = 0;
 		char name[MAX_NAME_LENGTH], phoneNumber[MAX_PHONE_NUMBER_LENGTH];
+		int* suitableNumbers;
 
+		// Проверяем считываение данных
 		const int errorOpenFile = loadData(&phoneBook, &numberOfContacts, "PhoneBookFile.txt");
 		if (!errorOpenFile)
 		{
@@ -303,32 +327,37 @@ int main()
 
 				switch (choice)
 				{
-				case 0:
-					return 0;
-				case 1:
-					addContact(phoneBook, &numberOfContacts);
-					break;
-				case 2:
-					printContacts(phoneBook, numberOfContacts);
-					break;
-				case 3:
-					printf("Введите имя владельца: ");
-					scanf_s("%s", name, MAX_NAME_LENGTH);
-					findPhoneNumber(phoneBook, numberOfContacts, name);
-					break;
-				case 4:
-					printf("Введите номер телефона: ");
-					scanf_s("%s", phoneNumber, MAX_PHONE_NUMBER_LENGTH);
-					findName(phoneBook, numberOfContacts, phoneNumber);
-					break;
-				case 5:
-					saveData(phoneBook, numberOfContacts, "PhoneBookFile.txt");
-					printf("Данные успешно сохранены!\n");
-					printf("\n");
-					break;
-				default:
-					printf("Некорректный ввод данных, попробуйте еще раз\n");
-					break;
+					case 0:
+						return 0;
+					case 1:
+						addContact(phoneBook, &numberOfContacts);
+						break;
+					case 2:
+						printContacts(phoneBook, numberOfContacts);
+						break;
+					case 3:
+						printf("Введите имя владельца: ");
+						scanf_s("%s", name, MAX_NAME_LENGTH);
+						suitableNumbers = findPhoneNumber(phoneBook, numberOfContacts, name);
+						printSuitableNumbers(phoneBook, suitableNumbers, "name");
+						free(suitableNumbers);
+						break;
+					case 4:
+						printf("Введите номер телефона: ");
+						scanf_s("%s", phoneNumber, MAX_PHONE_NUMBER_LENGTH);
+						suitableNumbers = findName(phoneBook, numberOfContacts, phoneNumber);
+						printSuitableNumbers(phoneBook, suitableNumbers, "phoneNumber");
+						free(suitableNumbers);
+						break;
+					case 5:
+						saveData(phoneBook, numberOfContacts, "PhoneBookFile.txt");
+						printf("Данные успешно сохранены!\n");
+						printf("\n");
+						break;
+					default:
+						printf("Некорректный ввод данных, попробуйте еще раз\n");
+						printf("\n");
+						break;
 				}
 			}
 			return 0;
