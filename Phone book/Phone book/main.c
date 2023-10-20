@@ -42,7 +42,7 @@ int loadData(PhoneBook* phoneBook, int* numberOfContacts, const char* filename)
 void addContact(PhoneBook* phoneBook, int* numberOfContacts)
 {
 	// Добавляем имя и номер в телефонную книжку
-	char name[MAX_NAME_LENGTH], phoneNumber[MAX_PHONE_NUMBER_LENGTH];
+	char name[MAX_NAME_LENGTH + 1], phoneNumber[MAX_PHONE_NUMBER_LENGTH + 1];
 	printf("Введите имя: ");
 	scanf_s("%s", name, MAX_NAME_LENGTH);
 	printf("Введите номер: ");
@@ -114,7 +114,7 @@ int* findName(PhoneBook* phoneBook, int numberOfContacts, const char* phoneNumbe
 
 void printSuitableNumbers(PhoneBook* phoneBook, int* suitableNumbers, const char* partOfContact)
 {
-	if (suitableNumbers[0] == NULL)
+	if (suitableNumbers[0] == 0)
 	{
 		printf("Людей с такими данными в телефонной книжке нет\n");
 		printf("\n");
@@ -122,7 +122,7 @@ void printSuitableNumbers(PhoneBook* phoneBook, int* suitableNumbers, const char
 	else
 	{
 		printf(strcmp("name", partOfContact) ? "\nВладельцы с таким номером телефона:\n" : "\nВладельцы номеров телефонов с таким именем:\n");
-		for (int i = 0; suitableNumbers[i] != NULL; ++i)
+		for (int i = 0; suitableNumbers[i] != 0; ++i)
 		{
 			printf("%s: %s\n", phoneBook[suitableNumbers[i]].name, phoneBook[suitableNumbers[i]].phoneNumber);
 		}
@@ -293,7 +293,7 @@ int findErrorCode(int* errorCodes)
 	return 0;
 }
 
-int tests(void)
+const int tests(void)
 {
 	const int errorCodes[] = { testLoadFile(), testFindPhoneNumber(), testFindName(), testSaveData(), testSaveData() };
 	return findErrorCode(errorCodes);
@@ -311,10 +311,10 @@ int main()
 		PhoneBook phoneBook[MAX_CONTACTS];
 		int numberOfContacts = 0;
 		char name[MAX_NAME_LENGTH], phoneNumber[MAX_PHONE_NUMBER_LENGTH];
-		int* suitableNumbers;
+		int* suitableNumbers = NULL;
 
 		// Проверяем считываение данных
-		const int errorOpenFile = loadData(&phoneBook, &numberOfContacts, "PhoneBookFile.txt");
+		const int errorOpenFile = loadData(phoneBook, &numberOfContacts, "PhoneBookFile.txt");
 		if (!errorOpenFile)
 		{
 			while (1)
