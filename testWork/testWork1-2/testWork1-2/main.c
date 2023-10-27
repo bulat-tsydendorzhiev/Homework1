@@ -69,4 +69,5 @@ int main(void)
     {
         return errorTest;
     }
+    return 0;
 }
