@@ -67,8 +67,10 @@ int tests(void)
 
 int main(void)
 {
-	int array1[] = { -123, 123, 124 };
-	int length = sizeof(array1) / sizeof(array1[0]);
-	const int* result = maxSum(array1, length);
-	printNumbers(result, length);
+	const int errorTest = tests();
+	if (errorTest)
+	{
+		return errorTest;
+	}
+	return 0;
 }
