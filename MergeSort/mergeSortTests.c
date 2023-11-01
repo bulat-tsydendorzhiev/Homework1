@@ -23,6 +23,8 @@ bool isSimilar(Node* list, Node* expectedList, int gettingField)
 
 TestErrorCode tests(void)
 {
+	ListErrorCode openFileErrorCode = okList;
+
 	// Test 1: sorting list by phone
 	Node* testList1 = NULL;
 	Node* expectedList11 = NULL;
@@ -30,7 +32,12 @@ TestErrorCode tests(void)
 	append(&expectedList11, "Bob", "456789123");
 	append(&expectedList11, "Alice", "987654321");
 
-	loadData(&testList1, "sortingTest1-2.txt");
+	openFileErrorCode = loadData(&testList1, "sortingTest1-2.txt");
+	if (openFileErrorCode)
+	{
+		return loadingFileError;
+	}
+
 	mergeSort(&testList1, 0);
 	if (!isSimilar(testList1, expectedList11, 0))
 	{
@@ -59,7 +66,11 @@ TestErrorCode tests(void)
 	append(&expectedList2, "John", "456789123");
 	append(&expectedList2, "John", "987654321");
 
-	loadData(&testList2, "sortingTest3.txt");
+	openFileErrorCode = loadData(&testList2, "sortingTest3.txt");
+	if (openFileErrorCode)
+	{
+		return loadingFileError;
+	}
 	mergeSort(&testList2, 1);
 	if (!isSimilar(testList2, expectedList2, 1))
 	{
@@ -75,7 +86,12 @@ TestErrorCode tests(void)
 	append(&expectedList3, "Alice", "123456789");
 	append(&expectedList3, "Bob", "123456789");
 
-	loadData(&testList3, "sortingTest4.txt");
+	openFileErrorCode = loadData(&testList3, "sortingTest4.txt");
+	if (openFileErrorCode)
+	{
+		return loadingFileError;
+	}
+
 	mergeSort(&testList3, 0);
 	if (!isSimilar(testList3, expectedList3, 0))
 	{
@@ -87,7 +103,12 @@ TestErrorCode tests(void)
 	// Test 5: sorting list from file without anything
 	Node* testList4 = NULL;
 
-	loadData(&testList4, "sortingTest5.txt");
+	openFileErrorCode = loadData(&testList4, "sortingTest5.txt");
+	if (openFileErrorCode)
+	{
+		return loadingFileError;
+	}
+
 	mergeSort(&testList4, 0);
 	if (testList4 != NULL)
 	{

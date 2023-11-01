@@ -56,7 +56,7 @@ Node* merge(Node* left, Node* right, const int sortBy)
 	return mergedList;
 }
 
-void mergeSort(Node** list, const int sortBy)
+ListErrorCode mergeSort(Node** list, const int sortBy)
 {
 	Node* head = *list;
 	Node* left = NULL;
@@ -76,4 +76,5 @@ void mergeSort(Node** list, const int sortBy)
 	mergeSort(&left, sortBy);
 
 	*list = merge(left, right, sortBy);
+	return okList;
 }

@@ -9,4 +9,4 @@ void split(Node* list, Node** left, Node** right);
 Node* merge(Node* left, Node* right, const int sortBy);
 
 // Function to sort list
-void mergeSort(Node** list, const int sortBy);
+ListErrorCode mergeSort(Node** list, const int sortBy);

@@ -6,6 +6,7 @@
 
 typedef enum
 {
+	loadingFileError = -1,
 	testsPassed,
 	testErrorCode1,
 	testErrorCode2,

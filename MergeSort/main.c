@@ -6,8 +6,8 @@
 
 typedef enum
 {
+	openFileError = -1,
 	ok,
-	openFileError,
 	inputError
 } ErrorCode;
 
@@ -16,6 +16,11 @@ int main(void)
 	const TestErrorCode testErrorCode = tests();
 	if (testErrorCode)
 	{
+		if (testErrorCode == -1)
+		{
+			printf("Open file error during testing\n");
+			return openFileError;
+		}
 		printf("test %d failed\n", testErrorCode);
 		return testErrorCode;
 	}
