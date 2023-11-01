@@ -8,7 +8,7 @@
 
 int main(void)
 {
-	const TestErrorCode testErrorCode = testPassed;
+	const TestErrorCode testErrorCode = tests();
 	if (testErrorCode)
 	{
 		return testErrorCode;
@@ -24,16 +24,23 @@ int main(void)
 	if (errorCode == inputExpressionError)
 	{
 		printf("Invalid input\n");
+		free(infixEpression);
+		free(postfixForm);
 		return inputExpressionError;
 	}
-	else if (errorCode == bracketError)
+	else if (errorCode == openedParenthesesError || errorCode == closedParenthesesError)
 	{
-		printf("Invalid expression\n");
-		return bracketError;
+		printf("Invalid expression: ");
+		printf(errorCode == openedParenthesesError ? "opened bracket error\n" : "closed bracket error\n");
+		free(infixEpression);
+		free(postfixForm);
+		return errorCode;
 	}
 	else
 	{
 		printf("%s\n", postfixForm);
+		free(infixEpression);
+		free(postfixForm);
 	}
 
 	return 0;

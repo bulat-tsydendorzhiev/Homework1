@@ -2,8 +2,9 @@
 
 typedef enum
 {
-	testPassed,
-	testFailed
+	testsPassed,
+	testFailed,
+	testOutOfMemoryError
 } TestErrorCode;
 
 // Tests for shunting yard working

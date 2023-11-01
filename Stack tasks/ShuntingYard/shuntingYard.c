@@ -23,8 +23,6 @@ int operationPriority(char operation)
 	case '*':
 	case '/':
 		return 2;
-	default:
-		return 0;
 	}
 }
 
@@ -33,6 +31,7 @@ ErrorCode infixToPostfix(char* infixExpression, char* postfixForm)
 	CharErrorCode stackErrorCode = okCharStack;
 	CharStack* stack = NULL;
 	int j = 0;
+	int parenthesesCount = 0;
 
 	for (int i = 0; infixExpression[i] != '\0'; ++i)
 	{
@@ -53,6 +52,7 @@ ErrorCode infixToPostfix(char* infixExpression, char* postfixForm)
 		else if (symbol == '(')
 		{
 			pushChar(&stack, symbol);
+			parenthesesCount++;
 		}
 		else if (symbol == ')')
 		{
@@ -66,6 +66,7 @@ ErrorCode infixToPostfix(char* infixExpression, char* postfixForm)
 			}
 
 			// Deleting opening bracket
+			parenthesesCount--;
 			popChar(&stack);
 		}
 		else if (isArithmeticOperation(symbol))
@@ -85,6 +86,15 @@ ErrorCode infixToPostfix(char* infixExpression, char* postfixForm)
 		{
 			return inputExpressionError;
 		}
+	}
+
+	if (parenthesesCount != 0)
+	{
+		if (parenthesesCount > 0)
+		{
+			return openedParenthesesError;
+		}
+		return closedParenthesesError;
 	}
 
 	while (!charStackIsEmpty(stack))

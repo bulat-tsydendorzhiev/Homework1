@@ -5,7 +5,8 @@ typedef enum
 {
 	ok,
 	inputExpressionError,
-	bracketError
+	openedParenthesesError,
+	closedParenthesesError
 } ErrorCode;
 
 // Function to check a character for a number
