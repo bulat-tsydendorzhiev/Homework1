@@ -5,6 +5,6 @@
 int main()
 {
     size_t resultSize = 0;
-    compressString("olololo", &resultSize);
+    compressString("hello world", &resultSize);
 
 }
