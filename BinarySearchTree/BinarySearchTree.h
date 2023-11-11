@@ -11,20 +11,21 @@ typedef enum
 
 typedef struct BinarySearchTree BinarySearchTree;
 
-// Создание двоичного дерева поиска
+// Create binary search tree
 BinarySearchTree* createTree(void);
 
-// Добавление ключа и значения в двоичное дерева поиска
+// add key and value to binary search tree
 BinarySearchTreeErrorCode insert(BinarySearchTree* tree, const int key, const char* const value);
 
-// Получение значения по ключу из двоичного дерева поиска
+// Get value by key from binary search tree
 char* getValueByKey(const BinarySearchTree* const tree, const int key);
 
-// Поиск ключа в двоичном дереве поиска
+// Check existence of key
 bool findKey(const BinarySearchTree* const tree, const int key);
 
-// Удаление узла из двоичного дерева поиска
+// Delete node with given key
+// If key doesn't exist, function does nothing
 BinarySearchTreeErrorCode deleteNode(BinarySearchTree* tree, const int key);
 
-// Очистка двоичного дерева поиска
+// Clear binary search tree
 void clearTree(BinarySearchTree** tree);

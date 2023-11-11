@@ -6,5 +6,5 @@ typedef enum
     outOfMemoryCommands
 } comandError;
 
-// Диалоговое окно для пользователя
+// User Dialog Box
 comandError commands(void);

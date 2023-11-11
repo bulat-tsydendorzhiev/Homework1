@@ -36,25 +36,31 @@ static char* getValue(int* length)
 {
     printf("¬ведите значение: ");
     *length = 0;
-    int capacity = 1;
+    size_t capacity = 1;
     char* string = (char*)malloc(sizeof(char));
+    if (string == NULL)
+    {
+        return NULL;
+    }
 
     char symbol = getchar();
 
     while (symbol != '\n')
     {
-        string[(*length)] = symbol;
-        (*length)++;
-
         if (*length >= capacity)
         {
             capacity *= 2;
-            string = (char*)realloc(string, capacity * sizeof(char));
-            if (string == NULL)
+            const char* newString = (char*)realloc(string, capacity * sizeof(char));
+            if (newString == NULL)
             {
                 return NULL;
             }
+
+            string = newString;
         }
+
+        string[(*length)] = symbol;
+        (*length)++;
 
         symbol = getchar();
     }

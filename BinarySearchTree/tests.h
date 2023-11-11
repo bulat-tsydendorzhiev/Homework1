@@ -2,9 +2,14 @@
 
 typedef enum
 {
+    outOfMemory = -2,
+    testFailed,
     testsPassed,
-    testFailed
+    addTestFailed,
+    findKeyTestFailed,
+    getValueTestFailed,
+    deleteTestFailed,
 } TestErrorCode;
 
-// “есты дл€ проверки работоспособности дерева
+// Tests to check the working of the binary search tree
 TestErrorCode tests(void);
