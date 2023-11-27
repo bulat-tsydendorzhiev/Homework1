@@ -1,2 +1,2 @@
-# Homework1
-для домашнего задания первого курса
+# Homework
+for first year university homework
