@@ -1,37 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <time.h>
 #include <locale.h>
 
-void swap(int* number1, int* number2);
-void bubbleSort(int* arrayOfNumbers, int length);
-void countingSort(int* arrayOfNumbers, int length);
-void measureSortingTime(int* array1, int array1Length, int* array2, int array2Length);
-int bubbleSortTest(void);
-int countingSortTest(void);
-int sortTest(void);
-
-int main(void)
-{
-	setlocale(LC_ALL, "Rus");
-	const int errorSortTest = sortTest();
-	if (!errorSortTest)
-	{
-		// создаем 2 массива для замера времени работы сортировок
-		int testArray1[100000] = { 0 };
-		int testArray2[100000] = { 0 };
-		for (int i = 0; i < 100000; ++i)
-		{
-			testArray1[i] = rand() % 5732;
-			testArray2[i] = testArray1[i];
-		}
-
-		// печатаем затраченное на сортировки время
-		measureSortingTime(&testArray1, 100000, &testArray2, 100000);
-		return 0;
-	}
-	return errorSortTest;
-}
+#define LENGTH_FOR_COMPARE 100000
 
 void swap(int* number1, int* number2)
 {
@@ -40,31 +13,30 @@ void swap(int* number1, int* number2)
 	*number2 = temp;
 }
 
-void bubbleSort(int* arrayOfNumbers, int length)
+void bubbleSort(int* arrayOfNumbers, const int length)
 {
-	int noSwaps; // для проверки свапа элементов
+	bool noSwaps = true;
 	for (int i = 0; i < length; ++i)
 	{
-		noSwaps = 1;
+		noSwaps = true;
 		for (int j = 0; j < length - i - 1; ++j)
 		{
 			if (arrayOfNumbers[j] > arrayOfNumbers[j + 1])
 			{
 				swap(&arrayOfNumbers[j], &arrayOfNumbers[j + 1]);
-				noSwaps = 0;
+				noSwaps = false;
 			}
 		}
-		if (noSwaps) // проверка на отсортированный массив
+		if (noSwaps)
 		{
 			break;
 		}
 	}
 }
 
-void countingSort(int* arrayOfNumbers, int length)
+void countingSort(int* arrayOfNumbers, const int length)
 {
-	// ищем максимальный и минимальный элементы для вычисления длины вспомогательного массива
-	int maxElement = 0, minElement = 0;
+	int maxElement = INT_MIN, minElement = INT_MAX;
 	for (int i = 0; i < length; ++i)
 	{
 		if (arrayOfNumbers[i] > maxElement)
@@ -77,123 +49,119 @@ void countingSort(int* arrayOfNumbers, int length)
 		}
 	}
 
-	int newArrayLength = maxElement - minElement + 1;
-	int* amountOfNumbers = calloc(newArrayLength, sizeof(int));
-	// сохраняем количество встреченных чисел в amountOfNumbers
+	const int newArrayLength = maxElement - minElement + 1;
+	int* amountOfNumbers = (int*)calloc(newArrayLength, sizeof(int));
+	if (amountOfNumbers == NULL)
+	{
+		free(amountOfNumbers);
+		return;
+	}
+
 	for (int i = 0; i < length; ++i)
 	{
 		amountOfNumbers[arrayOfNumbers[i] - minElement]++;
 	}
-
-	// сортируем массив, заменяя j-ый элемент на i + minElement
 	for (int i = 0, j = 0; i < newArrayLength; ++i)
 	{
 		while (amountOfNumbers[i] > 0)
 		{
-			arrayOfNumbers[j++] = i + minElement;
-			amountOfNumbers[i]--;
+			arrayOfNumbers[j] = i + minElement;
+			++j;
+			--amountOfNumbers[i];
 		}
 	}
+	free(amountOfNumbers);
 }
 
-int bubbleSortTest(void)
+bool arraysAreEqual(const int* const array1, const int* const array2, const int length)
 {
-	// Тест 1: Одноэлементный массив
-	int array1[] = { 5 };
-	int length1 = sizeof(array1) / sizeof(array1[0]);
-	bubbleSort(array1, length1);
-	if (array1[0] != 5) {
-		return 1;
-	}
-
-	// Тест 2: Массив с повторяющимися элементами
-	int array2[] = { 3, 2, 4, 2, 1 };
-	int length2 = sizeof(array2) / sizeof(array2[0]);
-	bubbleSort(array2, length2);
-	if (array2[0] != 1 || array2[1] != 2 || array2[2] != 2 || array2[3] != 3 || array2[4] != 4) {
-		return 2;
-	}
-
-	// Тест 3: Упорядоченный в обратном порядке массив
-	int array3[] = { 9, 7, 5, 3, 1 };
-	int length3 = sizeof(array3) / sizeof(array3[0]);
-	bubbleSort(array3, length3);
-	if (array3[0] != 1 || array3[1] != 3 || array3[2] != 5 || array3[3] != 7 || array3[4] != 9) {
-		return 3;
-	}
-
-	return 0;
-}
-
-int countingSortTest(void)
-{
-	// Тест 1: Одноэлементный массив
-	int array1[] = { 5 };
-	int length1 = sizeof(array1) / sizeof(array1[0]);
-	bubbleSort(array1, length1);
-	if (array1[0] != 5)
+	for (size_t i = 0; i < length; ++i)
 	{
-		return 1;
+		if (array1[i] != array2[i])
+		{
+			return false;
+		}
 	}
-
-	// Тест 2: Массив с повторяющимися элементами
-	int array2[] = { 3, 2, 4, 2, 1 };
-	int length2 = sizeof(array2) / sizeof(array2[0]);
-	bubbleSort(array2, length2);
-	if (array2[0] != 1 || array2[1] != 2 || array2[2] != 2 || array2[3] != 3 || array2[4] != 4)
-	{
-		return 2;
-	}
-
-	// Тест 3: Упорядоченный в обратном порядке массив
-	int array3[] = { 9, 7, 5, 3, 1 };
-	int length3 = sizeof(array3) / sizeof(array3[0]);
-	bubbleSort(array3, length3);
-	if (array3[0] != 1 || array3[1] != 3 || array3[2] != 5 || array3[3] != 7 || array3[4] != 9)
-	{
-		return 3;
-	}
-
-	return 0;
+	return true;
 }
 
-void measureSortingTime(int* array1, int array1Length, int* array2, int array2Length)
+bool sortingTest(void (*sortFunction)(int*, const int))
 {
-	clock_t startOfBubbleSort, endOfBubbleSort;
-	clock_t startOfCountingSort, endOfCountingSort;
-	double timeUseForBubbleSort, timeUseForCountingSort;
+	int testCases[][5] = { {-1, -2, -3, -4, -5},
+								{1, 2, 3, 4, 5},
+								{3, 1, 4, 1, 5},
+								{5, 4, 3, 2, 1},
+								{0, 0, 0, 0, 0} };
+	const int expectedResults[][5] = { {-5, -4, -3, -2, -1},
+								{1, 2, 3, 4, 5},
+								{1, 1, 3, 4, 5},
+								{1, 2, 3, 4, 5},
+								{0, 0, 0, 0, 0} };
+	const int numberOfTests = sizeof(testCases) / sizeof(testCases[0]);
 
-	// вычисление затраченного времени в секундах на сортировку массива "Пузырьком"
-	startOfBubbleSort = clock();
-	bubbleSort(array1, array1Length);
-	endOfBubbleSort = clock();
-	timeUseForBubbleSort = ((double)(endOfBubbleSort - startOfBubbleSort)) / CLOCKS_PER_SEC;
-
-	// выводим затраченное время
-	printf("Сортировка пузырьком заняла %f секунд\n", timeUseForBubbleSort);
-
-	// вычисление затраченного времени в секундах на сортировку массива "Подсчетом"
-	startOfBubbleSort = clock();
-	bubbleSort(array2, array2Length);
-	endOfBubbleSort = clock();
-	timeUseForCountingSort = ((double)(endOfBubbleSort - startOfBubbleSort)) / CLOCKS_PER_SEC;
-
-	// выводим затраченное время
-	printf("Сортировка подсчетом заняла %f секунд\n", timeUseForCountingSort);
+	for (size_t i = 0; i < numberOfTests; i++)
+	{
+		const int testCaseArrayLength = sizeof(testCases[i]) / sizeof(testCases[i][0]);
+		sortFunction(testCases[i], testCaseArrayLength);
+		if (!arraysAreEqual(testCases[i], expectedResults[i], testCaseArrayLength))
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
-int sortTest(void)
+int tests(void)
 {
-	const int errorBubbleSortTest = bubbleSortTest();
+	const int errorBubbleSortTest = sortingTest(bubbleSort);
 	if (errorBubbleSortTest)
 	{
-		printf("Ошибка пузырькойвой сортировки");
-		return errorBubbleSortTest;
+		return -1;
 	}
-	const int errorcountingSortTest = countingSortTest();
-	if (errorcountingSortTest)
+
+	const int errorCountingSortTest = sortingTest(countingSort);
+	if (errorCountingSortTest)
 	{
-		printf("Ошибка сортировки подсчетом");
-		return errorcountingSortTest;
+		return -2;
 	}
+
+	return 0;
+}
+
+void printMeasureSortingTime(int* array1, int* array2, const int arraysLength)
+{;
+	clock_t startOfSorting = clock();
+	bubbleSort(array1, arraysLength);
+	clock_t endOfSorting = clock();
+	double timeUsedForBubbleSort = ((double)(endOfSorting - startOfSorting)) / CLOCKS_PER_SEC;
+
+	printf("Bubble sort took %lf seconds\n", timeUsedForBubbleSort);
+
+	startOfSorting = clock();
+	bubbleSort(array2, arraysLength);
+	endOfSorting = clock();
+	double timeUsedForCountingSort = ((double)(endOfSorting - startOfSorting)) / CLOCKS_PER_SEC;
+
+	printf("Counting sort took %lf seconds\n", timeUsedForCountingSort);
+}
+
+int main()
+{
+	setlocale(LC_ALL, "Rus");
+	const int errorSortTest = tests();
+	if (errorSortTest)
+	{
+		return errorSortTest;
+	}
+
+	int testArray1[LENGTH_FOR_COMPARE] = { 0 };
+	int testArray2[LENGTH_FOR_COMPARE] = { 0 };
+	for (int i = 0; i < LENGTH_FOR_COMPARE; ++i)
+	{
+		testArray1[i] = rand();
+		testArray2[i] = rand();
+	}
+		
+	printMeasureSortingTime(testArray1, testArray2, LENGTH_FOR_COMPARE);
+	return 0;
 }
