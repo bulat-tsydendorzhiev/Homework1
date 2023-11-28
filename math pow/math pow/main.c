@@ -1,220 +1,140 @@
 #include <stdio.h>
-#include <locale.h>
-#include <time.h>
+#include <stdbool.h>
 
-int writeData(double* number, int* power);
-double pow(double number, int power);
-double fastPow(double number, int power);
-int testPower(void);
-int testFastPower(void);
-int tests(void);
-
-int main(void)
+void readData(double* number, int* power)
 {
-	setlocale(0, "Rus");
-	double number; // число, возводимое в степень
-	int power; // степень числа
-	const int errorCode = writeData(&number, &power); // проверка на корректный ввод данных
-
-	// проверка на ошибку
-	if (!errorCode)
+	printf("Enter number: ");
+	int scanResult = scanf_s("%lf", number);
+	while (scanResult == 0)
 	{
-		const int errorTest = tests();
-		if (errorTest)
-		{
-			return errorTest;
-		}
-		const double result = pow(number, power);
-		printf("%lf\n", result);
-		return 0;
+		scanf_s("%*[^\n]");
+		printf("Wrong input! Please enter number: ");
+		scanResult = scanf_s("%lf", number);
 	}
-	return errorCode;
+
+	printf("Enter number power(integer number): ");
+	scanResult = scanf_s("%d", power);
+	while (scanResult == 0)
+	{
+		scanf_s("%*[^\n]");
+		printf("Wrong input! Please enter integer number: ");
+		scanResult = scanf_s("%d", power);
+	}
 }
 
-int writeData(double* number, int* power)
+double slowPow(double number, int power, bool* errorOccurred)
 {
-	char check; // переменная для проверки на правильный тип данных 
-	printf("Введите через пробел число и целую степень, в которую нужно возвести число: ");
-	const int amountOfElements = scanf_s("%lf %d%c", number, power, &check);
-
-	if (amountOfElements != 3 || (*number == 0 && *power < 0) || check != '\n') // защита от дурака
+	if (number == 0 && power <= 0)
 	{
-		if (amountOfElements != 3 || check != '\n')
-		{
-			printf("Ошибка: некорректный ввод данных\n");
-			return 1;
-		}
-		else if (*number == 0 && *power < 0)
-		{
-			printf("Ошибка: деление числа на 0\n");
-			return 2;
-		}
+		*errorOccurred = true;
+		return -1;
 	}
-	return 0;
+
+	double result = 1.0;
+	number = power >= 0 ? number : 1 / number;
+	power = power >= 0 ? power : -power;
+
+	for (size_t i = 0; i < power; ++i)
+	{
+		result *= number;
+	}
+
+	return result;
 }
 
-double pow(double number, int power)
+double fastPow(double number, int power, bool* errorOccurred)
 {
-	// возведение в степень за O(n)
-	double result = 1;
-	if (power == 0 || number == 1)
+	if (number == 0 && power <= 0)
 	{
-		return result;
+		*errorOccurred = true;
+		return -1;
 	}
-	else if (number == 0)
+
+	double result = 1.0;
+	number = power >= 0 ? number : 1 / number;
+	power = power >= 0 ? power : -power;
+
+	while (power > 0)
 	{
-		return 0;
-	}
-	else if (power > 0)
-	{
-		while (power > 0)
+		if (power & 1)
 		{
 			result *= number;
-			power--;
 		}
+		number *= number;
+		power >>= 1;
 	}
-	else
-	{
-		while (power < 0)
-		{
-			result /= number;
-			power++;
-		}
-	}
+
 	return result;
 }
 
-double fastPow(double number, int power)
+bool testFunction(double (*function)(double, int, bool*))
 {
-	// возведение в степень за O(logn)
-	double result = 1;
-	if (power == 0 || number == 1)
+	// first element = number, second element = power, third element = expected result from function 
+	const double testCases[][3] = { {0, -1, -1},
+									{0, 0, -1},
+									{2, 2, 4},
+									{2, -2, 0.25},
+									{-3, 3, -27},
+									{123456789, 0, 1},
+									{0, 1241325, 0},
+									{1, -124124, 1},
+									{1, 123521, 1} };
+	const bool expectedErrors[] = { true, true, false, false, false, false, false, false, false };
+	const size_t numberOfTests = sizeof(testCases) / sizeof(testCases[0]);
+
+	for (size_t i = 0; i < numberOfTests; ++i)
 	{
-		return result;
-	}
-	else if (number == 0)
-	{
-		return 0;
-	}
-	else if (power > 0)
-	{
-		while (power > 0)
+		bool errorInput = false;
+		double tempResult = function(testCases[i][0], (int)testCases[i][1], &errorInput);
+		if (tempResult != testCases[i][2] || errorInput != expectedErrors[i])
 		{
-			if (power % 2 == 0)
-			{
-				number *= number;
-				power /= 2;
-			}
-			else
-			{
-				result *= number;
-				power--;
-			}
-		}
-		number = result;
-	}
-	else
-	{
-		while (power < 0)
-		{
-			if (power % 2 == 0)
-			{
-				number *= number;
-				power /= 2;
-			}
-			else
-			{
-				result /= number;
-				power++;
-			}
+			return true;
 		}
 	}
-	return result;
-}
-
-int testPower(void)
-{
-	// Тест 1: Возведение в степень 0
-	if ((int)pow(5, 0) != 1)
-	{
-		return 1;
-	}
-
-	// Тест 2: Возведение в положительную степень
-	if ((int)pow(2, 4) != 16)
-	{
-		return 2;
-	}
-
-	// Тест 3: Возведение в отрицательную степень
-	if (pow(2, -2) != 0.250000)
-	{
-		return 3;
-	}
-
-	// Тест 4: Возведение в степень 1
-	if ((int)pow(7, 1) != 7)
-	{
-		return 4;
-	}
-
-	// Тест 5: Возведение в степень больше 1
-	if ((int)pow(4, 3) != 64)
-	{
-		return 5;
-	}
-
-	return 0;
-}
-
-int testFastPower(void)
-{
-	// Тест 1: Возведение в степень 0
-	if ((int)fastPow(5, 0) != 1)
-	{
-		return 1;
-	}
-
-	// Тест 2: Возведение в положительную степень
-	if ((int)fastPow(2, 4) != 16)
-	{
-		return 2;
-	}
-
-	// Тест 3: Возведение в отрицательную степень
-	if (fastPow(2, -2) != 0.250000)
-	{
-		return 3;
-	}
-
-	// Тест 4: Возведение в степень 1
-	if ((int)fastPow(7, 1) != 7)
-	{
-		return 4;
-	}
-
-	// Тест 5: Возведение в степень больше 1
-	if ((int)fastPow(4, 3) != 64)
-	{
-		return 5;
-	}
-
-	return 0;
+	return false;
 }
 
 int tests(void)
 {
-	const int errorPowTest = testPower();
-	if (errorPowTest)
+	const bool slowPowTestError = testFunction(slowPow);
+	if (slowPowTestError)
 	{
-		printf("Тест для возведения в степень за O(n) не пройден\n");
-		return errorPowTest;
+		return -1;
 	}
 
-	int errorFastPowTest = testFastPower();
-	if (errorFastPowTest)
+	const bool fastPowTestError = testFunction(fastPow);
+	if (fastPowTestError)
 	{
-		printf("Тест для возведения в степень за O(logn) не пройден\n");
-		return errorFastPowTest;
+		return -2;
 	}
+
+	return 0;
+}
+
+int main(void)
+{
+	system("chcp 1251 > nul");
+
+	const int errorTest = tests();
+	if (errorTest)
+	{
+		return errorTest;
+	}
+
+	double number = 1.0;
+	int power = 1;
+	readData(&number, &power);
+
+	bool errorInput = false;
+	const double result = fastPow(number, power, &errorInput);
+	if (errorInput)
+	{
+		printf("Uncorrect input data\n");
+		printf("Uncertain result\n");
+		return 1;
+	}
+
+	printf("%lf\n", result);
+
+	return 0;
 }
