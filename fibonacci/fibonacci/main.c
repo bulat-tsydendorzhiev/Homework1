@@ -1,162 +1,103 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <time.h>
 
-int iterativeFibonacci(int number);
-int recursiveFibonacci(int number);
-int testForRecursiveFibonacci(void);
-int testForIterativeFibonacci(void);
-int tests(void);
-void timeCompare(void);
+int recursiveFibonacci(const int number, bool* errorOccured)
+{
+	if (number < 0)
+	{
+		*errorOccured = true;
+		return -1;
+	}
+	if (number == 0)
+	{
+		return 0;
+	}
+	if (number <= 2)
+	{
+		return 1;
+	}
+	return recursiveFibonacci(number - 1, errorOccured) + recursiveFibonacci(number - 2, errorOccured);
+}
 
-int main(void)
+int iterativeFibonacci(const int number, bool* errorOccured)
+{
+	if (number < 0)
+	{
+		*errorOccured = true;
+		return -1;
+	}
+	
+	int currentNumber = 0, previousNumber = 1;
+	for (size_t i = 0; i < number; ++i)
+	{
+		currentNumber = currentNumber + previousNumber;
+		previousNumber = currentNumber - previousNumber;
+	}
+	return currentNumber;
+}
+
+bool testFunction(const int *const function())
+{
+	const int expected[] = { -1, 0, 1, 1, 2, 3, 5, 8 };
+	const bool expectedErrors[] = { true, false, false, false, false, false, false, false };
+	const int numberOfTests = sizeof(expected) / sizeof(expected[0]);
+	for (size_t i = 0; i < numberOfTests; ++i)
+	{
+		bool errorInput = false;
+		const int tempResult = function(i - 1, &errorInput);
+		if (tempResult != expected[i] || errorInput != expectedErrors[i])
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+int tests(void)
+{
+	const int recursiveFibonacciTestError = testFunction(recursiveFibonacci);
+	if (recursiveFibonacciTestError)
+	{
+		return -1;
+	}
+
+	const int iterativeFibonacciTestError = testFunction(iterativeFibonacci);
+	if (iterativeFibonacciTestError)
+	{
+		return -2;
+	}
+	return 0;
+}
+
+void timeCompare(void)
+{
+	bool errorInput = false;
+	for (int i = 0; i < 50; ++i)
+	{
+		clock_t start = clock();
+		recursiveFibonacci(i, &errorInput);
+		clock_t end = clock();
+		const double timeForRecursive = ((double)(end - start)) / CLOCKS_PER_SEC;
+
+		start = clock();
+		iterativeFibonacci(i, &errorInput);
+		end = clock();
+		const double timeForIterative = ((double)(end - start)) / CLOCKS_PER_SEC;
+
+		printf("Fibonacci number = %d | iterative method time = %lf | recursive method time = %lf\n", i, timeForIterative, timeForRecursive);
+	}
+}
+
+int main()
 {
 	const int errorTest = tests();
 	if (errorTest)
 	{
 		return errorTest;
 	}
-	printf("Tests passed successfully!\n");
+
+	// time compare in interactive mode
 	timeCompare();
 	return 0;
-}
-
-int iterativeFibonacci(int number)
-{
-	if (number == 0)
-	{
-		return 0;
-	}
-	if (number <= 2)
-	{
-		return 1;
-	}
-	else
-	{
-		int firstPrevious = 1, secondPrevious = 1; // для сохранения двух предыдущих результатов 
-		int result;
-		for (int i = 0; i < number - 2; ++i)
-		{
-			result = firstPrevious + secondPrevious;
-			firstPrevious = secondPrevious;
-			secondPrevious = result;
-		}
-		return result;
-	}
-}
-
-int recursiveFibonacci(int number)
-{
-	if (number == 0)
-	{
-		return 0;
-	}
-	if (number <= 2)
-	{
-		return 1;
-	}
-	return recursiveFibonacci(number - 1) + recursiveFibonacci(number - 2);
-}
-
-int testForRecursiveFibonacci(void)
-{
-	// Тест 1: Проверка первого числа Фибоначчи
-	if (recursiveFibonacci(0) != 0) {
-		return 1;
-	}
-
-	// Тест 2: Проверка второго числа Фибоначчи
-	if (recursiveFibonacci(1) != 1) {
-		return 2;
-	}
-
-	// Тест 3: Проверка третьего числа Фибоначчи
-	if (recursiveFibonacci(2) != 1) {
-		return 3;
-	}
-
-	// Тест 4: Проверка пятого числа Фибоначчи
-	if (recursiveFibonacci(4) != 3) {
-		return 4;
-	}
-
-	// Тест 5: Проверка десятого числа Фибоначчи
-	if (recursiveFibonacci(9) != 34) {
-		return 5;
-	}
-
-	return 0;
-}
-
-int testForIterativeFibonacci(void)
-{
-	// Тест 1: Проверка первого числа Фибоначчи
-	if (iterativeFibonacci(0) != 0) {
-		return 1;
-	}
-
-	// Тест 2: Проверка второго числа Фибоначчи
-	if (iterativeFibonacci(1) != 1) {
-		return 2;
-	}
-
-	// Тест 3: Проверка третьего числа Фибоначчи
-	if (iterativeFibonacci(2) != 1) {
-		return 3;
-	}
-
-	// Тест 4: Проверка пятого числа Фибоначчи
-	if (iterativeFibonacci(4) != 3) {
-		return 4;
-	}
-
-	// Тест 5: Проверка десятого числа Фибоначчи
-	if (iterativeFibonacci(9) != 34) {
-		return 5;
-	}
-
-	return 0;
-}
-
-int tests(void)
-{
-	// проверка на ошибку у рекурсивного метода
-	const int errorRecursiveTest = testForRecursiveFibonacci();
-	if (errorRecursiveTest)
-	{
-		printf("Error of recursive Fibonacci algorithm test\n");
-		return errorRecursiveTest;
-	}
-
-	// проверка на ошибку у итеративного метода
-	const int errorIterativeTest = testForRecursiveFibonacci();
-	if (errorIterativeTest)
-	{
-		printf("Error of iterative Fibonacci algorithm test\n");
-		return errorIterativeTest;
-	}
-}
-
-void timeCompare(void)
-{
-	// сравниваем время рекурсивного и итеративного способов
-	clock_t start, end;
-	double timeForRecursive, timeForIterative;
-
-	for (int i = 0; i < 50; ++i)
-	{
-		// считаем время для рекурсивного способа
-		start = clock();
-		recursiveFibonacci(i);
-		end = clock();
-		timeForRecursive = ((double)(end - start)) / CLOCKS_PER_SEC;
-
-		// считаем время для итеративного способа
-		start = clock();
-		iterativeFibonacci(i);
-		end = clock();
-		timeForIterative = ((double)(end - start)) / CLOCKS_PER_SEC;
-
-		//выводим их время
-		printf("%d Fibonacci number took for iterative took %lf and took for recursive \n", i, timeForRecursive, timeForIterative);
-	}
 }
