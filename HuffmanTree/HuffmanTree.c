@@ -40,7 +40,6 @@ HuffmanTree* makeTree(HuffmanTree** const tree1, HuffmanTree** const tree2)
 	HuffmanTree* newTree = makeLeaf('\0', getCount(*tree1) + getCount(*tree2));
 	newTree->root->leftSon = (*tree1)->root;
 	newTree->root->rightSon = (*tree2)->root;
-
 	free(*tree1);
 	free(*tree2);
 	*tree1 = NULL;

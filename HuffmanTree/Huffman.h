@@ -2,4 +2,4 @@
 
 #include <stdlib.h>
 
-char* const compressString(const char* const string, size_t* const resultSize);
+void compressString(const char* const string, size_t* const resultSize);
