@@ -16,70 +16,61 @@ struct CircularList
     Node* tail;
 };
 
-CircularListError createCircularList(CircularList** circularList)
+CircularList** createCircularList(void)
 {
-    *circularList = malloc(sizeof(circularList));
-    if (*circularList == NULL)
-    {
-        return circularListIsEmptyError;
-    }
-    (*circularList)->head = NULL;
-    (*circularList)->tail = NULL;
-    return okCircularList;
+    return (CircularList*)calloc(1, sizeof(CircularList));
 }
 
-CircularListError append(CircularList** circularList, int value)
+bool circularListIsEmpty(CircularList* circularList)
 {
-    Node* temp = malloc(sizeof(Node));
+    return circularList == NULL || circularList->head == NULL;
+}
+
+bool append(CircularList* circularList, int value)
+{
+    Node* temp = (Node*)calloc(1, sizeof(Node));
     if (temp == NULL)
     {
-        return circularListOutOfMemory;
+        return false;
     }
     temp->value = value;
-    temp->next = NULL;
 
-    if (circularListisEmpty(*circularList))
+    if (circularListIsEmpty(circularList))
     {
-        (*circularList)->head = temp;
-        (*circularList)->tail = temp;
+        circularList->head = temp;
+        circularList->tail = temp;
         temp->next = temp;
-        return okCircularList;
     }
-
-    (*circularList)->tail->next = temp;
-    temp->next = (*circularList)->head;
-    (*circularList)->tail = temp;
-    return okCircularList;
+    else
+    {
+        circularList->tail->next = temp;
+        temp->next = circularList->head;
+        circularList->tail = temp;
+    }
+    return true;
 }
 
-bool circularListisEmpty(CircularList* circularList)
+void deletePosition(CircularList* circularList, const int positionNumber)
 {
-    return circularList->head == NULL;
-}
-
-CircularListError deletePosition(CircularList** circularList, const int positionNumber)
-{
-    Node* current = (*circularList)->head;
-    Node* previous = (*circularList)->tail;
-    for (int i = 1; i < positionNumber; ++i)
+    Node* current = circularList->head;
+    Node* previous = circularList->tail;
+    for (size_t i = 1; i < positionNumber; ++i)
     {
         previous = current;
         current = current->next;
     }
-
-    (*circularList)->head = current->next;
-    (*circularList)->tail = previous;
+    circularList->head = current->next;
+    circularList->tail = previous;
     previous->next = current->next;
     free(current);
-    return okCircularList;
 }
 
-bool onlyOneLeft(CircularList* circularList)
+bool isOnlyOneLeft(const CircularList*const circularList)
 {
     return circularList->head == circularList->tail;
 }
 
-int getHeadValue(CircularList* circularList)
+int getHeadValue(const CircularList*const circularList)
 {
     return circularList->head->value;
 }
@@ -87,8 +78,8 @@ int getHeadValue(CircularList* circularList)
 void clearCircularList(CircularList** circularList)
 {
     Node* current = (*circularList)->head;
-
-    while (circularListisEmpty(*circularList)) {
+    while (current != NULL)
+    {
         Node* next = current->next;
         free(current);
         current = next;
@@ -96,7 +87,6 @@ void clearCircularList(CircularList** circularList)
         if (current == (*circularList)->head)
             break;
     }
-
-    (*circularList)->head = NULL;
-    (*circularList)->tail = NULL;
+    free(*circularList);
+    *circularList = NULL;
 }

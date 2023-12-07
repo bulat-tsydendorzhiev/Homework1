@@ -2,48 +2,24 @@
 
 #include "circularList.h"
 
-int writeData(int* numberOfWarriors, int* needTokillEvery)
+int countPositionOfLastWarrior(const int numberOfWarriors, const int needTokillEvery)
 {
-	char check = ' ';
-	printf("Number of warriors: ");
-	int numberOfValues = scanf_s("%d%c", numberOfWarriors, &check);
-	if (numberOfValues != 2 || check != '\n' || * numberOfWarriors < 1)
-	{
-		return -1;
-	}
-
-	printf("Need to kill every: ");
-	numberOfValues = scanf_s("%d%c", needTokillEvery, &check);
-
-	if (numberOfValues != 2 || check != '\n' || *needTokillEvery < 1)
-	{
-		return -1;
-	}
-
-	return 0;
-}
-
-int getPositionOfLastWarrior(const int numberOfWarriors, const int needTokillEvery)
-{
-	CircularList* warriors = NULL;
-	const CircularListError creationError =  createCircularList(&warriors);
-	if (creationError)
-	{
-		return -1;
-	}
-
+	CircularList* warriors = createCircularList();
 	for (int i = 1; i <= numberOfWarriors; ++i)
 	{
-		append(&warriors, i);
+		bool successfullAppend = append(warriors, i);
+		if (!successfullAppend)
+		{
+			return -1;
+		}
 	}
 
-	while (!onlyOneLeft(warriors))
+	while (!isOnlyOneLeft(warriors))
 	{
-		deletePosition(&warriors, needTokillEvery);
+		deletePosition(warriors, needTokillEvery);
 	}
 
 	const int answer = getHeadValue(warriors);
-
 	clearCircularList(&warriors);
 	return answer;
 }

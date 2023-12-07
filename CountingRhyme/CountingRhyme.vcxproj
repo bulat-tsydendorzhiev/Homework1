@@ -128,12 +128,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="circularList.c" />
+    <ClCompile Include="console.c" />
     <ClCompile Include="countingRhyme.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="tests.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="circularList.h" />
+    <ClInclude Include="console.h" />
     <ClInclude Include="countingRhyme.h" />
+    <ClInclude Include="tests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

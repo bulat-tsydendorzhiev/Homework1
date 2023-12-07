@@ -2,34 +2,28 @@
 
 #include <stdbool.h>
 
-typedef enum
-{
-	okCircularList,
-	circularListIsEmptyError,
-	circularListOutOfMemory,
-	circularListNonExistentElement
-} CircularListError;
-
+// Circular list
 typedef struct CircularList CircularList;
 
-// Function to create circle list
-CircularListError createCircularList(CircularList** circularList);
+// Create circular list
+CircularList** createCircularList(void);
 
-// Function to check circle list emptiness
-bool circularListisEmpty(CircularList* circularList);
+// Check circular list emptiness
+bool circularListIsEmpty(CircularList* circularList);
 
-// Function to add value at the end of circle list
-CircularListError append(CircularList** circularList, const int value);
+// Add value at the end of the circular list;
+// return false if it fails to add an element to the list
+bool append(CircularList* circularList, const int value);
 
-// Function to delete value from circle list by its position number
-CircularListError deletePosition(CircularList** circularList, const int positionNumber);
+// Delete value from circular list by its position number
+void deletePosition(CircularList* circularList, const int positionNumber);
 
-// Function to check whether the one node left, return true if it is
-bool onlyOneLeft(CircularList* circularList);
+// Check whether the one node left;
+// return true if it is
+bool isOnlyOneLeft(const CircularList*const circularList);
 
-// Function to get a value of head node
-int getHeadValue(CircularList* circularList);
+// Return a value of head node
+int getHeadValue(const CircularList*const circularList);
 
-// Function to clear circle list
+// Clear circular list
 void clearCircularList(CircularList** list);
-
