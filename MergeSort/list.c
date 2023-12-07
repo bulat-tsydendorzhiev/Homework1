@@ -1,131 +1,173 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
+#include <stdio.h>
 #include <stdbool.h>
 
 #include "list.h"
 
-#define MAX_NAME_LENGTH 50
-#define MAX_PHONE_NUMBER_LENGTH 20
-
-struct Node
+typedef struct Node
 {
-	char* name;
-	char* phoneNumber;
-	struct Node* next;
+    char* name;
+    char* phoneNumber;
+    struct Node* next;
+} Node;
+
+struct List
+{
+    Node* head;
+    Node* tail;
+    size_t length;
 };
 
-ListErrorCode append(Node** list, const char* name, const char* phoneNumber)
+List* createList(void)
 {
-	Node* temp = malloc(sizeof(Node));
-	if (temp == NULL)
-	{
-		return listOutOfMemory;
-	}
-	size_t nameLength = strlen(name) + 1;
-	temp->name = malloc(nameLength);
-	if (temp->name == NULL)
-	{
-		return listOutOfMemory;
-	}
-	strcpy_s(temp->name, nameLength, name);
-
-	size_t phoneNumberLength = strlen(phoneNumber) + 1;
-	temp->phoneNumber = malloc(phoneNumberLength);
-	if (temp->phoneNumber == NULL)
-	{
-		return listOutOfMemory;
-	}
-	strcpy_s(temp->phoneNumber, phoneNumberLength, phoneNumber);
-	temp->next = NULL;
-
-	if (*list == NULL)
-	{
-		*list = temp;
-	}
-	else
-	{
-		Node* head = *list;
-		while (head->next != NULL)
-		{
-			head = head->next;
-		}
-		head->next = temp;
-	}
-	return okList;
+    return (List*)calloc(1, sizeof(List));
 }
 
-ListErrorCode loadData(Node** list, const char* filename)
+bool listIsEmpty(List* list)
 {
-	FILE* file = NULL;
-	fopen_s(&file, filename, "r");
-	if (file == NULL)
-	{
-		clearList(*list);
-		return listOpenFileError;
-	}
-
-	char name[MAX_NAME_LENGTH];
-	char phoneNumber[MAX_PHONE_NUMBER_LENGTH];
-	while (fscanf_s(file, "%s - %s", name, MAX_NAME_LENGTH, phoneNumber, MAX_PHONE_NUMBER_LENGTH) == 2)
-	{
-		append(list, name, phoneNumber);
-	}
-
-	fclose(file);
-	return okList;
+    return list == NULL || list->head == NULL;
 }
 
-Node* getNextNode(Node* node, ListErrorCode* errorCode)
+size_t getListLength(List* list)
 {
-	if (node == NULL)
-	{
-		*errorCode = listIsEmpty;
-		return NULL;
-	}
-	return node->next;
+    return list->length;
 }
 
-void printList(Node* list)
+char* getPartOfContact(const List* const list, const int key)
 {
-	Node* current = list;
-	while (current != NULL)
-	{
-		printf("%s - %s\n", current->name, current->phoneNumber);
-		current = current->next;
-	}
+    if (listIsEmpty(list))
+    {
+        return NULL;
+    }
+    return (key == 0) ? list->head->name : list->head->phoneNumber;
 }
 
-ListErrorCode clearList(Node** list) {
-	if (*list == NULL)
-	{
-		return listIsEmpty;
-	}
-
-	while ((*list) != NULL)
-	{
-		Node* trash = *list;
-		*list = (*list)->next;
-		free(trash->name);
-		free(trash->phoneNumber);
-		free(trash);
-	}
-	return okList;
+static void deleteNode(Node** node)
+{
+    free((*node)->name);
+    free((*node)->phoneNumber);
+    free(*node);
+    *node = NULL;
 }
 
-ListErrorCode changeNextNode(Node** node, Node* changeValue)
+static Node* createNode(const char* name, const char* const phoneNumber)
 {
-	(*node)->next = changeValue;
+    Node* node = (Node*)calloc(1, sizeof(Node));
+    if (node == NULL)
+    {
+        return NULL;
+    }
+    node->name = _strdup(name);
+    node->phoneNumber = _strdup(phoneNumber);
+    if (node->name == NULL || node->phoneNumber == NULL)
+    {
+        deleteNode(&node);
+        return NULL;
+    }
+    return node;
 }
 
-char* getField(Node* node, int gettingField)
+static void insert(List* list, Node* listElement)
 {
-	if (gettingField == 1)
-	{
-		return node->name;
-	}
-	else
-	{
-		return node->phoneNumber;
-	}
+    listElement->next = NULL;
+    if (listIsEmpty(list))
+    {
+        list->head = listElement;
+    }
+    else
+    {
+        list->tail->next = listElement;
+    }
+    list->tail = listElement;
+    ++list->length;
+}
+
+static void removeListElement(List* list, Node* listElement)
+{
+    list->head = listElement->next;
+    if (listElement == list->tail)
+    {
+        list->tail = listElement->next;
+    }
+    --list->length;
+}
+
+bool append(List* list, const char* const name, const char* const phoneNumber)
+{
+    Node* newContact = createNode(name, phoneNumber);
+    if (newContact == NULL)
+    {
+        return false;
+    }
+
+    insert(list, newContact);
+    return true;
+}
+
+void moveListElementToOtherList(List* listFrom, List* listTo)
+{
+    if (listIsEmpty(listFrom))
+    {
+        return;
+    }
+
+    Node* movingElement = listFrom->head;
+    removeListElement(listFrom, movingElement);
+    insert(listTo, movingElement);
+}
+
+void printList(List* list)
+{
+    Node* current = list->head;
+    while (current != NULL)
+    {
+        printf("%s - %s\n", current->name, current->phoneNumber);
+        current = current->next;
+    }
+}
+
+static void deleteHeadValue(List* list)
+{
+    if (listIsEmpty(list))
+    {
+        return;
+    }
+    Node* removingNode = list->head;
+    removeListElement(list, removingNode);
+    deleteNode(&removingNode);
+}
+
+void deleteList(List** list)
+{
+    while (!listIsEmpty(*list))
+    {
+        deleteHeadValue(*list);
+    }
+    free(*list);
+    *list = NULL;
+}
+
+static bool compare(const Node* const current, const Node* const next, const int key)
+{
+    return (key == 0) ? strcmp(current->name, next->name) < 0 : strcmp(current->phoneNumber, next->phoneNumber) < 0;
+}
+
+bool isSorted(const List* const list, const int key)
+{
+    if (listIsEmpty(list))
+    {
+        return true;
+    }
+
+    Node* current = list->head;
+    while (current->next != NULL)
+    {
+        if (!compare(current, current->next, key))
+        {
+            return false;
+        }
+        current = current->next;
+    }
+    return true;
 }

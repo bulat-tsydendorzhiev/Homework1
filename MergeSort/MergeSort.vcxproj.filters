@@ -24,7 +24,13 @@
     <ClCompile Include="mergeSort.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="mergeSortTests.c">
+    <ClCompile Include="tests.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="console.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="dataInit.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,25 +41,19 @@
     <ClInclude Include="mergeSort.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="mergeSortTests.h">
+    <ClInclude Include="tests.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="console.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="dataInit.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="phoneBook.txt">
-      <Filter>Файлы ресурсов</Filter>
-    </Text>
-    <Text Include="sortingTest1-2.txt">
-      <Filter>Файлы ресурсов</Filter>
-    </Text>
-    <Text Include="sortingTest3.txt">
-      <Filter>Файлы ресурсов</Filter>
-    </Text>
-    <Text Include="sortingTest4.txt">
-      <Filter>Файлы ресурсов</Filter>
-    </Text>
-    <Text Include="sortingTest5.txt">
-      <Filter>Файлы ресурсов</Filter>
-    </Text>
+    <Text Include="mainFile.txt" />
+    <Text Include="sortByNameFile.txt" />
+    <Text Include="sortByPhoneNumberFile.txt" />
   </ItemGroup>
 </Project>

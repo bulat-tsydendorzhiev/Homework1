@@ -1,80 +1,93 @@
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
 #include "mergeSort.h"
-#include "list.h"
 
-void split(Node* list, Node** left, Node** right)
+static bool split(List* list, List** const leftPart, List** const rightPart)
 {
-	ListErrorCode errorCode = okList;
-	Node* fast = NULL;
-	Node* slow = NULL;
+    *leftPart = createList();
+    *rightPart = createList();
+    if (*leftPart == NULL || *rightPart == NULL)
+    {
+        return false;
+    }
 
-	slow = list;
-	fast = getNextNode(list, &errorCode);
-
-	while (fast != NULL) {
-		fast = getNextNode(fast, &errorCode);
-		if (fast != NULL) {
-			fast = getNextNode(fast, &errorCode);
-			slow = getNextNode(slow, &errorCode);
-		}
-	}
-
-	(*left) = list;
-	(*right) = getNextNode(slow, &errorCode);
-	changeNextNode(&slow, NULL);
+    const size_t length = getListLength(list);
+    for (size_t i = 0; i < length; i++)
+    {
+        if (i < length / 2)
+        {
+            moveListElementToOtherList(list, *leftPart);
+        }
+        else
+        {
+            moveListElementToOtherList(list, *rightPart);
+        }
+    }
+    return true;
 }
 
-Node* merge(Node* left, Node* right, const int sortBy)
+static void merge(List* list, List* leftPart, List* rightPart, const int key)
 {
-	if (left == NULL)
-	{
-		return right;
-	}
+    while (!listIsEmpty(leftPart) && !listIsEmpty(rightPart))
+    {
+        if (strcmp(getPartOfContact(leftPart, key), getPartOfContact(rightPart, key)) < 0)
+        {
+            moveListElementToOtherList(leftPart, list);
+        }
+        else
+        {
+            moveListElementToOtherList(rightPart, list);
+        }
+    }
 
-	if (right == NULL)
-	{
-		return left;
-	}
+    while (!listIsEmpty(leftPart))
+    {
+        moveListElementToOtherList(leftPart, list);
+    }
 
-	ListErrorCode errorCode = okList;
-	Node* mergedList = NULL;
-
-	if (strcmp(getField(left, sortBy), getField(right, sortBy)) <= 0)
-	{
-		mergedList = left;
-		changeNextNode(&mergedList, merge(getNextNode(left, &errorCode), right, sortBy));
-	}
-	else
-	{
-		mergedList = right;
-		changeNextNode(&mergedList, merge(left, getNextNode(right, &errorCode), sortBy));
-	}
-
-	return mergedList;
+    while (!listIsEmpty(rightPart))
+    {
+        moveListElementToOtherList(rightPart, list);
+    }
 }
 
-ListErrorCode mergeSort(Node** list, const int sortBy)
+static deleteLists(List** leftPart, List** rightPart)
 {
-	Node* head = *list;
-	Node* left = NULL;
-	Node* right = NULL;
+    deleteList(leftPart);
+    deleteList(rightPart);
+    return listIsEmpty(*leftPart) && listIsEmpty(*rightPart);
+}
 
-	// Check for emptiness of list
-	const ListErrorCode empty = okList;
-	Node* nextNode = getNextNode(*list, &empty);
-	if (empty || nextNode == NULL)
-	{
-		return listIsEmpty;
-	}
+bool mergeSort(List* list, const int key)
+{
+    if (getListLength(list) < 2)
+    {
+        return true;
+    }
 
-	split(head, &left, &right);
+    List* leftPart = NULL;
+    List* rightPart = NULL;
+    const bool successSplit = split(list, &leftPart, &rightPart);
+    if (!successSplit)
+    {
+        deleteLists(&leftPart, &rightPart);
+        return false;
+    }
 
-	mergeSort(&right, sortBy);
-	mergeSort(&left, sortBy);
+    const bool successfullySplitedLeftPart = mergeSort(leftPart, key);
+    if (!successfullySplitedLeftPart)
+    {
+        deleteLists(&leftPart, &rightPart);
+        return false;
+    }
+    const bool successfullySplitedRightPart = mergeSort(rightPart, key);
+    if (!successfullySplitedRightPart)
+    {
+        deleteLists(&leftPart, &rightPart);
+        return false;
+    }
 
-	*list = merge(left, right, sortBy);
-	return okList;
+    merge(list, leftPart, rightPart, key);
+    return deleteLists(&leftPart, &rightPart);
 }

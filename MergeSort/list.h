@@ -1,37 +1,33 @@
 #pragma once
+
 #include <stdbool.h>
-#include "list.h"
 
-#define MAX_NAME_LENGTH 50
-#define MAX_PHONE_NUMBER_LENGTH 20
+// List
+typedef struct List List;
 
-typedef enum
-{
-	okList,
-	listIsEmpty,
-	listOutOfMemory,
-	listOpenFileError
-} ListErrorCode;
+// Create List
+List* createList(void);
 
-typedef struct Node Node;
+// Return list length
+size_t getListLength(List* list);
 
-// Function to add name and phone number at the end of the list
-ListErrorCode append(Node** list, const char* name, const char* phoneNumber);
+// Check list on emptiness
+bool listIsEmpty(List* list);
 
-//Function to load contacts from file
-ListErrorCode loadData(Node** list, const char* filename);
+// Add value at the end of the list
+bool append(List* list, const char* name, const char* const phoneNumber);
 
-//Function to get next node
-Node* getNextNode(Node* node, ListErrorCode* errorCode);
+// Return part of contact by key
+char* getPartOfContact(const List* const list, const int key);
 
-// Function to print contacts in format "name - phone number"
-void printList(Node* list);
+// Move list element to other list
+void moveListElementToOtherList(List* listFrom, List* listTo);
 
-// Function to clear list
-ListErrorCode clearList(Node** list);
+// Print name and phone number
+void printList(List* list);
 
-// Function to change the value of next node
-ListErrorCode changeNextNode(Node** node, Node* changeValue);
+// Delete list
+void deleteList(List** list);
 
-// Function to get node field( name or phone number )
-char* getField(Node* node, int gettingField);
+// Сheck the list for sorting
+bool isSorted(const List* const list, const int key);

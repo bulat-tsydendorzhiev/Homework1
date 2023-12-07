@@ -127,22 +127,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="console.c" />
+    <ClCompile Include="dataInit.c" />
     <ClCompile Include="list.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="mergeSort.c" />
-    <ClCompile Include="mergeSortTests.c" />
+    <ClCompile Include="tests.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="console.h" />
+    <ClInclude Include="dataInit.h" />
     <ClInclude Include="list.h" />
     <ClInclude Include="mergeSort.h" />
-    <ClInclude Include="mergeSortTests.h" />
+    <ClInclude Include="tests.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="phoneBook.txt" />
-    <Text Include="sortingTest1-2.txt" />
-    <Text Include="sortingTest3.txt" />
-    <Text Include="sortingTest4.txt" />
-    <Text Include="sortingTest5.txt" />
+    <Text Include="mainFile.txt" />
+    <Text Include="sortByNameFile.txt" />
+    <Text Include="sortByPhoneNumberFile.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
