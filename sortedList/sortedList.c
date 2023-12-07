@@ -1,98 +1,135 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
 #include "sortedList.h"
 
 typedef struct Node
 {
-	int value;
-	struct Node* next;
+    int value;
+    struct Node* next;
 } Node;
 
-ErrorCode pushValue(Node** list, const int value)
+struct SortedList
 {
-	Node* temp = malloc(sizeof(Node));
-	if (temp == NULL)
-	{
-		return outOfMemory;
-	}
+    Node* head;
+    Node* tail;
+};
 
-	temp->value = value;
-
-	if (*list == NULL || value < (*list)->value)
-	{
-		temp->next = *list;
-		*list = temp;
-	}
-	else
-	{
-		Node* head = *list;
-		while (head->next != NULL && head->next->value < value)
-		{
-			head = head->next;
-		}
-		temp->next = head->next;
-		head->next = temp;
-	}
-	return ok;
+SortedList* createSortedList(void)
+{
+    return (SortedList*)calloc(1, sizeof(SortedList));
 }
 
-ErrorCode deleteValue(Node** list, const int value)
+bool sortedListIsEmpty(const SortedList* const SortedList)
 {
-	if (*list == NULL)
-	{
-		return listIsEmpty;
-	}
-
-	Node* deletingNode = (*list);
-	Node* previousNode = NULL;
-
-	if (deletingNode != NULL && deletingNode->value == value) {
-		*list = deletingNode->next;
-		free(deletingNode);
-		return ok;
-	}
-
-	while (deletingNode != NULL && deletingNode->value != value)
-	{
-		previousNode = deletingNode;
-		deletingNode = deletingNode->next;
-	}
-
-	if (deletingNode == NULL)
-	{
-		return deletingANonExistentElement;
-	}
-	else
-	{
-		previousNode->next = deletingNode->next;
-		free(deletingNode);
-	}
-	return ok;
+    return SortedList->head == NULL;
 }
 
-void printList(Node* list)
+SortedListErrorCode addValue(SortedList* const SortedList, const int value)
 {
-	while (list != NULL)
-	{
-		printf("%d ", list->value);
-		list = list->next;
-	}
-	printf("\n");
+    Node* current = SortedList->head;
+    Node* previous = NULL;
+    while (current != NULL && current->value < value)
+    {
+        previous = current;
+        current = current->next;
+    }
+
+    Node* newNode = (Node*)calloc(1, sizeof(Node));
+    if (newNode == NULL)
+    {
+        return outOfMemory;
+    }
+    newNode->value = value;
+    newNode->next = current;
+
+    if (previous == NULL)
+    {
+        SortedList->head = newNode;
+    }
+    else
+    {
+        previous->next = newNode;
+    }
+
+    if (newNode->next == NULL)
+    {
+        SortedList->tail = newNode;
+    }
+
+    return ok;
 }
 
-ErrorCode clearList(Node** list)
+SortedListErrorCode deleteValue(SortedList* const SortedList, const int value)
 {
-	if (*list == NULL)
-	{
-		return listIsEmpty;
-	}
+    Node* current = SortedList->head;
+    Node* previous = NULL;
+    while (current != NULL && current->value != value)
+    {
+        previous = current;
+        current = current->next;
+    }
 
-	while ((*list) != NULL)
-	{
-		Node* trash = *list;
-		*list = (*list)->next;
-		free(trash);
-	}
-	return ok;
+    if (current == NULL)
+    {
+        return deletingNonExistentElement;
+    }
+
+    Node* next = current->next;
+    if (previous == NULL)
+    {
+        SortedList->head = next;
+    }
+    else
+    {
+        previous->next = next;
+    }
+
+    if (next == NULL)
+    {
+        SortedList->tail = NULL;
+    }
+
+    return ok;
+}
+
+void printSortedList(const SortedList* const SortedList)
+{
+    Node* current = SortedList->head;
+    while (current != NULL)
+    {
+        printf("%d ", current->value);
+        current = current->next;
+    }
+    printf("\n");
+}
+
+void deleteSortedList(SortedList** SortedList)
+{
+    while (!sortedListIsEmpty(*SortedList))
+    {
+        deleteValue(*SortedList, (*SortedList)->head->value);
+    }
+    free(*SortedList);
+    *SortedList = NULL;
+}
+
+bool isSorted(SortedList* list)
+{
+    if (sortedListIsEmpty(list))
+    {
+        return true;
+    }
+
+    Node* current = list->head;
+    while (current->next != NULL)
+    {
+        if (current->value > current->next->value)
+        {
+            return false;
+        }
+        current = current->next;
+    }
+    return true;
 }

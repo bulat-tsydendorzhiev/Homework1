@@ -3,22 +3,28 @@
 typedef enum
 {
 	ok,
-	listIsEmpty,
-	outOfMemory,
-	deletingANonExistentElement
-} ErrorCode;
+	deletingNonExistentElement,
+	outOfMemory
+} SortedListErrorCode;
 
-// Node of the sorted list
-typedef struct Node Node;
+// Sorted list
+typedef struct SortedList SortedList;
 
-// Function to push value and preserves sorting
-ErrorCode pushValue(Node** list, const int value);
+// Create sorted list
+SortedList* createSortedList(void);
 
-// Function to delete value and preserves sorting
-ErrorCode deleteValue(Node** list, const int value);
+// Add a value so that the list is sorted
+SortedListErrorCode addValue(SortedList* const SortedList, const int value);
 
-// Function to print sorted list
-void printList(Node* list);
+// Delete list value
+SortedListErrorCode deleteValue(SortedList* const SortedList, const int value);
 
-// Function to clear list
-ErrorCode clearList(Node** list);
+// Print sorted list values
+void printSortedList(const SortedList* const SortedList);
+
+// Delete sorted list
+void deleteSortedList(SortedList** SortedList);
+
+// Сheck list for sortingж
+// Return true if list is sorted
+bool isSorted(const SortedList* const list);
