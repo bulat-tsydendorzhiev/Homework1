@@ -1,42 +1,4 @@
-﻿  main.c
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(45,30): warning C4473: "scanf_s": передано недостаточно аргументов для строки формата
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(45,30): message : заполнители и их параметры ожидают переменное число аргументов в количестве 3, но было предоставлено 2
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(45,30): message : отсутствующий вариативный аргумент "3" требуется для строки форматирования "%c"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(45,30): message : этот аргумент используется в качестве размера буфера
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(155,20): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[1]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(155,20): warning C4024: smartQuickSort: различные типы для формального и фактического параметров 1
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(156,22): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[1]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(156,22): warning C4024: arraysEqual: различные типы для формального и фактического параметров 1
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(156,31): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[1]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(156,31): warning C4024: arraysEqual: различные типы для формального и фактического параметров 2
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(164,20): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[5]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(164,20): warning C4024: smartQuickSort: различные типы для формального и фактического параметров 1
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(165,22): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[5]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(165,22): warning C4024: arraysEqual: различные типы для формального и фактического параметров 1
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(165,31): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[5]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(165,31): warning C4024: arraysEqual: различные типы для формального и фактического параметров 2
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(173,20): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[5]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(173,20): warning C4024: smartQuickSort: различные типы для формального и фактического параметров 1
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(174,22): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[5]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(174,22): warning C4024: arraysEqual: различные типы для формального и фактического параметров 1
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(174,31): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[5]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(174,31): warning C4024: arraysEqual: различные типы для формального и фактического параметров 2
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(182,20): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[5]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(182,20): warning C4024: smartQuickSort: различные типы для формального и фактического параметров 1
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(183,22): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[5]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(183,22): warning C4024: arraysEqual: различные типы для формального и фактического параметров 1
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(183,31): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[5]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(183,31): warning C4024: arraysEqual: различные типы для формального и фактического параметров 2
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(191,20): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[5]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(191,20): warning C4024: smartQuickSort: различные типы для формального и фактического параметров 1
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(192,22): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[5]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(192,22): warning C4024: arraysEqual: различные типы для формального и фактического параметров 1
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(192,31): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[5]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(192,31): warning C4024: arraysEqual: различные типы для формального и фактического параметров 2
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(200,20): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[4]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(200,20): warning C4024: smartQuickSort: различные типы для формального и фактического параметров 1
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(201,22): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[4]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(201,22): warning C4024: arraysEqual: различные типы для формального и фактического параметров 1
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(201,31): warning C4047: функция: "int *" отличается по уровням косвенного обращения от "int (*)[4]"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\Smart Qsort\main.c(201,31): warning C4024: arraysEqual: различные типы для формального и фактического параметров 2
-  Smart Qsort.vcxproj -> C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Smart Qsort\x64\Debug\Smart Qsort.exe
+﻿  console.c
+  main.c
+  Создание кода...
+  Smart Qsort.vcxproj -> C:\Homework\Smart Qsort\x64\Debug\Smart Qsort.exe
