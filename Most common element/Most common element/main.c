@@ -1,106 +1,60 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <locale.h>
+#include <stdbool.h>
 
-int writeData(int* arrayLength, int** arrayOfNumbers);
-void swap(int* number1, int* number2);
-void insertionSort(int* arrayOfNumbers, int left, int right);
-void quickSort(int* arrayOfNumbers, int left, int right);
-int findMostFrequent(int* arrayOfNumbers, int arrayLength);
-int searchTest(void);
-
-int main(void)
-{
-    setlocale(LC_ALL, "Rus");
-    const int errorSearchTest = searchTest();
-    if (!errorSearchTest)
-    {
-        int arrayLength, *arrayofNumbers;
-        const int errorWriteData = writeData(&arrayLength, &arrayofNumbers);
-        if (!errorWriteData)
-        {
-            int result = findMostFrequent(&(*arrayofNumbers), arrayLength);
-            printf("%d\n", result);
-        }
-        return errorWriteData;
-    }
-    return errorSearchTest;
-}
-
-int writeData(int* arrayLength, int** arrayOfNumbers)
-{
-    int amountOfValues;
-    char check;
-
-    printf("Введите длину массива чисел: ");
-    amountOfValues = scanf_s("%d%c", arrayLength, &check);
-    if (*arrayLength <= 0 || amountOfValues != 2 || check != '\n')
-    {
-        printf("Некорректный ввод данных\n");
-        if (*arrayLength <= 0)
-        {
-            printf("Длина массива должна быть натуральным числом\n");
-        }
-        return 1;
-    }
-
-    printf("Введите сам массив: ");
-    *arrayOfNumbers = (int*)malloc(sizeof(int) * *arrayLength);
-    for (int i = 0; i < *arrayLength; ++i)
-    {
-        scanf_s("%d", &(*arrayOfNumbers)[i]);
-    }
-    return 0;
-}
+#define TESTS_FAILED -1
+#define SUCCESS 0
+#define SCAN_ERROR 1
+#define OUT_OF_MEMORY 2
 
 void swap(int* number1, int* number2)
 {
-    int temp = *number1;
+    const int temp = *number1;
     *number1 = *number2;
     *number2 = temp;
 }
 
-void insertionSort(int* arrayOfNumbers, int left, int right)
+void insertionSort(int* array, const int left, const int right)
 {
     int value, j;
     for (int i = left; i <= right; ++i)
     {
-        value = arrayOfNumbers[i];
+        value = array[i];
         j = i;
-        while (j > left && arrayOfNumbers[j - 1] > value)
+        while (j > left && array[j - 1] > value)
         {
-            arrayOfNumbers[j] = arrayOfNumbers[j - 1];
+            array[j] = array[j - 1];
             j--;
         }
-        arrayOfNumbers[j] = value;
+        array[j] = value;
     }
 }
 
-void quickSort(int* arrayOfNumbers, int left, int right)
+void quickSort(int* const array, const int left, const int right)
 {
     if (right - left + 1 <= 10)
     {
-        insertionSort(arrayOfNumbers, left, right);
+        insertionSort(array, left, right);
         return;
     }
-    int pivot = arrayOfNumbers[(left + right) / 2];
+    const int pivot = array[(left + right) / 2];
     int i = left;
     int j = right;
 
     while (i <= j)
     {
-        while (arrayOfNumbers[i] < pivot)
+        while (array[i] < pivot)
         {
             i++;
         }
-        while (arrayOfNumbers[j] > pivot)
+        while (array[j] > pivot)
         {
             j--;
         }
 
         if (i <= j)
         {
-            swap(&arrayOfNumbers[j], &arrayOfNumbers[i]);
+            swap(&array[j], &array[i]);
             i++;
             j--;
         }
@@ -108,30 +62,28 @@ void quickSort(int* arrayOfNumbers, int left, int right)
 
     if (left < j)
     {
-        quickSort(arrayOfNumbers, left, j + 1);
+        quickSort(array, left, j + 1);
     }
     if (i < right)
     {
-        quickSort(arrayOfNumbers, i, right);
+        quickSort(array, i, right);
     }
 }
 
-int findMostFrequent(int* arrayOfNumbers, int arrayLength)
+int searchMostFrequent(const int* const array, const int arrayLength)
 {
-    quickSort(arrayOfNumbers, 0, arrayLength - 1);
-
-    int answer = arrayOfNumbers[0], maxCount = 1;
+    int answer = array[0], maxCount = 1;
     int count = 1;
 
     for (int i = 1; i < arrayLength; ++i)
     {
-        if (arrayOfNumbers[i - 1] == arrayOfNumbers[i])
+        if (array[i - 1] == array[i])
         {
-            count++;
+            ++count;
             if (count > maxCount)
             {
                 maxCount = count;
-                answer = arrayOfNumbers[i - 1];
+                answer = array[i - 1];
             }
         }
         else
@@ -142,48 +94,124 @@ int findMostFrequent(int* arrayOfNumbers, int arrayLength)
     return answer;
 }
 
-int searchTest(void)
+bool isSorted(const int* const array, const size_t arrayLength)
 {
-    // Тест 1: Наиболее часто встречающееся число в середине массива
-    int array1[] = { 8, 8, 8, 9, 9, 9, 9, 10, 10 }; 
-    int length1 = sizeof(array1) / sizeof(array1[0]);
-    if (findMostFrequent(array1, length1) != 9)
+    if (arrayLength == 1)
     {
-        return 1;
+        return true;
     }
-    
-    // Тест 2: Наиболее часто встречающееся число в начале массива
-    int array2[] = {5, 5, 5, 5, 6, 6, 7, 7, 7};
-    int length2 = sizeof(array2) / sizeof(array2[0]);
-    if (findMostFrequent(array2, length2) != 5)
+    for (size_t i = 1; i < arrayLength; ++i)
     {
-        return 2;
+        if (array[i - 1] > array[i])
+        {
+            return false;
+        }
     }
-    
-    // Тест 3: Наиболее часто встречающееся число в конце массива
-    int array3[] = { 1, 2, 2, 3, 3, 3, 4, 4, 4, 4 };
-    int length3 = sizeof(array3) / sizeof(array3[0]);
-    if (findMostFrequent(array3, length3) != 4)
-    {
-        return 3;
-    }
-    
-    // Тест 4: Массив с одним элементом
-    int array4[] = {11};
-    int length4 = sizeof(array4) / sizeof(array4[0]);
+    return true;
+}
 
-    if (findMostFrequent(array4, length4) != 11)
+bool testsForQuickSort(void)
+{
+    int testArrays[][20] = { {1},
+                        {5, 4, 3, 2, 1},
+                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                        {15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1},
+                        {1, 3, 2, 0, -1, 5, 6, 7, 2, 9, -12, 68, 37, 21, 99, 214, 62, 63, 12, 0} };
+    const size_t testArraysLengths[] = { 1, 5, 15, 15, 20 };
+
+    for (size_t i = 0; i < 5; ++i)
     {
-        return 4;
+        quickSort(testArrays[i], 0, testArraysLengths[i] - 1);
+        if (!isSorted(testArrays[i], testArraysLengths[i]))
+        {
+            return false;
+        }
     }
-    
-    // Тест 5: Массив с повторяющимися числами, но без наиболее часто встречающегося числа
-    int array5[] = {12, 12, 13, 13, 14, 14};
-    int length5 = sizeof(array5) / sizeof(array5[0]);
-    if (findMostFrequent(array5, length5) != 12)
+    return true;
+}
+
+bool testForSearching(void)
+{
+    const int testArrays[][10] = { {1},
+                                {1, 2, 2, 3, 3, 3, 4, 4, 4, 4},
+                                {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+                                {12, 12, 13, 13, 14, 14} };
+    const int testArraysLengths[] = { 1, 10, 10, 6 };
+    const int expectedResults[] = { 1, 4, 1, 12 };
+
+    for (size_t i = 0; i < 4; i++)
     {
-        return 5;
+        const int result = searchMostFrequent(testArrays[i], testArraysLengths[i]);
+        if (result != expectedResults[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool tests(void)
+{
+    if (!testsForQuickSort())
+    {
+        printf("Tests for quick sort failed\n");
+        return false;
+    }
+    if (!testForSearching())
+    {
+        printf("Tests for searching failed\n");
+        return false;
+    }
+    return true;
+}
+
+int initData(int* const arrayLength, int** const array)
+{
+    printf("Enter array length: ");
+    if (scanf_s("%d", arrayLength) != 1 || *arrayLength <= 0)
+    {
+        return SCAN_ERROR;
     }
 
-    return 0;
+    *array = (int*)calloc(*arrayLength, sizeof(int));
+    if (*array == NULL)
+    {
+        return OUT_OF_MEMORY;
+    }
+
+    printf("Enter array: ");
+    for (size_t i = 0; i < *arrayLength; i++)
+    {
+        if (scanf_s("%d", &(*array)[i]) != 1)
+        {
+            free(*array);
+            return SCAN_ERROR;
+        }
+    }
+    return SUCCESS;
+}
+
+int main(void)
+{
+    const bool testPassed = tests();
+    if (!testPassed)
+    {
+        return TESTS_FAILED;
+    }
+
+    int* array = NULL;
+    int arrayLength = 0;
+    const int errorInit = initData(&arrayLength, &array);
+    if (errorInit)
+    {
+        printf("Error during initialization\n");
+        return errorInit;
+    }
+
+    quickSort(array, 0, arrayLength - 1);
+    const int mostFrequentElement = searchMostFrequent(array, arrayLength);
+    printf("Most frequent element in array is %d\n", mostFrequentElement);
+
+    free(array);
+    return SUCCESS;
 }

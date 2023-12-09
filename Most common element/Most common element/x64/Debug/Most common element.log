@@ -1,6 +1,4 @@
-﻿  main.c
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Most common element\Most common element\main.c(36,30): warning C4473: "scanf_s": передано недостаточно аргументов для строки формата
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Most common element\Most common element\main.c(36,30): message : заполнители и их параметры ожидают переменное число аргументов в количестве 3, но было предоставлено 2
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Most common element\Most common element\main.c(36,30): message : отсутствующий вариативный аргумент "3" требуется для строки форматирования "%c"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Most common element\Most common element\main.c(36,30): message : этот аргумент используется в качестве размера буфера
-  Most common element.vcxproj -> C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\Most common element\x64\Debug\Most common element.exe
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: промежуточный каталог (x64\Debug\) содержит файлы, которые используются совместно с другим проектом (Most common element.vcxproj).  Это может привести к ошибкам очистки и перестроения.
+  main.c
+C:\Homework\Most common element\Most common element\main.c(124,58): warning C4267: функция: преобразование из "size_t" в "const int"; возможна потеря данных
+  Most common element.vcxproj -> C:\Homework\Most common element\x64\Debug\Most frequent element.exe
