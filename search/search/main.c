@@ -1,96 +1,61 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <locale.h>
+#include <stdbool.h>
 #include <time.h>
 
-void swap(int* number1, int* number2);
-void insertionSort(int* arrayOfNumbers, int left, int right);
-void quickSort(int* arrayOfNumbers, int left, int right);
-int writeData(int* arrayLength, int* amountOfRandomNumber);
-int binarySearch(int number, int* arrayOfNumbers, int length);
-void createArrayOfNumbers(int* arrayOfNumbers, int arrayLength);
-void check(int randomNumber, int* arrayOfNumbers, int arrayLength);
-int binarySearchTest(void);
-
-int main(void)
-{
-    setlocale(LC_ALL, "Rus");
-    const int errorBinarySearchTest = binarySearchTest();
-    if (!errorBinarySearchTest)
-    {
-        const int arrayLength, amountOfRandomNumber;
-        // проверка на правильный ввод данных
-        if (!writeData(&arrayLength, &amountOfRandomNumber))
-        {
-            // создаем массив из n(arrayLength) случайных элементов
-            int* arrayOfNumbers = calloc(arrayLength, sizeof(int));
-            int randomNumber;
-            createArrayOfNumbers(arrayOfNumbers, arrayLength);
-
-            // сортируем массив, чтобы использовать бинарный поиск
-            quickSort(arrayOfNumbers, 0, arrayLength - 1);
-
-            //провер€ем находитс€ ли число в массиве
-            for (int i = 0; i < amountOfRandomNumber; ++i)
-            {
-                randomNumber = rand() % 1000;
-                check(randomNumber, arrayOfNumbers, arrayLength);
-            }
-            return 0;
-        }
-        return 1;
-    }
-    return errorBinarySearchTest;
-}
+#define TESTS_FAILED -1
+#define SUCCESS 0
+#define SCAN_ERROR 1
+#define OUT_OF_MEMORY 2
+#define RANGE_OF_RANDOM_NUMBERS 1000
 
 void swap(int* number1, int* number2)
 {
-    int temp = *number1;
-    *number1 = *number2;
-    *number2 = temp;
+    *number1 ^= *number2;
+    *number2 ^= *number1;
+    *number1 ^= *number2;
 }
 
-void insertionSort(int* arrayOfNumbers, int left, int right)
+void insertionSort(int* const array, int left, int right)
 {
-    int value, j;
     for (int i = left; i <= right; ++i)
     {
-        value = arrayOfNumbers[i];
-        j = i;
-        while (j > left && arrayOfNumbers[j - 1] > value)
+        const int value = array[i];
+        int j = i;
+        while (j > left && array[j - 1] > value)
         {
-            arrayOfNumbers[j] = arrayOfNumbers[j - 1];
+            array[j] = array[j - 1];
             j--;
         }
-        arrayOfNumbers[j] = value;
+        array[j] = value;
     }
 }
 
-void quickSort(int* arrayOfNumbers, int left, int right)
+void quickSort(int* const array, const int left, const int right)
 {
     if (right - left + 1 <= 10)
     {
-        insertionSort(arrayOfNumbers, left, right);
+        insertionSort(array, left, right);
         return;
     }
-    int pivot = arrayOfNumbers[(left + right) / 2];
+    const int pivot = array[(left + right) / 2];
     int i = left;
     int j = right;
 
     while (i <= j)
     {
-        while (arrayOfNumbers[i] < pivot)
+        while (array[i] < pivot)
         {
             i++;
         }
-        while (arrayOfNumbers[j] > pivot)
+        while (array[j] > pivot)
         {
             j--;
         }
 
         if (i <= j)
         {
-            swap(&arrayOfNumbers[j], &arrayOfNumbers[i]);
+            swap(&array[j], &array[i]);
             i++;
             j--;
         }
@@ -98,117 +63,159 @@ void quickSort(int* arrayOfNumbers, int left, int right)
 
     if (left < j)
     {
-        quickSort(arrayOfNumbers, left, j + 1);
+        quickSort(array, left, j + 1);
     }
     if (i < right)
     {
-        quickSort(arrayOfNumbers, i, right);
+        quickSort(array, i, right);
     }
 }
 
-int writeData(int* arrayLength, int* amountOfRandomNumber)
+int binarySearch(const int number, const int* const array, const int length)
 {
-    char check;
-    printf("¬ведите числа n и k: ");
-    const int errorScanf = scanf_s("%d %d%c", arrayLength, amountOfRandomNumber, &check);
-    if (errorScanf != 3 || check != '\n' || check == ',' || *arrayLength <= 0 || *amountOfRandomNumber <= 0)
-    {
-        printf("ќшибка: n и k должны быть натуральными числами\n");
-        return 1;
-    }
-    return 0;
-}
-
-int binarySearch(int number, int* arrayOfNumbers, int length)
-{
-    int middleIndex, middleElement;
     int start = 0;
     int end = length - 1;
 
     while (start <= end)
     {
-        // берем серединный элемент и сравниваем его с искомым числом
-        middleIndex = (start + end) / 2;
-        middleElement = arrayOfNumbers[middleIndex];
-        if (number == middleElement)
+        const int middleIndex = (start + end) / 2;
+        if (number == array[middleIndex])
         {
-            // число нашлось
-            return 1;
+            return middleIndex;
         }
-        else if (middleElement < number)
+        else if (array[middleIndex] < number)
         {
-            // присваиваем началу диапазона поиска индекс серединного числа, так как числа левее меньше искомого
             start = middleIndex + 1;
         }
         else
         {
-            // присваиваем концу диапазона поиска индекс серединного числа, так как числа правее больше искомого
             end = middleIndex - 1;
         }
     }
-    // число не нашлось
-    return 0;
+    return -1;
 }
 
-void createArrayOfNumbers(int* arrayOfNumbers, int arrayLength)
+bool isSorted(const int* const array, const size_t arrayLength)
 {
-    srand(time(NULL));
-    for (int i = 0; i < arrayLength; ++i)
+    if (arrayLength == 1)
     {
-        arrayOfNumbers[i] = rand() % 1000;
+        return true;
     }
+    for (size_t i = 1; i < arrayLength; ++i)
+    {
+        if (array[i - 1] > array[i])
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
-void check(int randomNumber, int* arrayOfNumbers, int arrayLength)
+bool testsForQuickSort(void)
 {
-    // провер€ем, находитс€ ли число в массиве
-    if (binarySearch(randomNumber, arrayOfNumbers, arrayLength))
+    int testArrays[][20] = { {1},
+                        {5, 4, 3, 2, 1},
+                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                        {15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0},
+                        {1, 3, 2, 0, -1, 5, 6, 7, 2, 9, -12, 68, 37, 21, 99, 214, 62, 63, 12, 0} };
+    const size_t testArraysLengths[] = { 1, 5, 15, 16, 20 };
+
+    for (size_t i = 0; i < 5; ++i)
     {
-        printf("„исло %d находитс€ в массиве, состо€щем из %d чисел\n", randomNumber, arrayLength);
+        quickSort(testArrays[i], 0, testArraysLengths[i] - 1);
+        if (!isSorted(testArrays[i], testArraysLengths[i]))
+        {
+            return false;
+        }
     }
-    else
-    {
-        printf("„исло %d не находитс€ в массиве, состо€щем из %d чисел\n", randomNumber, arrayLength);
-    }
+    return true;
 }
 
-int binarySearchTest(void)
+bool testForBinarySearch(void)
 {
-    // “ест 1: ѕоиск существующего элемента
-    int array1[] = { 1, 3, 5, 7, 9 };
-    int length1 = sizeof(array1) / sizeof(array1[0]);
-    int target1 = 7;
-    if (!binarySearch(target1, array1, length1))
+    const int testArrays[][20] = { {1},
+                                {2, 2, 2, 2, 2},
+                                {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+                                { -12, -1, 0, 0, 1, 2, 2, 3, 4, 6, 7, 9, 12, 21, 37, 62, 63, 68, 99, 214},
+                                {3, 1, 4, 1, 5, 9, 2, 6, 5} };
+    const int testArraysLengths[] = {1, 5, 10, 20, 9};
+    const int targets[] = {1, 2, 3, 4, 123};
+    const int expectedResults[] = { 0, 2, 2, 8, -1};
+    for (size_t i = 0; i < 5; i++)
     {
-        return 1;
+        if (binarySearch(targets[i], testArrays[i], testArraysLengths[i]) != expectedResults[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool tests()
+{
+    if (!testsForQuickSort())
+    {
+        printf("Tests for quick sort failed\n");
+        return false;
+    }
+    if (!testForBinarySearch())
+    {
+        printf("Tests for binary search failed\n");
+        return false;
+    }
+    return true;
+}
+
+bool readData(int* const arrayLength, int* const amountOfRandomNumbers)
+{
+    printf("Enter array length and amount of random numbers: ");
+    return scanf_s("%d %d", arrayLength, amountOfRandomNumbers) == 2 && *arrayLength > 0 && *amountOfRandomNumbers > 0;
+}
+
+int* createArrayOfRandomNumbers(const int arrayLength)
+{
+    int* newArray = (int*)calloc(arrayLength, sizeof(int));
+    if (newArray == NULL)
+    {
+        return NULL;
+    }
+    for (size_t i = 0; i < arrayLength; i++)
+    {
+        srand(time(NULL));
+        newArray[i] = rand() % RANGE_OF_RANDOM_NUMBERS;
+    }
+    return newArray;
+}
+
+int main(void)
+{
+    const bool testsPassed = tests();
+    if (!testsPassed)
+    {
+        return TESTS_FAILED;
     }
 
-    // “ест 2: ѕоиск несуществующего элемента
-    int array2[] = { 2, 4, 6, 8, 10 };
-    int length2 = sizeof(array2) / sizeof(array2[0]);
-    int target2 = 5;
-    if (binarySearch(target2, array2, length2))
+    int arrayLength = 0, amountOfRandomNumbers = 0;
+    const bool successfullRead = readData(&arrayLength, &amountOfRandomNumbers);
+    if (!successfullRead)
     {
-        return 2;
+        printf("Error input\n");
+        return SCAN_ERROR;
     }
 
-    // “ест 3: ѕоиск в массиве с одним элементом
-    int array3[] = { 5 };
-    int length3 = sizeof(array3) / sizeof(array3[0]);
-    int target3 = 5;
-    if (!binarySearch(target3, array3, length3))
+    int* randomArray = createArrayOfRandomNumbers(arrayLength);
+    if (randomArray == NULL)
     {
-        return 3;
+        return OUT_OF_MEMORY;
     }
 
-    // “ест 4: ѕоиск в массиве с повтор€ющимис€ элементами
-    int array4[] = { 2, 2, 2, 2, 2 };
-    int length4 = sizeof(array4) / sizeof(array4[0]);
-    int target4 = 2;
-    if (!binarySearch(target4, array4, length4))
+    quickSort(randomArray, 0, arrayLength - 1);
+    for (size_t i = 0; i < amountOfRandomNumbers; i++)
     {
-        return 3;
+        const int randomNumber = rand() % RANGE_OF_RANDOM_NUMBERS;
+        printf(binarySearch(randomNumber, randomArray, arrayLength) == -1 ? "Number %d is not in random array\n": "Number %d is in random array\n", randomNumber);
     }
 
-    return 0;
+    free(randomArray);
+    return SUCCESS;
 }

@@ -1,9 +1,4 @@
 ﻿  main.c
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\search\search\main.c(23,36): warning C4090: функция: разные квалификаторы "const"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\search\search\main.c(23,59): warning C4090: функция: разные квалификаторы "const"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\search\search\main.c(113,36): warning C4473: "scanf_s": передано недостаточно аргументов для строки формата
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\search\search\main.c(113,36): message : заполнители и их параметры ожидают переменное число аргументов в количестве 4, но было предоставлено 3
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\search\search\main.c(113,36): message : отсутствующий вариативный аргумент "4" требуется для строки форматирования "%c"
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\search\search\main.c(113,36): message : этот аргумент используется в качестве размера буфера
-C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\search\search\main.c(155,11): warning C4244: функция: преобразование "time_t" в "unsigned int", возможна потеря данных
-  search.vcxproj -> C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\Домашка по проге\third homework\search\x64\Debug\search.exe
+C:\Homework\search\search\main.c(124,58): warning C4267: функция: преобразование из "size_t" в "const int"; возможна потеря данных
+C:\Homework\search\search\main.c(183,15): warning C4244: функция: преобразование "time_t" в "unsigned int", возможна потеря данных
+  search.vcxproj -> C:\Homework\search\x64\Debug\search.exe
