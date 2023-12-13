@@ -3,14 +3,14 @@
 
 #include "Qsort.h"
 
-static void swap(int* number1, int* number2)
+static void swap(char* number1, char* number2)
 {
-    *number1 ^= *number2;
-    *number2 ^= *number1;
-    *number1 ^= *number2;
+    const char temp = *number1;
+    *number1 = *number2;
+    *number2 = temp;
 }
 
-static void insertionSort(int* array, int left, int right)
+static void insertionSort(char* array, int left, int right)
 {
     for (size_t i = left; i <= right; ++i)
     {
@@ -25,14 +25,14 @@ static void insertionSort(int* array, int left, int right)
     }
 }
 
-void qSort(int* const array, const int left, const int right)
+void qSort(char* const array, const int left, const int right)
 {
     if (right - left + 1 <= 10)
     {
         insertionSort(array, left, right);
         return;
     }
-    const int pivot = array[(left + right) / 2];
+    const char pivot = array[(left + right) / 2];
     size_t i = left;
     size_t j = right;
 
@@ -57,19 +57,10 @@ void qSort(int* const array, const int left, const int right)
 
     if (left < j)
     {
-        smartQsort(array, left, j + 1);
+        qSort(array, left, j + 1);
     }
     if (i < right)
     {
-        smartQsort(array, i, right);
+        qSort(array, i, right);
     }
-}
-
-void printSortedArray(const int* const array, const int arrayLength)
-{
-    for (size_t i = 0; i < arrayLength; ++i)
-    {
-        printf("%d ", array[i]);
-    }
-    printf("\n");
 }
