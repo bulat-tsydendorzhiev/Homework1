@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define MAX_STRING_LENGTH 100
-
 typedef enum
 {
     testsFailed = -1,
