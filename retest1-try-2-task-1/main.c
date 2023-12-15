@@ -15,7 +15,7 @@ number convertBinaryToDecimal(const bool* const binaryNumber, const number lengt
     number power = 1;
     for (number i = 0; i < length; ++i)
     {
-        if (binaryNumber[i])
+        if (binaryNumber[length - i - 1])
         {
             result += power;
         }
