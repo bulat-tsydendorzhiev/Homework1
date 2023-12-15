@@ -2,8 +2,8 @@
 
 #include <stdlib.h>
 
-// Get string from user
+// Get string of arbitary length from user
 char* getString(size_t* length);
 
-// Get string from file
+// Get string of arbitary length from file
 char* getStringFromFile(const char* const fileName, size_t* length);

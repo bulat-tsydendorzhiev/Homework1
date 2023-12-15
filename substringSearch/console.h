@@ -5,8 +5,7 @@
 typedef enum
 {
     success,
-    testsFailed = -1,
-    outOfMemory = -2
+    outOfMemory = 2
 } ErrorCode;
 
 // Console

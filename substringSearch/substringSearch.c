@@ -1,10 +1,9 @@
-#include <string.h>
 #include <stdio.h>
 
 #include "substringSearch.h"
 
-#define BASE 31
-#define MOD INT_MAX
+#define BASE 13
+#define MOD 991
 
 static size_t getHash(const char* const string, const size_t length)
 {
@@ -42,8 +41,8 @@ int substringSearch(const char* const string, const size_t stringLength, const c
 				}
 			}
 		}
-		currentHash = (BASE * (currentHash - preMaxDegree * string[i])) % MOD;
-		currentHash = (currentHash + string[i + substringLength]) % MOD;
+		currentHash = currentHash - string[i] * preMaxDegree % MOD;
+		currentHash = ((currentHash + MOD) % MOD * BASE + string[i + substringLength]) % MOD;
 	}
 	return -1;
 }
