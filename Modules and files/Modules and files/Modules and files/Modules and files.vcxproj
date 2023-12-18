@@ -24,6 +24,7 @@
     <ProjectGuid>{9a9c005f-1db9-41e4-82f6-5818a11eeeea}</ProjectGuid>
     <RootNamespace>Modulesandfiles</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>modulesAndFiles</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -127,13 +128,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="searchMostFrequent.c" />
+    <ClCompile Include="initData.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="quickSort.c" />
+    <ClCompile Include="tests.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="QuickSort.h" />
+    <ClInclude Include="searchMostFrequent.h" />
+    <ClInclude Include="initData.h" />
+    <ClInclude Include="quickSort.h" />
+    <ClInclude Include="tests.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="File.txt" />
+    <Text Include="input.txt" />
     <Text Include="test1.txt" />
     <Text Include="test2.txt" />
     <Text Include="test3.txt" />
