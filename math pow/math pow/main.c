@@ -1,25 +1,22 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-void readData(double* number, int* power)
+void readNumber(int* const number, const char* const inputParameter)
 {
-	printf("Enter number: ");
-	int scanResult = scanf_s("%lf", number);
-	while (scanResult == 0)
+	printf("Enter integer %s: ", inputParameter);
+	int scanAmount = scanf_s("%d", number);
+	while (scanAmount != 1)
 	{
+		printf("Wrong input. Please, try again.");
 		scanf_s("%*[^\n]");
-		printf("Wrong input! Please enter number: ");
-		scanResult = scanf_s("%lf", number);
+		scanAmount = scanf_s("%d", number);
 	}
+}
 
-	printf("Enter number power(integer number): ");
-	scanResult = scanf_s("%d", power);
-	while (scanResult == 0)
-	{
-		scanf_s("%*[^\n]");
-		printf("Wrong input! Please enter integer number: ");
-		scanResult = scanf_s("%d", power);
-	}
+void readData(int* const base, int* const power)
+{
+	readNumber(base, "number");
+	readNumber(power, "power of number");
 }
 
 double slowPow(double number, int power, bool* errorOccurred)
@@ -113,28 +110,27 @@ int tests(void)
 
 int main(void)
 {
-	system("chcp 1251 > nul");
-
 	const int errorTest = tests();
 	if (errorTest)
 	{
 		return errorTest;
 	}
 
-	double number = 1.0;
-	int power = 1;
-	readData(&number, &power);
+	int base = 0;
+	int power = 0;
+
+	readData(&base, &power);
 
 	bool errorInput = false;
-	const double result = fastPow(number, power, &errorInput);
+	const double result = fastPow(base, power, &errorInput);
 	if (errorInput)
 	{
-		printf("Uncorrect input data\n");
+		printf("Incorrect input data\n");
 		printf("Uncertain result\n");
 		return 1;
 	}
 
-	printf("%lf\n", result);
+	printf("%d to the power of %d equals: %lf\n", base, power, result);
 
 	return 0;
 }
