@@ -1,183 +1,142 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <locale.h>
 
-int writeData(int* number1, int* number2)
+typedef enum
 {
-    int amountOfValues;
-    char check;
+    testsFailed = -1,
+    success,
+    scanError
+} ErrorCode;
 
-    printf("Введите первое десятичное число: ");
-    amountOfValues = scanf_s("%d%c", number1, &check);
-    if (amountOfValues != 2 || check != '\n')
-    {
-        printf("Некорректный ввод данных\n");
-        return 1;
-    }
-
-    printf("Введите второе десятичное число: ");
-    amountOfValues = scanf_s("%d%c", number2, &check);
-    if (amountOfValues != 2 || check != '\n')
-    {
-        printf("Некорректный ввод данных\n");
-        return 2;
-    }
-    printf("\n");
-    return 0;
+bool readNumber(int* const number, const char* const indexNumber)
+{
+    printf("Введите %s число: ", indexNumber);
+    return scanf_s("%d", number) == 1;
 }
 
-void convertDecimalToBinary(int number, int* binary)
+int initData(int* const number1, int* const number2)
 {
-    int i = 0;
+    if (!readNumber(number1, "первое"))
+    {
+        return scanError;
+    }
+    if (!readNumber(number2, "второе"))
+    {
+        return scanError;
+    }
+    return success;
+}
+
+void convertDecimalToBinary(const int number, int binaryNumber[32])
+{
+    size_t i = 0;
     while (i < 32)
     {
-        binary[31 - i] = (number >> i) & 1; // Получение i-го бита числа
-        i++;
+        binaryNumber[31 - i] = (number >> i) & 1;
+        ++i;
     }
 }
 
-int convertBinaryToDecimal(int* binary) {
-    int decimal = 0; // Искомое число
-    int i = 32;
-    int power = 1; // Степень двойки
+int convertBinaryToDecimal(const int binaryNumber[32])
+{
+    int decimal = 0;
+    int power = 1;
 
-    // Если число отрицательное, устанавливаем старший бит в 1
-    if (binary[i] == 1) {
+    if (binaryNumber[32] == 1)
+    {
         decimal = -power;
     }
 
-    i--;
-
-    while (i >= 0) {
-        decimal += binary[i] * power;
-        power *= 2;
-        i--;
+    int i = 31;
+    while (i >= 0)
+    {
+        decimal += binaryNumber[i] * power;
+        power = power << 1;
+        --i;
     }
 
     return decimal;
 }
 
-void addBinaryColumn(int* binary1, int* binary2, int* result)
+void sumTwoBinaryNumbersInColumn(const int binaryNumber1[32], const int binaryNumber2[32], int result[32])
 {
-    int carry = 0; // Перенос
+    int carry = 0;
 
-    // Складываем числа по разрядам
-    for (int i = 31; i >= 0; i--) {
-        int bit1 = binary1[i]; // Получаем текущий бит первого числа
-        int bit2 = binary2[i]; // Получаем текущий бит второго числа
+    for (int i = 31; i >= 0; --i)
+    {
+        const int bit1 = binaryNumber1[i];
+        const int bit2 = binaryNumber2[i];
+        const int sum = bit1 ^ bit2 ^ carry;
 
-        // Складываем биты с учетом переноса
-        int sum = bit1 ^ bit2 ^ carry;
-
-        // Обновляем перенос
         carry = (bit1 & bit2) | (bit1 & carry) | (bit2 & carry);
-
-        // Сохраняем результат в обратном порядке
         result[i] = sum;
     }
 }
 
-void printBinary(int* binary)
+void printBinaryNumber(const int binaryNumber[32])
 {
-    // Выводит двоичную запись
-    for (int i = 0; i < 32; i++) {
-        printf("%d", binary[i]);
+    for (size_t i = 0; i < 32; ++i)
+    {
+        printf("%d", binaryNumber[i]);
     }
     printf("\n");
 }
 
-void printAnswer(int number1, int number2)
+bool runTests(void)
 {
-    // Заводим 2 массива для хранения двоичной записи и один для хранения результата сложения в столбик
-    int binary1[32], binary2[32], resultOfSumm[32];
-
-    // Переводим числа в их двоичную запись выводим их в консоль
-    printf("Число %d двоичном виде выглядит вот так: ", number1);
-    convertDecimalToBinary(number1, binary1);
-    printBinary(binary1);
-
-    printf("Число %d двоичном виде выглядит вот так: ", number2);
-    convertDecimalToBinary(number2, binary2);
-    printBinary(binary2);
-
-    // Выполняем сложение в столбик и выводим на экран результат в двоичном и десятичном видах
-    addBinaryColumn(binary1, binary2, resultOfSumm);
-    printf("Результат сложения в двоичном виде: ");
-    printBinary(resultOfSumm);
-
-    const int decimalNotation = convertBinaryToDecimal(resultOfSumm);
-    printf("Результат сложения в десятичной записи: %d\n", decimalNotation);
-}
-
-int tests(void)
-{
-    // Тест 1: сумма положительных чисел
-    int number11 = 5, number12 = 7, binary11[32], binary12[32], resultOfSumm1[32];
-
-    convertDecimalToBinary(number11, binary11);
-    convertDecimalToBinary(number12, binary12);
-    addBinaryColumn(binary11, binary12, resultOfSumm1);
-    const int decimalNotation1 = convertBinaryToDecimal(resultOfSumm1);
-
-    if (decimalNotation1 != 12)
+    const int testCases[][3] = { {4, 6, 10}, {-5, -7, -12}, {-5, 0, -5}, {5, -2, 3} };
+    for (size_t i = 0; i < 4; ++i)
     {
-        return 21;
+        int binaryNumber1[32] = { 0 };
+        int binaryNumber2[32] = { 0 };
+        int resultOfSum[32] = { 0 };
+        convertDecimalToBinary(testCases[i][0], binaryNumber1);
+        convertDecimalToBinary(testCases[i][1], binaryNumber2);
+        sumTwoBinaryNumbersInColumn(binaryNumber1, binaryNumber2, resultOfSum);
+        if (convertBinaryToDecimal(resultOfSum) != testCases[i][2])
+        {
+            printf("Тест %Iu провалился\n", i + 1);
+            return false;
+        }
     }
-
-    // Тест 2: сумма отрицательных чисел
-    int number21 = -5, number22 = -7, binary21[32], binary22[32], resultOfSumm2[32];
-
-    convertDecimalToBinary(number21, binary21);
-    convertDecimalToBinary(number22, binary22);
-    addBinaryColumn(binary21, binary22, resultOfSumm2);
-    const int decimalNotation2 = convertBinaryToDecimal(resultOfSumm2);
-
-    if (decimalNotation2 != -12)
-    {
-        return 22;
-    }
-
-    // Тест 3: сумма отрицательного и положительного чисел
-    int number31 = -5, number32 = 7, binary31[32], binary32[32], resultOfSumm3[32];
-
-    convertDecimalToBinary(number31, binary31);
-    convertDecimalToBinary(number32, binary32);
-    addBinaryColumn(binary31, binary32, resultOfSumm3);
-    const int decimalNotation3 = convertBinaryToDecimal(resultOfSumm3);
-
-    if (decimalNotation3 != 2)
-    {
-        return 23;
-    }
-
-    // Тест 4: сумма c числом, являющимся нулем
-    int number41 = 0, number42 = 7, binary41[32], binary42[32], resultOfSumm4[32];
-
-    convertDecimalToBinary(number41, binary41);
-    convertDecimalToBinary(number42, binary42);
-    addBinaryColumn(binary41, binary42, resultOfSumm4);
-    const int decimalNotation4 = convertBinaryToDecimal(resultOfSumm4);
-
-    if (decimalNotation4 != 7)
-    {
-        return 24;
-    }
-    return 0;
+    return true;
 }
 
 int main(void)
 {
     setlocale(LC_ALL, "Rus");
-    int number1, number2;
-    const int errorTest = tests();
-    if (!errorTest)
+
+    const bool testsPassed = runTests();
+    if (!testsPassed)
     {
-        const int errorWirteData = writeData(&number1, &number2);
-        if (!errorWirteData) // защита от дурака
-        {
-            printAnswer(number1, number2);
-            return 0;
-        }
-        return errorWirteData;
+        return testsFailed;
     }
-    return errorTest;
+
+    int number1 = 0;
+    int number2 = 0;
+    const int errorInit = initData(&number1, &number2);
+    if (errorInit)
+    {
+        return errorInit;
+    }
+
+    int binaryNumber1[32] = { 0 };
+    int binaryNumber2[32] = { 0 };
+    int resultOfSum[32] = { 0 };
+    convertDecimalToBinary(number1, binaryNumber1);
+    convertDecimalToBinary(number2, binaryNumber2);
+
+    printf("Двоичное представление числа %d: ", number1);
+    printBinaryNumber(binaryNumber1);
+
+    printf("Двоичное представление числа %d: ", number2);
+    printBinaryNumber(binaryNumber2);
+
+    sumTwoBinaryNumbersInColumn(binaryNumber1, binaryNumber2, resultOfSum);
+    printf("Результат сложения чисел в их двоичном представлении: ");
+    printBinaryNumber(resultOfSum);
+    printf("Результат сложения чисел в десятичной системе счисления: %d", convertBinaryToDecimal(resultOfSum));
+
+    return success;
 }
