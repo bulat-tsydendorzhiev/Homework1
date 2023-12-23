@@ -127,14 +127,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EmptyTestFile.txt" />
+    <ClCompile Include="console.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="phoneBook.c" />
+    <ClCompile Include="tests.c" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="PhoneBookFile.txt" />
-    <Text Include="testFile.txt" />
-    <Text Include="testSaveDataFile1.txt" />
-    <Text Include="testSaveDataFile2.txt" />
+    <ClInclude Include="console.h" />
+    <ClInclude Include="phoneBook.h" />
+    <ClInclude Include="tests.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="input.txt" />
+    <Text Include="outputFileForTest.txt" />
+    <Text Include="testFile1.txt" />
+    <Text Include="testFile2.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
