@@ -2,6 +2,8 @@
 #include <stdbool.h>
 #include <locale.h>
 
+#define BINARY_REPRESENTATION_SIZE 32
+
 typedef enum
 {
     testsFailed = -1,
@@ -15,7 +17,7 @@ bool readNumber(int* const number, const char* const indexNumber)
     return scanf_s("%d", number) == 1;
 }
 
-int initData(int* const number1, int* const number2)
+ErrorCode initData(int* const number1, int* const number2)
 {
     if (!readNumber(number1, "первое"))
     {
@@ -28,38 +30,25 @@ int initData(int* const number1, int* const number2)
     return success;
 }
 
-void convertDecimalToBinary(const int number, int binaryNumber[32])
+void convertDecimalToBinary(const int number, int binaryNumber[BINARY_REPRESENTATION_SIZE])
 {
-    size_t i = 0;
-    while (i < 32)
+    for (size_t i = 0; i < BINARY_REPRESENTATION_SIZE; ++i)
     {
-        binaryNumber[31 - i] = (number >> i) & 1;
-        ++i;
+        binaryNumber[BINARY_REPRESENTATION_SIZE - i - 1] = (number >> i) & 1;
     }
 }
 
-int convertBinaryToDecimal(const int binaryNumber[32])
+int convertBinaryToDecimal(const int binaryNumber[BINARY_REPRESENTATION_SIZE])
 {
     int decimal = 0;
-    int power = 1;
-
-    if (binaryNumber[32] == 1)
+    for (size_t i = 0; i < BINARY_REPRESENTATION_SIZE; ++i)
     {
-        decimal = -power;
+        decimal += binaryNumber[i] << (BINARY_REPRESENTATION_SIZE - i - 1);
     }
-
-    int i = 31;
-    while (i >= 0)
-    {
-        decimal += binaryNumber[i] * power;
-        power = power << 1;
-        --i;
-    }
-
     return decimal;
 }
 
-void sumTwoBinaryNumbersInColumn(const int binaryNumber1[32], const int binaryNumber2[32], int result[32])
+void sumTwoBinaryNumbersInColumn(const int binaryNumber1[BINARY_REPRESENTATION_SIZE], const int binaryNumber2[BINARY_REPRESENTATION_SIZE], int result[BINARY_REPRESENTATION_SIZE])
 {
     int carry = 0;
 
@@ -74,7 +63,7 @@ void sumTwoBinaryNumbersInColumn(const int binaryNumber1[32], const int binaryNu
     }
 }
 
-void printBinaryNumber(const int binaryNumber[32])
+void printBinaryNumber(const int binaryNumber[BINARY_REPRESENTATION_SIZE])
 {
     for (size_t i = 0; i < 32; ++i)
     {
@@ -88,9 +77,9 @@ bool runTests(void)
     const int testCases[][3] = { {4, 6, 10}, {-5, -7, -12}, {-5, 0, -5}, {5, -2, 3} };
     for (size_t i = 0; i < 4; ++i)
     {
-        int binaryNumber1[32] = { 0 };
-        int binaryNumber2[32] = { 0 };
-        int resultOfSum[32] = { 0 };
+        int binaryNumber1[BINARY_REPRESENTATION_SIZE] = { 0 };
+        int binaryNumber2[BINARY_REPRESENTATION_SIZE] = { 0 };
+        int resultOfSum[BINARY_REPRESENTATION_SIZE] = { 0 };
         convertDecimalToBinary(testCases[i][0], binaryNumber1);
         convertDecimalToBinary(testCases[i][1], binaryNumber2);
         sumTwoBinaryNumbersInColumn(binaryNumber1, binaryNumber2, resultOfSum);
@@ -115,15 +104,15 @@ int main(void)
 
     int number1 = 0;
     int number2 = 0;
-    const int errorInit = initData(&number1, &number2);
+    const ErrorCode errorInit = initData(&number1, &number2);
     if (errorInit)
     {
         return errorInit;
     }
 
-    int binaryNumber1[32] = { 0 };
-    int binaryNumber2[32] = { 0 };
-    int resultOfSum[32] = { 0 };
+    int binaryNumber1[BINARY_REPRESENTATION_SIZE] = { 0 };
+    int binaryNumber2[BINARY_REPRESENTATION_SIZE] = { 0 };
+    int resultOfSum[BINARY_REPRESENTATION_SIZE] = { 0 };
     convertDecimalToBinary(number1, binaryNumber1);
     convertDecimalToBinary(number2, binaryNumber2);
 
