@@ -8,39 +8,41 @@
 #define EMPTY_FILE_NAME "testFile1.txt"
 #define NOT_EMPTY_FILE_NAME "testFile2.txt"
 
-static PhoneBook* initTestPhoneBook(const char* const testFileName)
+static bool runDataInitTestForEmptyFile(void)
 {
-    PhoneBook* phoneBook = createPhoneBook();
-    if (phoneBook == NULL)
-    {
-        return NULL;
-    }
-
-    const int errorInit = initData(phoneBook, testFileName);
+    PhoneBook phoneBook[MAX_CONTACTS_NUMBER] = { "", "" };
+    size_t numberOfContacts = 0;
+    const ErrorCode errorInit = initData(phoneBook, EMPTY_FILE_NAME, &numberOfContacts);
     if (errorInit)
     {
-        free(phoneBook);
-        return NULL;
+        return false;
     }
 
-    return phoneBook;
+    return numberOfContacts == 0;
+}
+
+static bool runDataInitTestForNotEmptyFile(void)
+{
+    PhoneBook phoneBook[MAX_CONTACTS_NUMBER] = { "", "" };
+    size_t numberOfContacts = 0;
+    const ErrorCode errorInit = initData(phoneBook, NOT_EMPTY_FILE_NAME, &numberOfContacts);
+    if (errorInit)
+    {
+        return false;
+    }
+
+    return numberOfContacts == 3;
 }
 
 static bool runDataInitTest(void)
 {
-    PhoneBook* phoneBook = initTestPhoneBook(EMPTY_FILE_NAME);
-    if (phoneBook == NULL)
-    {
-        return false;
-    }
-    deletePhoneBook(&phoneBook);
-    return true;
+    return runDataInitTestForEmptyFile() && runDataInitTestForNotEmptyFile();
 }
 
 static size_t findIndexOfContact(const size_t* const contacts)
 {
-    size_t indexOfContact = INT_MAX;
-    for (size_t i = 0; contacts[i] != INT_MAX; i++)
+    size_t indexOfContact = BREAK_POINT;
+    for (size_t i = 0; contacts[i] != BREAK_POINT; i++)
     {
         indexOfContact = contacts[i];
     }
@@ -49,45 +51,45 @@ static size_t findIndexOfContact(const size_t* const contacts)
 
 static bool runFindingContactsTestForEmptyFile(void)
 {
-    PhoneBook* phoneBook = initTestPhoneBook(EMPTY_FILE_NAME);
-    if (phoneBook == NULL)
+    PhoneBook phoneBook[MAX_CONTACTS_NUMBER] = { "", "" };
+    size_t numberOfContacts = 0;
+    const ErrorCode errorInit = initData(phoneBook, EMPTY_FILE_NAME, &numberOfContacts);
+    if (errorInit)
     {
         return false;
     }
 
-    size_t* contacts = findContactsByPartOfContact(phoneBook, "Me", 3);
+    size_t* contacts = findContactsByPartOfContact(phoneBook, "Me", findPhoneNumberByNameCommand, numberOfContacts);
     if (contacts == NULL)
     {
-        deletePhoneBook(&phoneBook);
         return false;
     }
 
     const size_t indexOfContact = findIndexOfContact(contacts);
 
     free(contacts);
-    deletePhoneBook(&phoneBook);
-    return indexOfContact == INT_MAX;
+    return indexOfContact == BREAK_POINT;
 }
 
 static bool runFindingContactsTestForNotEmptyFile(void)
 {
-    PhoneBook* phoneBook = initTestPhoneBook(NOT_EMPTY_FILE_NAME);
-    if (phoneBook == NULL)
+    PhoneBook phoneBook[MAX_CONTACTS_NUMBER] = { "", "" };
+    size_t numberOfContacts = 0;
+    const ErrorCode errorInit = initData(phoneBook, NOT_EMPTY_FILE_NAME, &numberOfContacts);
+    if (errorInit)
     {
         return false;
     }
 
-    size_t* contacts = findContactsByPartOfContact(phoneBook, "7890", 4);
+    size_t* contacts = findContactsByPartOfContact(phoneBook, "7890", findNameByPhoneNumberCommand, numberOfContacts);
     if (contacts == NULL)
     {
-        deletePhoneBook(&phoneBook);
         return false;
     }
 
     const size_t indexOfContact = findIndexOfContact(contacts);
 
     free(contacts);
-    deletePhoneBook(&phoneBook);
     return indexOfContact == 2;
 }
 
@@ -98,52 +100,50 @@ static bool runFindingContactsTest(void)
 
 static bool runAddingContactTest(void)
 {
-    PhoneBook* phoneBook = initTestPhoneBook(NOT_EMPTY_FILE_NAME);
-    if (phoneBook == NULL)
+    PhoneBook phoneBook[MAX_CONTACTS_NUMBER] = { "", "" };
+    size_t numberOfContacts = 0;
+    const ErrorCode errorInit = initData(phoneBook, NOT_EMPTY_FILE_NAME, &numberOfContacts);
+    if (errorInit)
     {
         return false;
     }
 
-    const ErrorCode errorAdding = addContact(phoneBook, "Cat", "0000");
+    const ErrorCode errorAdding = addContact(phoneBook, "Cat", "0000", &numberOfContacts);
     if (errorAdding)
     {
-        deletePhoneBook(&phoneBook);
         return false;
     }
 
-    size_t* contacts = findContactsByPartOfContact(phoneBook, "Cat", 3);
+    size_t* contacts = findContactsByPartOfContact(phoneBook, "Cat", findPhoneNumberByNameCommand, numberOfContacts);
     if (contacts == NULL)
     {
-        deletePhoneBook(&phoneBook);
         return false;
     }
 
     const size_t indexOfContact = findIndexOfContact(contacts);
-
     free(contacts);
-    deletePhoneBook(&phoneBook);
     return indexOfContact == 3;
 }
 
 static bool runSavingDataTest(void)
 {
-    PhoneBook* phoneBook = initTestPhoneBook(NOT_EMPTY_FILE_NAME);
-    if (phoneBook == NULL)
+    PhoneBook phoneBook[MAX_CONTACTS_NUMBER] = { "", "" };
+    size_t numberOfContacts = 0;
+    const ErrorCode errorInit = initData(phoneBook, NOT_EMPTY_FILE_NAME, &numberOfContacts);
+    if (errorInit)
     {
         return false;
     }
 
-    const ErrorCode errorAdding = addContact(phoneBook, "Cat", "0000");
+    const ErrorCode errorAdding = addContact(phoneBook, "Cat", "0000", &numberOfContacts);
     if (errorAdding)
     {
-        deletePhoneBook(&phoneBook);
         return false;
     }
 
-    const ErrorCode errorSave = saveData(phoneBook, "outputFileForTest.txt");
+    const ErrorCode errorSave = saveData(phoneBook, "outputFileForTest.txt", numberOfContacts);
     if (errorSave)
     {
-        deletePhoneBook(&phoneBook);
         return false;
     }
 
@@ -156,32 +156,26 @@ static bool runSavingDataTest(void)
     fopen_s(&file, "outputFileForTest.txt", "r");
     if (file == NULL)
     {
-        deletePhoneBook(&phoneBook);
         return false;
     }
 
-    size_t i = 0;
-    while (!feof(file))
+    for (size_t i = 0; !feof(file); ++i)
     {
         char name[MAX_NAME_LENGTH] = "";
         char phoneNumber[MAX_PHONE_NUMBER_LENGTH] = "";
         if (fscanf_s(file, "%[^ ]", name, MAX_NAME_LENGTH) != 1 || fscanf_s(file, "%s\n", phoneNumber, MAX_PHONE_NUMBER_LENGTH) != 1)
         {
-            deletePhoneBook(&phoneBook);
             fclose(file);
             return false;
         }
 
         if (strcmp(name, expectedData[i][0]) != 0 || strcmp(phoneNumber, expectedData[i][1]) != 0)
         {
-            deletePhoneBook(&phoneBook);
             fclose(file);
             return false;
         }
-        ++i;
     }
 
-    deletePhoneBook(&phoneBook);
     fclose(file);
     return true;
 }

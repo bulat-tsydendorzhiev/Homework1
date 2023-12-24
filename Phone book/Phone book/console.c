@@ -5,17 +5,7 @@
 #include "console.h"
 #include "phoneBook.h"
 
-#define MAIN_FILE "input.txt"
-
-typedef enum
-{
-	exitCommand,
-	addNoteCommand,
-	printContactsCommand,
-	findPhoneNumberByNameCommand,
-	findNameByPhoneNumberCommand,
-	saveNotesCommand
-} Command;
+#define MAIN_FILE_NAME "input.txt"
 
 static int getName(char name[MAX_NAME_LENGTH])
 {
@@ -31,16 +21,11 @@ static int getPhoneNumber(char phoneNumber[MAX_PHONE_NUMBER_LENGTH])
 
 int runProgram(void)
 {
-	PhoneBook* phoneBook = createPhoneBook();
-	if (phoneBook == NULL)
-	{
-		return outOfMemory;
-	}
-
-	const int errorInit = initData(phoneBook, MAIN_FILE);
+	PhoneBook phoneBook[MAX_CONTACTS_NUMBER] = { "", "" };
+	size_t numberOfContacts = 0;
+	const ErrorCode errorInit = initData(phoneBook, MAIN_FILE_NAME, &numberOfContacts);
 	if (errorInit)
 	{
-		free(phoneBook);
 		return errorInit;
 	}
 
@@ -50,82 +35,81 @@ int runProgram(void)
 		printCommands();
 		scanf_s("%d", &choice);
 
-		size_t* suitableContacts = NULL;
-		ErrorCode error = 0;
-		char name[MAX_NAME_LENGTH] = "";
-		char phoneNumber[MAX_PHONE_NUMBER_LENGTH] = "";
 		switch (choice)
 		{
 		case exitCommand:
-			deletePhoneBook(&phoneBook);
 			return ok;
-		case addNoteCommand:
-			error = getName(name);
-			if (error)
+		case addContactCommand:
+		{
+			char name[MAX_NAME_LENGTH] = "";
+			char phoneNumber[MAX_PHONE_NUMBER_LENGTH] = "";
+			ConsoleError scanningError = getName(name);
+			if (scanningError)
 			{
-				deletePhoneBook(&phoneBook);
-				return error;
+				return scanningError;
 			}
-			error = getPhoneNumber(phoneNumber);
-			if (error)
+			scanningError = getPhoneNumber(phoneNumber);
+			if (scanningError)
 			{
-				deletePhoneBook(&phoneBook);
-				return error;
+				return scanningError;
 			}
-			error = addContact(phoneBook, name, phoneNumber);
-			if (error)
+			ErrorCode addingContactError = addContact(phoneBook, name, phoneNumber, &numberOfContacts);
+			if (addingContactError)
 			{
-				deletePhoneBook(&phoneBook);
-				return error;
+				return addingContactError;
 			}
 			printf("Данные успешно добавлены\n");
 			printf("\n");
 			break;
+		}
 		case printContactsCommand:
-			printContacts(phoneBook);
+			printContacts(phoneBook, numberOfContacts);
 			break;
 		case findPhoneNumberByNameCommand:
-			error = getName(name);
-			if (error)
+		{
+			char name[MAX_NAME_LENGTH] = "";
+			ConsoleError scanningError = getName(name);
+			if (scanningError)
 			{
-				deletePhoneBook(&phoneBook);
-				return error;
+				return scanningError;
 			}
-			suitableContacts = findContactsByPartOfContact(phoneBook, name, choice);
+			size_t* suitableContacts = findContactsByPartOfContact(phoneBook, name, choice, numberOfContacts);
 			if (suitableContacts == NULL)
 			{
-				deletePhoneBook(&phoneBook);
 				free(suitableContacts);
 				return outOfMemory;
 			}
 			printSuitableContacts(phoneBook, suitableContacts, choice);
 			break;
+		}
 		case findNameByPhoneNumberCommand:
-			error = getPhoneNumber(phoneNumber);
-			if (error)
+		{
+			char phoneNumber[MAX_PHONE_NUMBER_LENGTH] = "";
+			ConsoleError scanningError = getPhoneNumber(phoneNumber);
+			if (scanningError)
 			{
-				deletePhoneBook(&phoneBook);
-				return error;
+				return scanningError;
 			}
-			suitableContacts = findContactsByPartOfContact(phoneBook, phoneNumber, choice);
+			size_t* suitableContacts = findContactsByPartOfContact(phoneBook, phoneNumber, choice, numberOfContacts);
 			if (suitableContacts == NULL)
 			{
-				deletePhoneBook(&phoneBook);
 				free(suitableContacts);
 				return outOfMemory;
 			}
 			printSuitableContacts(phoneBook, suitableContacts, choice);
 			break;
-		case saveNotesCommand:
-			error = saveData(phoneBook, MAIN_FILE);
-			if (error)
+		}
+		case saveContactsCommand:
+		{
+			ErrorCode fileSavingError = saveData(phoneBook, MAIN_FILE_NAME, numberOfContacts);
+			if (fileSavingError)
 			{
-				deletePhoneBook(&phoneBook);
-				return error;
+				return fileSavingError;
 			}
 			printf("Данные успешно сохранены\n");
 			printf("\n");
 			break;
+		}
 		default:
 			printf("Неизвестная команда. Попробуйте снова.\n");
 			printf("\n");

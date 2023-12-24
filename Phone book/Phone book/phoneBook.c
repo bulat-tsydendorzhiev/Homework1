@@ -3,32 +3,16 @@
 
 #include "phoneBook.h"
 
-typedef struct Note
-{
-	char name[MAX_NAME_LENGTH];
-	char phoneNumber[MAX_PHONE_NUMBER_LENGTH];
-} Note;
-
-struct PhoneBook
-{
-	Note notes[MAX_CONTACTS_NUMBER];
-	size_t numberOfContacts;
-};
-
-PhoneBook* createPhoneBook(void)
-{
-	return (PhoneBook*)calloc(1, sizeof(PhoneBook));
-}
-
-ErrorCode initData(PhoneBook* const phoneBook, const char* const openningFileName)
+ErrorCode initData(PhoneBook phoneBook[MAX_CONTACTS_NUMBER], const char* const fileNameToOpen, size_t* const numberOfContacts)
 {
 	FILE* file = NULL;
-	fopen_s(&file, openningFileName, "r");
+	fopen_s(&file, fileNameToOpen, "r");
 	if (file == NULL)
 	{
 		return openFileError;
 	}
 
+	// Check file on emptiness
 	char character = getc(file);
 	if ((int)character == -1)
 	{
@@ -37,38 +21,41 @@ ErrorCode initData(PhoneBook* const phoneBook, const char* const openningFileNam
 	}
 	ungetc(character, file);
 
-	while (!feof(file) && phoneBook->numberOfContacts < MAX_CONTACTS_NUMBER)
+	while (!feof(file) && *numberOfContacts < MAX_CONTACTS_NUMBER)
 	{
-		fscanf_s(file, "%[^ ]", phoneBook->notes[phoneBook->numberOfContacts].name, MAX_NAME_LENGTH);
-		fscanf_s(file, "%s\n", phoneBook->notes[phoneBook->numberOfContacts].phoneNumber, MAX_PHONE_NUMBER_LENGTH);
-		++phoneBook->numberOfContacts;
+		if (fscanf_s(file, "%[^ ]", phoneBook[*numberOfContacts].name, MAX_NAME_LENGTH) == 1 &&
+			fscanf_s(file, "%s\n", phoneBook[*numberOfContacts].phoneNumber, MAX_PHONE_NUMBER_LENGTH) == 1)
+		{
+			++(*numberOfContacts);
+		}
 	}
 
 	fclose(file);
 	return success;
 }
 
-ErrorCode addContact(PhoneBook* const phoneBook, const char name[MAX_NAME_LENGTH], const char phoneNumber[MAX_PHONE_NUMBER_LENGTH])
+ErrorCode addContact(PhoneBook phoneBook[MAX_CONTACTS_NUMBER], const char name[MAX_NAME_LENGTH], const char phoneNumber[MAX_PHONE_NUMBER_LENGTH],
+	size_t* const numberOfContacts)
 {
-	int errorCopy = strcpy_s(phoneBook->notes[phoneBook->numberOfContacts].name, MAX_NAME_LENGTH, name);
+	int errorCopy = strcpy_s(phoneBook[*numberOfContacts].name, MAX_NAME_LENGTH, name);
 	if (errorCopy)
 	{
-		return errorCopy;
+		return copyError;
 	}
 
-	errorCopy = strcpy_s(phoneBook->notes[phoneBook->numberOfContacts].phoneNumber, MAX_PHONE_NUMBER_LENGTH, phoneNumber);
+	errorCopy = strcpy_s(phoneBook[*numberOfContacts].phoneNumber, MAX_PHONE_NUMBER_LENGTH, phoneNumber);
 	if (errorCopy)
 	{
-		return errorCopy;
+		return copyError;
 	}
 
-	++phoneBook->numberOfContacts;
+	++(*numberOfContacts);
 	return success;
 }
 
-void printContacts(const PhoneBook* const phoneBook)
+void printContacts(const PhoneBook phoneBook[MAX_CONTACTS_NUMBER], const size_t numberOfContacts)
 {
-	if (phoneBook->numberOfContacts == 0)
+	if (numberOfContacts == 0)
 	{
 		printf("Телефонная книга пуста.\n");
 		printf("\n");
@@ -76,14 +63,14 @@ void printContacts(const PhoneBook* const phoneBook)
 	}
 
 	printf("Список контактов:\n");
-	for (size_t i = 0; i < phoneBook->numberOfContacts; ++i)
+	for (size_t i = 0; i < numberOfContacts; ++i)
 	{
-		printf("%s: %s\n", phoneBook->notes[i].name, phoneBook->notes[i].phoneNumber);
+		printf("%s: %s\n", phoneBook[i].name, phoneBook[i].phoneNumber);
 	}
 	printf("\n");
 }
 
-size_t* findContactsByPartOfContact(const PhoneBook* const phoneBook, const char* const partOfContact, const int choice)
+size_t* findContactsByPartOfContact(const PhoneBook phoneBook[MAX_CONTACTS_NUMBER], const char* const partOfContact, const int choice, const size_t numberOfContacts)
 {
 	size_t* suitableContacts = (size_t*)calloc(MAX_CONTACTS_NUMBER + 1, sizeof(int));
 	if (suitableContacts == NULL)
@@ -92,58 +79,59 @@ size_t* findContactsByPartOfContact(const PhoneBook* const phoneBook, const char
 	}
 
 	size_t j = 0;
-	for (size_t i = 0; i < phoneBook->numberOfContacts; ++i)
+	for (size_t i = 0; i < numberOfContacts; ++i)
 	{
-		if (choice == 3)
+		if (choice == findPhoneNumberByNameCommand)
 		{
-			if (strcmp(phoneBook->notes[i].name, partOfContact) == 0)
+			if (strcmp(phoneBook[i].name, partOfContact) == 0)
 			{
-				suitableContacts[j++] = i;
+				suitableContacts[j] = i;
+				++j;
 			}
 		}
-		else if (choice == 4)
+		else if (choice == findNameByPhoneNumberCommand)
 		{
-			if (strcmp(phoneBook->notes[i].phoneNumber, partOfContact) == 0)
+			if (strcmp(phoneBook[i].phoneNumber, partOfContact) == 0)
 			{
-				suitableContacts[j++] = i;
+				suitableContacts[j] = i;
+				++j;
 			}
 		}
 	}
 
-	suitableContacts[j] = INT_MAX;
+	suitableContacts[j] = BREAK_POINT;
 	return suitableContacts;
 }
 
-void printSuitableContacts(const PhoneBook* const phoneBook, const size_t* const suitableContacts, const int choice)
+void printSuitableContacts(const PhoneBook phoneBook[MAX_CONTACTS_NUMBER], const size_t* const suitableContacts, const int choice)
 {
-	if (suitableContacts[0] == INT_MAX)
+	if (suitableContacts[0] == BREAK_POINT)
 	{
 		printf("Людей с такими данными в телефонной книжке нет\n");
 		printf("\n");
+		return;
 	}
-	else
+
+	printf(choice == findNameByPhoneNumberCommand ? "Владельцы с таким номером телефона:\n" : "Владельцы номеров телефонов с таким именем:\n");
+	for (size_t i = 0; suitableContacts[i] != BREAK_POINT; ++i)
 	{
-		printf(choice == 4 ? "Владельцы с таким номером телефона:\n" : "Владельцы номеров телефонов с таким именем:\n");
-		for (size_t i = 0; suitableContacts[i] != INT_MAX; ++i)
-		{
-			printf("%s: %s\n", phoneBook->notes[suitableContacts[i]].name, phoneBook->notes[suitableContacts[i]].phoneNumber);
-		}
-		printf("\n");
+		printf("%s: %s\n", phoneBook[suitableContacts[i]].name, phoneBook[suitableContacts[i]].phoneNumber);
 	}
+	printf("\n");
 }
 
-ErrorCode saveData(const PhoneBook* const phoneBook, const char* const writtingFileName)
+ErrorCode saveData(const PhoneBook phoneBook[MAX_CONTACTS_NUMBER], const char* const fileNameToWrite, const size_t numberOfContacts)
 {
 	FILE* file = NULL;
-	fopen_s(&file, writtingFileName, "w");
+	fopen_s(&file, fileNameToWrite, "w");
 	if (file == NULL)
 	{
 		return openFileError;
 	}
 
-	for (size_t i = 0; i < phoneBook->numberOfContacts; ++i)
+	for (size_t i = 0; i < numberOfContacts; ++i)
 	{
-		fprintf_s(file, "%s %s\n", phoneBook->notes[i].name, phoneBook->notes[i].phoneNumber);
+		fprintf_s(file, "%s %s\n", phoneBook[i].name, phoneBook[i].phoneNumber);
 	}
 
 	fclose(file);
@@ -162,10 +150,4 @@ void printCommands(void)
 	printf("5 - сохранить текущие данные в файл\n");
 
 	printf("Ваша команда: ");
-}
-
-void deletePhoneBook(PhoneBook** const phoneBook)
-{
-	free(*phoneBook);
-	*phoneBook = NULL;
 }
