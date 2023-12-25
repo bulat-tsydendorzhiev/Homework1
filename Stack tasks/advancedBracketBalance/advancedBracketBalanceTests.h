@@ -2,8 +2,8 @@
 
 typedef enum TestErrorCode
 {
-	testsPassed,
-	testFailed
+    testsPassed,
+    testFailed
 } TestErrorCode;
 
 // tests for advanced bracket balance

@@ -21,11 +21,11 @@
     <ClCompile Include="advancedBracketBalance.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\Stack\Stack\CharStack.c">
-      <Filter>Файлы ресурсов</Filter>
-    </ClCompile>
     <ClCompile Include="advancedBracketBalanceTests.c">
       <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Stack\Stack\CharStack.c">
+      <Filter>Файлы ресурсов</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

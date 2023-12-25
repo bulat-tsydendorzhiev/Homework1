@@ -3,8 +3,8 @@
 
 typedef enum BalanceError
 {
-	balance,
-	stackError
+    balance,
+    stackError
 } BalanceError;
 
 // Function to compare opening and closing brackets
