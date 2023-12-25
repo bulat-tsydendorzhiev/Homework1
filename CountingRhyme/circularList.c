@@ -16,7 +16,7 @@ struct CircularList
     Node* tail;
 };
 
-CircularList** createCircularList(void)
+CircularList* createCircularList(void)
 {
     return (CircularList*)calloc(1, sizeof(CircularList));
 }
@@ -54,7 +54,7 @@ void deletePosition(CircularList* circularList, const int positionNumber)
 {
     Node* current = circularList->head;
     Node* previous = circularList->tail;
-    for (size_t i = 1; i < positionNumber; ++i)
+    for (size_t i = 0; i < positionNumber - 1; ++i)
     {
         previous = current;
         current = current->next;
@@ -75,7 +75,7 @@ int getHeadValue(const CircularList*const circularList)
     return circularList->head->value;
 }
 
-void clearCircularList(CircularList** circularList)
+void clearCircularList(CircularList** const circularList)
 {
     Node* current = (*circularList)->head;
     while (current != NULL)

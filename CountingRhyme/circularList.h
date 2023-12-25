@@ -6,7 +6,7 @@
 typedef struct CircularList CircularList;
 
 // Create circular list
-CircularList** createCircularList(void);
+CircularList* createCircularList(void);
 
 // Check circular list emptiness
 bool circularListIsEmpty(CircularList* circularList);
@@ -26,4 +26,4 @@ bool isOnlyOneLeft(const CircularList*const circularList);
 int getHeadValue(const CircularList*const circularList);
 
 // Clear circular list
-void clearCircularList(CircularList** list);
+void clearCircularList(CircularList** const list);
