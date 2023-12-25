@@ -129,12 +129,12 @@
   <ItemGroup>
     <ClCompile Include="..\Stack\Stack\CharStack.c" />
     <ClCompile Include="advancedBracketBalance.c" />
-    <ClCompile Include="advancedBracketBalanceTests.c" />
+    <ClCompile Include="tests.c" />
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="advancedBracketBalance.h" />
-    <ClInclude Include="advancedBracketBalanceTests.h" />
+    <ClInclude Include="tests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

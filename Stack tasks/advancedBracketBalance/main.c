@@ -1,35 +1,33 @@
 #include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
 
 #include "advancedBracketBalance.h"
-#include "advancedBracketBalanceTests.h"
+#include "tests.h"
 
-#define MAX_LENGTH 100
+#define MAX_STRING_LENGTH 100
+
+typedef enum
+{
+    testsFailed = -1,
+    success,
+    scanError
+};
 
 int main(void)
 {
-    const TestErrorCode testErrorCode = tests();
-    if (testErrorCode)
+    const bool testsPassed = runTests();
+    if (!testsPassed)
     {
-        return testErrorCode;
+        return testsFailed;
     }
 
-    char* string = malloc(sizeof(char) * MAX_LENGTH);
-    printf("Enter bracket sequence: ");
-    scanf_s("%[^\n]", string, MAX_LENGTH - 1);
-
-    BalanceError balanceError = balance;
-    isBalanced(string, &balanceError);
-    if (!balanceError)
+    char string[MAX_STRING_LENGTH] = "";
+    printf("Enter string: ");
+    if (scanf_s("%s", string, MAX_STRING_LENGTH) != 1)
     {
-        printf("Your bracket sequence is balanced\n");
-    }
-    else
-    {
-        printf("Your bracket sequence is not balanced\n");
+        return scanError;
     }
 
-    free(string);
-    return 0;
+    printf(isBalanced(string) ? "String is balanced\n": "String is not balanced\n");
+
+    return success;
 }

@@ -21,7 +21,7 @@
     <ClCompile Include="advancedBracketBalance.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="advancedBracketBalanceTests.c">
+    <ClCompile Include="tests.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="..\Stack\Stack\CharStack.c">
@@ -32,7 +32,7 @@
     <ClInclude Include="advancedBracketBalance.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="advancedBracketBalanceTests.h">
+    <ClInclude Include="tests.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

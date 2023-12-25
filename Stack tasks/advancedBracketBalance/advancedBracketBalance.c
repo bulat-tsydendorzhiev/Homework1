@@ -1,74 +1,59 @@
-#include <stdbool.h>
 #include <stdlib.h>
 
 #include "../Stack/Stack/CharStack.h"
 #include "advancedBracketBalance.h"
 
-bool compareBrackets(char openingBracket, char closingBracket)
+static bool compareBrackets(const char openingBracket, const char closingBracket)
 {
-    if (openingBracket == '(')
+    switch (openingBracket)
     {
+    case '(':
         return closingBracket == ')';
-    }
-    if (openingBracket == '[')
-    {
+    case '[':
         return closingBracket == ']';
-    }
-    if (openingBracket == '{')
-    {
+    case '{':
         return closingBracket == '}';
+    default:
+        return false;
     }
 }
 
-bool isBalanced(char* string, BalanceError* balanceError)
+bool isBalanced(const char* const string)
 {
     CharStack* stack = NULL;
-    bool closed = false;
-    for (int i = 0; string[i] != '\0'; ++i)
+    for (size_t i = 0; string[i] != '\0'; ++i)
     {
-        char symbol = string[i];
-        if (symbol == '(' || symbol == '[' || symbol == '{')
+        char character = string[i];
+        if (character == '(' || character == '[' || character == '{')
         {
-            if (closed)
+            CharStackErrorCode pushingError = pushChar(&stack, character);
+            if (pushingError)
             {
-                *balanceError = stackError;
                 clearCharStack(&stack);
                 return false;
             }
-            pushChar(&stack, symbol);
         }
-
-        else if (symbol == ')' || symbol == ']' || symbol == '}')
+        else if (character == ')' || character == ']' || character == '}')
         {
-            CharErrorCode errorTop = okCharStack;
+            CharStackErrorCode errorTop = okCharStack;
             char topBracket = topChar(stack, &errorTop);
-
             if (errorTop)
             {
-                *balanceError = stackError;
                 clearCharStack(&stack);
                 return false;
             }
-
-            if (!compareBrackets(topBracket, symbol))
+            
+            if (!compareBrackets(topBracket, character))
             {
-                *balanceError = stackError;
                 clearCharStack(&stack);
                 return false;
             }
 
             popChar(&stack);
-            closed = true;
         }
     }
 
-    if (!charStackIsEmpty(stack))
-    {
-        *balanceError = stackError;
-        clearCharStack(&stack);
-        return false;
-    }
-
+    const bool stackIsEmpty = charStackIsEmpty(stack);
     clearCharStack(&stack);
-    return true;
+    return stackIsEmpty;
 }
