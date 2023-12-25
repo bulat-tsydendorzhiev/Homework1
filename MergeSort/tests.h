@@ -4,4 +4,4 @@
 
 // Tests to check the functionality of merge sort;
 // return true if tests passed
-bool tests(void);
+bool runTests(void);

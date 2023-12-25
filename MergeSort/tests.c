@@ -33,48 +33,48 @@ static List* initTestList(const char* const fileName)
     return list;
 }
 
-static bool sortingByNameTest(void)
+static bool runSortingByNameTest(void)
 {
     List* list = initTestList("sortByNameFile.txt");
     if (list == NULL)
     {
-        return true;
+        return false;
     }
 
-    const bool errorSort = mergeSort(list, 0);
-    if (errorSort)
+    const bool listIsSorted = mergeSort(list, 0);
+    if (!listIsSorted)
     {
         deleteList(&list);
-        return errorSort;
+        return false;
     }
     return isSorted(list, 0);
 }
 
-static bool sortingByPhoneNumberTest(void)
+static bool runSortingByPhoneNumberTest(void)
 {
     List* list = initTestList("sortByPhoneNumberFile.txt");
     if (list == NULL)
     {
-        return true;
+        return false;
     }
 
-    const bool errorSort = mergeSort(list, 1);
-    if (errorSort)
+    const bool listIsSorted = mergeSort(list, 1);
+    if (!listIsSorted)
     {
         deleteList(&list);
-        return errorSort;
+        return false;
     }
     return isSorted(list, 1);
 }
 
-bool tests(void)
+bool runTests(void)
 {
-    if (!sortingByNameTest())
+    if (!runSortingByNameTest())
     {
         printf("Test on sorting phonebook by name failed\n");
         return false;
     }
-    if (!sortingByPhoneNumberTest())
+    if (!runSortingByPhoneNumberTest())
     {
         printf("Test on sorting phonebook by phone number failed\n");
         return false;

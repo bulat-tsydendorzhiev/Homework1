@@ -52,7 +52,7 @@ static void merge(List* list, List* leftPart, List* rightPart, const int key)
     }
 }
 
-static deleteLists(List** leftPart, List** rightPart)
+static bool deleteLists(List** leftPart, List** rightPart)
 {
     deleteList(leftPart);
     deleteList(rightPart);
@@ -68,21 +68,21 @@ bool mergeSort(List* list, const int key)
 
     List* leftPart = NULL;
     List* rightPart = NULL;
-    const bool successSplit = split(list, &leftPart, &rightPart);
-    if (!successSplit)
+    const bool successfulSplit = split(list, &leftPart, &rightPart);
+    if (!successfulSplit)
     {
         deleteLists(&leftPart, &rightPart);
         return false;
     }
 
-    const bool successfullySplitedLeftPart = mergeSort(leftPart, key);
-    if (!successfullySplitedLeftPart)
+    const bool successfullyMergedLeftPart = mergeSort(leftPart, key);
+    if (!successfullyMergedLeftPart)
     {
         deleteLists(&leftPart, &rightPart);
         return false;
     }
-    const bool successfullySplitedRightPart = mergeSort(rightPart, key);
-    if (!successfullySplitedRightPart)
+    const bool successfullyMergedRightPart = mergeSort(rightPart, key);
+    if (!successfullyMergedRightPart)
     {
         deleteLists(&leftPart, &rightPart);
         return false;

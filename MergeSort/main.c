@@ -5,7 +5,7 @@
 
 int main()
 {
-    const bool testsPassed = tests();
+    const bool testsPassed = runTests();
     if (!testsPassed)
     {
         return !testsPassed;

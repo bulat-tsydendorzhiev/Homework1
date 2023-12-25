@@ -52,8 +52,14 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="mainFile.txt" />
-    <Text Include="sortByNameFile.txt" />
-    <Text Include="sortByPhoneNumberFile.txt" />
+    <Text Include="mainFile.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="sortByNameFile.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="sortByPhoneNumberFile.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
   </ItemGroup>
 </Project>

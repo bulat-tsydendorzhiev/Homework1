@@ -15,8 +15,8 @@ DataInitErrorCode dataInit(FILE* stream, List* phoneBook)
             printf("Incorrect format of data\n");
             return scanError;
         }
-        const bool successfullAppend = append(phoneBook, name, phoneNumber);
-        if (!successfullAppend)
+        const bool successfulAppend = append(phoneBook, name, phoneNumber);
+        if (!successfulAppend)
         {
             return listOutOfMemory;
         }
