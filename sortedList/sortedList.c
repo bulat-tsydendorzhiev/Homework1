@@ -13,7 +13,6 @@ typedef struct Node
 struct SortedList
 {
     Node* head;
-    Node* tail;
 };
 
 SortedList* createSortedList(void)
@@ -21,14 +20,14 @@ SortedList* createSortedList(void)
     return (SortedList*)calloc(1, sizeof(SortedList));
 }
 
-bool sortedListIsEmpty(const SortedList* const SortedList)
+bool sortedListIsEmpty(const SortedList* const sortedList)
 {
-    return SortedList->head == NULL;
+    return sortedList->head == NULL;
 }
 
-SortedListErrorCode addValue(SortedList* const SortedList, const int value)
+SortedListErrorCode addValue(SortedList* const sortedList, const int value)
 {
-    Node* current = SortedList->head;
+    Node* current = sortedList->head;
     Node* previous = NULL;
     while (current != NULL && current->value < value)
     {
@@ -46,24 +45,19 @@ SortedListErrorCode addValue(SortedList* const SortedList, const int value)
 
     if (previous == NULL)
     {
-        SortedList->head = newNode;
+        sortedList->head = newNode;
     }
     else
     {
         previous->next = newNode;
     }
 
-    if (newNode->next == NULL)
-    {
-        SortedList->tail = newNode;
-    }
-
     return ok;
 }
 
-SortedListErrorCode deleteValue(SortedList* const SortedList, const int value)
+SortedListErrorCode deleteValue(SortedList* const sortedList, const int value)
 {
-    Node* current = SortedList->head;
+    Node* current = sortedList->head;
     Node* previous = NULL;
     while (current != NULL && current->value != value)
     {
@@ -79,24 +73,19 @@ SortedListErrorCode deleteValue(SortedList* const SortedList, const int value)
     Node* next = current->next;
     if (previous == NULL)
     {
-        SortedList->head = next;
+        sortedList->head = next;
     }
     else
     {
         previous->next = next;
     }
-
-    if (next == NULL)
-    {
-        SortedList->tail = NULL;
-    }
-
+    
     return ok;
 }
 
-void printSortedList(const SortedList* const SortedList)
+void printSortedList(const SortedList* const sortedList)
 {
-    Node* current = SortedList->head;
+    Node* current = sortedList->head;
     while (current != NULL)
     {
         printf("%d ", current->value);
@@ -105,17 +94,17 @@ void printSortedList(const SortedList* const SortedList)
     printf("\n");
 }
 
-void deleteSortedList(SortedList** SortedList)
+void deleteSortedList(SortedList** sortedList)
 {
-    while (!sortedListIsEmpty(*SortedList))
+    while (!sortedListIsEmpty(*sortedList))
     {
-        deleteValue(*SortedList, (*SortedList)->head->value);
+        deleteValue(*sortedList, (*sortedList)->head->value);
     }
-    free(*SortedList);
-    *SortedList = NULL;
+    free(*sortedList);
+    *sortedList = NULL;
 }
 
-bool isSorted(SortedList* list)
+bool isSorted(const SortedList* const list)
 {
     if (sortedListIsEmpty(list))
     {
@@ -132,4 +121,14 @@ bool isSorted(SortedList* list)
         current = current->next;
     }
     return true;
+}
+
+void printCommands(void)
+{
+    printf("Choose one of options:\n");
+    printf("0 - exit\n");
+    printf("1 - add value to sorted list\n");
+    printf("2 - delete value from sorted list\n");
+    printf("3 - print sorted list\n");
+    printf("Enter your choice: ");
 }

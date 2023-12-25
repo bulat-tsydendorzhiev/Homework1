@@ -4,8 +4,9 @@
 // listError: if error because of list occurred
 typedef enum
 {
-    success = 0,
-    listError = 2,
+    success,
+    scanError,
+    listError,
 } ConsoleErrorCodes;
 
 // Run the program

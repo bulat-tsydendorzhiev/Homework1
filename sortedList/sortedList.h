@@ -2,10 +2,18 @@
 
 typedef enum
 {
-	ok,
-	deletingNonExistentElement,
-	outOfMemory
+    ok,
+    deletingNonExistentElement,
+    outOfMemory
 } SortedListErrorCode;
+
+typedef enum
+{
+    exitCommand,
+    addValueToList,
+    deleteValueFromList,
+    printList
+} Command;
 
 // Sorted list
 typedef struct SortedList SortedList;
@@ -14,17 +22,20 @@ typedef struct SortedList SortedList;
 SortedList* createSortedList(void);
 
 // Add a value so that the list is sorted
-SortedListErrorCode addValue(SortedList* const SortedList, const int value);
+SortedListErrorCode addValue(SortedList* const sortedList, const int value);
 
 // Delete list value
-SortedListErrorCode deleteValue(SortedList* const SortedList, const int value);
+SortedListErrorCode deleteValue(SortedList* const sortedList, const int value);
 
 // Print sorted list values
-void printSortedList(const SortedList* const SortedList);
+void printSortedList(const SortedList* const sortedList);
 
 // Delete sorted list
-void deleteSortedList(SortedList** SortedList);
+void deleteSortedList(SortedList** sortedList);
 
 // Сheck list for sortingж
 // Return true if list is sorted
 bool isSorted(const SortedList* const list);
+
+// Print commands for user
+void printCommands(void);

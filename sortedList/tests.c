@@ -5,7 +5,7 @@
 #include "tests.h"
 #include "sortedList.h"
 
-static bool pushTestingValues(SortedList* list, const int* const pushingValues, const size_t numberOfPushingValues)
+static bool addTestingValues(SortedList* list, const int* const pushingValues, const size_t numberOfPushingValues)
 {
     for (size_t i = 0; i < numberOfPushingValues; i++)
     {
@@ -18,7 +18,7 @@ static bool pushTestingValues(SortedList* list, const int* const pushingValues, 
     return isSorted(list);
 }
 
-static bool popTestingValues(SortedList* list, const int* const popingValues, const size_t numberOfPopingValues)
+static bool deleteTestingValues(SortedList* list, const int* const popingValues, const size_t numberOfPopingValues)
 {
     for (size_t i = 0; i < numberOfPopingValues; i++)
     {
@@ -31,7 +31,7 @@ static bool popTestingValues(SortedList* list, const int* const popingValues, co
     return isSorted(list);
 }
 
-static bool pushTest(void)
+static bool runAddingValuesTest(void)
 {
     SortedList* list = createSortedList();
     if (list == NULL)
@@ -41,13 +41,13 @@ static bool pushTest(void)
 
     const int pushingValues[] = { 3, -1, 4, 1, 5, 9, 2, 6, 5, 0 };
     const size_t numberOfPushingValues = sizeof(pushingValues) / sizeof(pushingValues[0]);
-    const bool errorPush = pushTestingValues(list, pushingValues, numberOfPushingValues);
+    const bool errorPush = addTestingValues(list, pushingValues, numberOfPushingValues);
 
     deleteSortedList(&list);
     return errorPush;
 }
 
-static bool popTest(void)
+static bool runDeletingValuesTest(void)
 {
     SortedList* list = createSortedList();
     if (list == NULL)
@@ -57,7 +57,7 @@ static bool popTest(void)
 
     const int pushingValues[] = { 3, -1, 4, 1, 5, 9, 2, 6, 5, 0 };
     const size_t numberOfPushingValues = sizeof(pushingValues) / sizeof(pushingValues[0]);
-    const bool successPush = pushTestingValues(list, pushingValues, numberOfPushingValues);
+    const bool successPush = addTestingValues(list, pushingValues, numberOfPushingValues);
     if (!successPush)
     {
         deleteSortedList(&list);
@@ -66,7 +66,7 @@ static bool popTest(void)
 
     const int popingValues[] = { -1, 0, 5, 9 };
     const size_t numberOfPopingValues = sizeof(popingValues) / sizeof(popingValues[0]);
-    const bool errorPop = popTestingValues(list, popingValues, numberOfPopingValues);
+    const bool errorPop = deleteTestingValues(list, popingValues, numberOfPopingValues);
 
     deleteSortedList(&list);
     return errorPop;
@@ -74,14 +74,14 @@ static bool popTest(void)
 
 bool tests(void)
 {
-    if (!pushTest())
+    if (!runAddingValuesTest())
     {
-        printf("push test failed\n");
+        printf("Adding value test failed\n");
         return false;
     }
-    if (!popTest())
+    if (!runDeletingValuesTest())
     {
-        printf("pop test failed\n");
+        printf("Deleting value test failed\n");
         return false;
     }
     return true;

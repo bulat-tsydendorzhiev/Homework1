@@ -4,6 +4,8 @@
 #include "tests.h"
 #include "console.h"
 
+#include "sortedList.h"
+
 int main()
 {
     const bool testPassed = tests();
@@ -12,4 +14,5 @@ int main()
         return !testPassed;
     }
     return runProgram();
+    return 0;
 }
