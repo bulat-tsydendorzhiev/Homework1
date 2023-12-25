@@ -21,18 +21,24 @@
     <ClCompile Include="shuntingYard.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="shuntingYardTests.c">
+    <ClCompile Include="tests.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="..\Stack\Stack\CharStack.c">
       <Filter>Файлы ресурсов</Filter>
+    </ClCompile>
+    <ClCompile Include="console.c">
+      <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shuntingYard.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="shuntingYardTests.h">
+    <ClInclude Include="tests.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="console.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

@@ -128,13 +128,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Stack\Stack\CharStack.c" />
+    <ClCompile Include="console.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="shuntingYard.c" />
-    <ClCompile Include="shuntingYardTests.c" />
+    <ClCompile Include="tests.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="console.h" />
     <ClInclude Include="shuntingYard.h" />
-    <ClInclude Include="shuntingYardTests.h" />
+    <ClInclude Include="tests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

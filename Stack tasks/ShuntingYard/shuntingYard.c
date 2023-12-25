@@ -3,110 +3,106 @@
 #include "shuntingYard.h"
 #include "../Stack/Stack/CharStack.h"
 
-bool isDigit(char symbol)
+static bool isDigit(const char character)
 {
-	return symbol >= '0' && symbol <= '9';
+    return character >= '0' && character <= '9';
 }
 
-bool isArithmeticOperation(char symbol)
+static bool isArithmeticOperation(const char character)
 {
-	return symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/';
+    return character == '+' || character == '-' || character == '*' || character == '/';
 }
 
-int operationPriority(char operation)
+static int getOperationPriority(const char operation)
 {
-	switch (operation)
-	{
-	case '+':
-	case '-':
-		return 1;
-	case '*':
-	case '/':
-		return 2;
-	}
+    switch (operation)
+    {
+    case '+':
+    case '-':
+        return 1;
+    case '*':
+    case '/':
+        return 2;
+    default:
+        return -1;
+    }
 }
 
-ErrorCode infixToPostfix(char* infixExpression, char* postfixForm)
+ErrorCode translateInfixToPostfix(char infixExpression[MAX_STRING_LENGTH], char postfixForm[MAX_STRING_LENGTH])
 {
-	CharErrorCode stackErrorCode = okCharStack;
-	CharStack* stack = NULL;
-	int j = 0;
-	int parenthesesCount = 0;
+    CharStackErrorCode stackError = okCharStack;
+    CharStack* stack = NULL;
+    size_t j = 0;
+    int parenthesesCount = 0;
 
-	for (int i = 0; infixExpression[i] != '\0'; ++i)
-	{
-		char symbol = infixExpression[i];
+    for (size_t i = 0; infixExpression[i] != '\0'; ++i)
+    {
+        char character = infixExpression[i];
 
-		if (symbol == ' ')
-		{
-			continue;
-		}
+        if (character == ' ')
+        {
+            continue;
+        }
 
-		if (isDigit(symbol))
-		{
-			postfixForm[j] = symbol;
-			++j;
-			postfixForm[j] = ' ';
-			++j;
-		}
-		else if (symbol == '(')
-		{
-			pushChar(&stack, symbol);
-			parenthesesCount++;
-		}
-		else if (symbol == ')')
-		{
-			while (!charStackIsEmpty(stack) && topChar(stack, &stackErrorCode) != '(')
-			{
-				postfixForm[j] = topChar(stack, &stackErrorCode);
-				popChar(&stack);
-				++j;
-				postfixForm[j] = ' ';
-				++j;
-			}
+        if (isDigit(character))
+        {
+            postfixForm[j] = character;
+            ++j;
+            postfixForm[j] = ' ';
+            ++j;
+        }
+        else if (character == '(')
+        {
+            pushChar(&stack, character);
+            ++parenthesesCount;
+        }
+        else if (character == ')')
+        {
+            while (!charStackIsEmpty(stack) && topChar(stack, &stackError) != '(')
+            {
+                postfixForm[j] = topChar(stack, &stackError);
+                popChar(&stack);
+                ++j;
+                postfixForm[j] = ' ';
+                ++j;
+            }
 
-			// Deleting opening bracket
-			parenthesesCount--;
-			popChar(&stack);
-		}
-		else if (isArithmeticOperation(symbol))
-		{
-			while (!charStackIsEmpty(stack) && topChar(stack, &stackErrorCode) != '(' && operationPriority(topChar(stack, &stackErrorCode)) >= operationPriority(symbol))
-			{
-				postfixForm[j] = topChar(stack, &stackErrorCode);
-				popChar(&stack);
-				++j;
-				postfixForm[j] = ' ';
-				++j;
-			}
+            --parenthesesCount;
+            popChar(&stack);
+        }
+        else if (isArithmeticOperation(character))
+        {
+            while (!charStackIsEmpty(stack) && topChar(stack, &stackError) != '(' &&
+                getOperationPriority(topChar(stack, &stackError)) >= getOperationPriority(character))
+            {
+                postfixForm[j] = topChar(stack, &stackError);
+                popChar(&stack);
+                ++j;
+                postfixForm[j] = ' ';
+                ++j;
+            }
 
-			pushChar(&stack, symbol);
-		}
-		else
-		{
-			return inputExpressionError;
-		}
-	}
+            pushChar(&stack, character);
+        }
+        else
+        {
+            return inputExpressionError;
+        }
+    }
 
-	if (parenthesesCount != 0)
-	{
-		if (parenthesesCount > 0)
-		{
-			return openedParenthesesError;
-		}
-		return closedParenthesesError;
-	}
+    if (parenthesesCount != 0)
+    {
+        return parenthesesCount > 0 ? openedParenthesesError : closedParenthesesError;
+    }
 
-	while (!charStackIsEmpty(stack))
-	{
-		postfixForm[j] = topChar(stack, &stackErrorCode);
-		popChar(&stack);
-		++j;
-		postfixForm[j] = ' ';
-		++j;
-	}
+    while (!charStackIsEmpty(stack))
+    {
+        postfixForm[j] = topChar(stack, &stackError);
+        popChar(&stack);
+        ++j;
+        postfixForm[j] = ' ';
+        ++j;
+    }
 
-	postfixForm[j] = '\0';
-
-	return ok;
+    return ok;
 }
