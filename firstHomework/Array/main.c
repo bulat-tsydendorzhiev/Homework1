@@ -29,9 +29,10 @@ void reverseArray(int* array, const int firstSectionLength, const int secondSect
 
 int main()
 {
-    int firstSectionLength = 0, secondSectionLength = 0;
+    int firstSectionLength = 0;
+    int secondSectionLength = 0;
 
-    printf("Enter first section length(positive number less than 1000): ");
+    printf("Enter first section length (positive number less than 1000): ");
     if (scanf_s("%d", &firstSectionLength) != 1 || firstSectionLength <= 0)
     {
         printf("Error input\n");
