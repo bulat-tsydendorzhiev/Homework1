@@ -2,28 +2,30 @@
 
 #include <stdbool.h>
 
-// Error codes for int stack results
+// okCharStack: everything is alright
+// emptyIntStackError: int stack is empty
+// outOfMemoryCharStack: lack of memory happened
 typedef enum IntErrorCode
 {
-	okIntStack,
-	IntStackIsEmpty,
-	outOfMemoryIntStack
-}IntErrorCode;
+    okIntStack,
+    emptyIntStack,
+    outOfMemoryIntStack
+} IntStackErrorCode;
 
 // Stack that consists of int values
 typedef struct IntStack IntStack;
 
-// Function to check emptiness of the int stack
+// Check emptiness of the int stack
 bool intStackIsEmpty(IntStack* head);
 
-// Function to push int element to the int stack
-IntErrorCode pushInt(IntStack** head, const int value);
+// Push int element to the int stack
+IntStackErrorCode pushInt(IntStack** const head, const int value);
 
-// Function to pop int element from the int stack
-IntErrorCode popInt(IntStack** head);
+// Pop int element from the int stack
+IntStackErrorCode popInt(IntStack** const head);
 
-// Function to clear int stack
-IntErrorCode clearIntStack(IntStack** head);
+// Clear int stack
+IntStackErrorCode clearIntStack(IntStack** const head);
 
-// Function to return top element of the int stack
-int topInt(IntStack* head, IntErrorCode* errorCode);
+// Return top element of the int stack
+int topInt(IntStack* const head, IntStackErrorCode* const errorCode);
