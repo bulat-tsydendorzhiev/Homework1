@@ -7,9 +7,9 @@
 // outOfMemoryCharStack: lack of memory happened
 typedef enum CharErrorCode
 {
-	okCharStack,
-	emptyCharStackError,
-	outOfMemoryCharStack
+    okCharStack,
+    emptyCharStack,
+    outOfMemoryCharStack
 } CharStackErrorCode;
 
 // Stack that consists of char values
