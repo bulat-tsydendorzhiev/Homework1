@@ -2,28 +2,30 @@
 
 #include <stdbool.h>
 
-// Error codes for char stack results
+// okCharStack: everything is alright
+// emptyCharStackError: char stack is empty
+// outOfMemoryCharStack: lack of memory happened
 typedef enum CharErrorCode
 {
 	okCharStack,
-	CharStackIsEmpty,
+	emptyCharStackError,
 	outOfMemoryCharStack
-}CharErrorCode;
+} CharStackErrorCode;
 
 // Stack that consists of char values
 typedef struct CharStack CharStack;
 
-// Function to check emptiness of the char stack
+// Check emptiness of the char stack
 bool charStackIsEmpty(CharStack* head);
 
-// Function to push char element to the char stack
-CharErrorCode pushChar(CharStack** head, const char value);
+// Push char value to the char stack
+CharStackErrorCode pushChar(CharStack** const head, const char value);
 
-// Function to pop char element from the char stack
-CharErrorCode popChar(CharStack** head);
+// Pop char element from the char stack
+CharStackErrorCode popChar(CharStack** const head);
 
-// Function to clear char stack
-CharErrorCode clearCharStack(CharStack** head);
+// Clear char stack
+CharStackErrorCode clearCharStack(CharStack** const head);
 
-// Function to return top element of the char stack
-char topChar(CharStack* head, CharErrorCode* errorCode);
+// Return top element of the char stack
+char topChar(CharStack* const head, CharStackErrorCode* const errorCode);

@@ -4,23 +4,17 @@
 #include "CharStack.h"
 #include "StackTests.h"
 
+#define SUCCESS 0
+#define TESTS_FAILED -1
+
 int main(void)
 {
-	const TestErrorCode testIntErrorCode = intStackTests();
-	if (testIntErrorCode)
+	const bool testsPassed = runTests();
+	if (!testsPassed)
 	{
-		printf("int stack test failed\n");
-		return testIntErrorCode;
-	}
-
-	const TestErrorCode testCharErrorCode = charStackTests();
-	if (testCharErrorCode)
-	{
-		printf("char stack test failed\n");
-		return testCharErrorCode;
+		return TESTS_FAILED;
 	}
 
 	printf("Tests passed succesfully!\n");
-
-	return 0;
+	return SUCCESS;
 }

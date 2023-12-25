@@ -14,9 +14,9 @@ bool intStackIsEmpty(IntStack* head)
 	return head == NULL;
 }
 
-IntErrorCode pushInt(IntStack** head, const int value)
+IntStackErrorCode pushInt(IntStack** const head, const int value)
 {
-	IntStack* next = malloc(sizeof(IntStack));
+	IntStack* next = (IntStack*)calloc(1, sizeof(IntStack));
 	if (next == NULL)
 	{
 		return outOfMemoryIntStack;
@@ -27,11 +27,11 @@ IntErrorCode pushInt(IntStack** head, const int value)
 	return okIntStack;
 }
 
-IntErrorCode popInt(IntStack** head)
+IntStackErrorCode popInt(IntStack** const head)
 {
 	if (intStackIsEmpty(*head))
 	{
-		return IntStackIsEmpty;
+		return emptyIntStackError;
 	}
 	IntStack* trash = *head;
 	*head = (*head)->previous;
@@ -39,11 +39,11 @@ IntErrorCode popInt(IntStack** head)
 	return okIntStack;
 }
 
-IntErrorCode clearIntStack(IntStack** head)
+IntStackErrorCode clearIntStack(IntStack** const head)
 {
 	if (intStackIsEmpty(*head))
 	{
-		return IntStackIsEmpty;
+		return emptyIntStackError;
 	}
 
 	IntStack* next = (*head)->previous;
@@ -57,12 +57,12 @@ IntErrorCode clearIntStack(IntStack** head)
 	return okIntStack;
 }
 
-int topInt(IntStack* head, IntErrorCode* errorCode)
+int topInt(IntStack* const head, IntStackErrorCode* const errorCode)
 {
 	if (intStackIsEmpty(head))
 	{
-		*errorCode = IntStackIsEmpty;
-		return 1;
+		*errorCode = emptyIntStackError;
+		return -1;
 	}
 	return head->value;
 }
