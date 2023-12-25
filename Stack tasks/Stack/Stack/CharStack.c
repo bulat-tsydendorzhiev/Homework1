@@ -13,12 +13,12 @@ bool charStackIsEmpty(CharStack* head)
     return head == NULL;
 }
 
-CharErrorCode pushChar(CharStack** head, const char value)
+CharStackErrorCode pushChar(CharStack** const head, const char value)
 {
-    CharStack* next = malloc(sizeof(CharStack));
+    CharStack* next = (CharStack*)calloc(1, sizeof(CharStack));
     if (next == NULL)
     {
-        return CharStackIsEmpty;
+        return outOfMemoryCharStack;
     }
     next->value = value;
     next->previous = *head;
@@ -26,11 +26,11 @@ CharErrorCode pushChar(CharStack** head, const char value)
     return okCharStack;
 }
 
-CharErrorCode popChar(CharStack** head)
+CharStackErrorCode popChar(CharStack** const head)
 {
     if (*head == NULL)
     {
-        return CharStackIsEmpty;
+        return emptyCharStack;
     }
     CharStack* trash = *head;
     *head = (*head)->previous;
@@ -38,13 +38,13 @@ CharErrorCode popChar(CharStack** head)
     return okCharStack;
 }
 
-CharErrorCode clearCharStack(CharStack** head)
+CharStackErrorCode clearCharStack(CharStack** const head)
 {
     if (head == NULL || *head == NULL)
     {
-        return CharStackIsEmpty;
+        return emptyCharStack;
     }
-
+    
     CharStack* next = (*head)->previous;
     while (next != NULL)
     {
@@ -56,12 +56,12 @@ CharErrorCode clearCharStack(CharStack** head)
     return okCharStack;
 }
 
-char topChar(CharStack* head, CharErrorCode* errorCode)
+char topChar(CharStack* const head, CharStackErrorCode* const errorCode)
 {
     if (head == NULL)
     {
-        *errorCode = CharStackIsEmpty;
-        return 1;
+        *errorCode = emptyCharStack;
+        return '\0';
     }
     return head->value;
 }
