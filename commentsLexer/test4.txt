@@ -1,0 +1,1 @@
+it's not a comment /*more than*//*one/comment*/
