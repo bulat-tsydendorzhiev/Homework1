@@ -1,15 +1,6 @@
 #pragma once
 
-typedef enum
-{
-	testsPassed,
-	test1Failed,
-	test2Failed,
-	test3Failed
-} TestErrorCode;
+#include <stdbool.h>
 
-// Tests for stack for integer values
-TestErrorCode intStackTests(void);
-
-// Tests for stack for char values
-TestErrorCode charStackTests(void);
+// Tests to check the functionality of char and int stacks
+bool runTests(void);
