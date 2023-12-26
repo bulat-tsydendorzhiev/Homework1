@@ -111,6 +111,7 @@ static Node* createNode(const char* const key, const char* const value)
     newNode->value = _strdup(value);
     if (newNode->key == NULL || newNode->value == NULL)
     {
+        free(newNode);
         return NULL;
     }
 
