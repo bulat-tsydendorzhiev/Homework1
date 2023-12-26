@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "BinarySearchTree.h"
 
@@ -21,38 +22,7 @@ BinarySearchTree* createTree(void)
 	return (BinarySearchTree*)calloc(1, sizeof(BinarySearchTree));
 }
 
-static char* updateValue(const char* const newString)
-{
-	const size_t length = strlen(newString) + 1;
-	char* updatedString = (char*)malloc(sizeof(char) * length);
-	if (updatedString == NULL)
-	{
-		free(updatedString);
-		return NULL;
-	}
-	strcpy_s(updatedString, length, newString);
-	return updatedString;
-}
-
-static Node* createNode(const int key, const char* const value)
-{
-	Node* newNode = (Node*)calloc(1, sizeof(Node));
-	if (newNode == NULL)
-	{
-		return NULL;
-	}
-	newNode->key = key;
-	newNode->value = updateValue(value);
-	if (newNode->value == NULL)
-	{
-		return NULL;
-	}
-	newNode->leftSon = NULL;
-	newNode->rightSon = NULL;
-	return newNode;
-}
-
-static Node* findNodeByKey(Node* node, const int key, Node** parent)
+static Node* findNodeByKey(const Node* const node, const int key, Node** const parent)
 {
 	Node* currentNode = node;
 	while (currentNode != NULL && currentNode->key != key)
@@ -76,18 +46,22 @@ static Node* findNodeByKey(Node* node, const int key, Node** parent)
 
 BinarySearchTreeErrorCode insert(BinarySearchTree* tree, const int key, const char* const value)
 {
+	const char* newValue = _strdup(value);
+	if (newValue == NULL)
+	{
+		return outOfMemoryBST;
+	}
+
 	Node* parent = NULL;
 	Node* node = findNodeByKey(tree->root, key, &parent);
 	if (node == NULL)
 	{
-		node = (Node*)malloc(sizeof(Node));
+		node = (Node*)calloc(1, sizeof(Node));
 		if (node == NULL)
 		{
 			return outOfMemoryBST;
 		}
 		node->key = key;
-		node->leftSon = NULL;
-		node->rightSon = NULL;
 
 		if (parent == NULL)
 		{
@@ -105,16 +79,8 @@ BinarySearchTreeErrorCode insert(BinarySearchTree* tree, const int key, const ch
 			}
 		}
 	}
-	else
-	{
-		free(node->value);
-		node->value = NULL;
-	}
-	node->value = updateValue(value);
-	if (node->value == NULL)
-	{
-		return outOfMemoryBST;
-	}
+
+	node->value = newValue;
 	return okBST;
 }
 
@@ -297,4 +263,15 @@ void clearTree(BinarySearchTree** tree)
 	clearTreeRecursion((*tree)->root);
 	free(*tree);
 	*tree = NULL;
+}
+
+void printCommands(void)
+{
+	printf("Выберите одну из следующих команд:\n");
+	printf("0 - Выйти\n");
+	printf("1 - Добавить значение по заданному ключу в словарь.\n");
+	printf("2 - Получить значение по заданному ключу из словаря.\n");
+	printf("3 - Проверить наличие заданного ключа в словаре.\n");
+	printf("4 - Удалить заданный ключ и связанное с ним значение из словаря.\n");
+	printf("Ваш выбор: ");
 }

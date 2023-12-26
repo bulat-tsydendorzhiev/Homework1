@@ -1,71 +1,46 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "commands.h"
+#include "console.h"
 #include "BinarySearchTree.h"
-
-enum command
-{
-    quit,
-    add,
-    get,
-    find,
-    delete,
-};
-
-static void printComands(void)
-{
-    printf("Выберите одну из следующих команд:\n");
-    printf("0 - Выйти\n");
-    printf("1 - Добавить значение по заданному ключу в словарь.\n");
-    printf("2 - Получить значение по заданному ключу из словаря.\n");
-    printf("3 - Проверить наличие заданного ключа в словаре.\n");
-    printf("4 - Удалить заданный ключ и связанное с ним значение из словаря.\n");
-    printf("Ваш выбор: ");
-}
 
 static int getChoice(void)
 {
     int choice = 0;
     scanf_s("%d", &choice);
-
     return choice;
 }
 
-static char* getValue(int* length)
+static char* getValue(void)
 {
     printf("Введите значение: ");
-    *length = 0;
+    size_t length = 0;
     size_t capacity = 1;
-    char* string = (char*)malloc(sizeof(char));
+    char* string = (char*)calloc(1, sizeof(char));
     if (string == NULL)
     {
         return NULL;
     }
 
-    char symbol = getchar();
-
-    while (symbol != '\n')
+    char character = getchar();
+    while (character != '\n')
     {
-        if (*length >= capacity)
+        string[length] = character;
+        ++length;
+        if (length >= capacity)
         {
-            capacity *= 2;
-            const char* newString = (char*)realloc(string, capacity * sizeof(char));
-            if (newString == NULL)
+            const char* temp = (char*)realloc(string, 2 * capacity * sizeof(char));
+            if (temp == NULL)
             {
                 return NULL;
             }
-
-            string = newString;
+            capacity *= 2;
+            string = temp;
         }
 
-        string[(*length)] = symbol;
-        (*length)++;
-
-        symbol = getchar();
+        character = getchar();
     }
-
-    string[*length] = '\0';
+    string[length] = '\0';
 
     return string;
 }
@@ -78,33 +53,31 @@ static int getKey(void)
     return key;
 }
 
-static comandError addCommand(BinarySearchTree* const tree)
+static ConsoleError addCommand(BinarySearchTree* const tree)
 {
     const int key = getKey();
 
-    getchar();
-    int length = 0;
-    const char* value = getValue(&length);
+    const int character = getchar(); // in order to start getting value
+    const char* value = getValue();
     if (value == NULL)
     {
-        return outOfMemoryCommands;
+        return lackOfMemory;
     }
 
     const BinarySearchTreeErrorCode insertError = insert(tree, key, value);
     if (insertError)
     {
-        return outOfMemoryCommands;
+        return lackOfMemory;
     }
 
     printf("Ключ и значение добавлены\n");
     printf("\n");
-    return successfullCommand;
+    return success;
 }
 
 static void getCommand(BinarySearchTree* const tree)
 {
     const int key = getKey();
-
     const char* value = getValueByKey(tree, key);
     if (value == NULL)
     {
@@ -114,63 +87,57 @@ static void getCommand(BinarySearchTree* const tree)
     {
         printf("Значение: %s\n", value);
     }
+    printf("\n");
 }
 
 static void findCommand(BinarySearchTree* const tree)
 {
     const int key = getKey();
-
-    const bool keyNotFound = findKey(tree, key);
-    if (keyNotFound)
-    {
-        printf("Не существует такого ключа\n");
-    }
-    else
-    {
-        printf("Такой ключ существует\n");
-    }
+    const bool keyFound = findKey(tree, key);
+    printf(keyFound ? "Такой ключ существует\n": "Не существует такого ключа\n");
+    printf("\n");
 }
 
 static void deleteCommand(BinarySearchTree* const tree)
 {
     const int key = getKey();
-
     const BinarySearchTreeErrorCode errorDelete = deleteNode(tree, key);
-    if (errorDelete == keyNotFoundBST)
-    {
-        printf("Не существует ключа с таким значением\n");
-    }
-    else
-    {
-        printf("Удаление прошло успешно\n");
-    }
+    printf(errorDelete == keyNotFoundBST ? "Не существует ключа с таким значением\n": "Удаление прошло успешно\n");
     printf("\n");
 }
 
-comandError commands(void)
+ConsoleError runProgram(void)
 {
     BinarySearchTree* tree = createTree();
     if (tree == NULL)
     {
-        return outOfMemoryCommands;
+        printf("Ошибка выделения памяти");
+        return lackOfMemory;
     }
 
-    comandError error = 0;
     while (true)
     {
-        printComands();
+        printCommands();
 
-        int choice = getChoice();
+        const int choice = getChoice();
         printf((choice != 0) ? "-----------------------------------------------------------------\n" : "");
 
         switch (choice)
         {
         case quit:
             clearTree(&tree);
-            return successfullCommand;
+            return success;
         case add:
-            error = addCommand(tree);
+        {
+            const ConsoleError errorAdding = addCommand(tree);
+            if (errorAdding)
+            {
+                clearTree(&tree);
+                printf("Ошибка выделения памяти");
+                return lackOfMemory;
+            }
             break;
+        }
         case get:
             getCommand(tree);
             break;
@@ -184,12 +151,6 @@ comandError commands(void)
             printf("Неизвестная команда. Попробуйте снова\n");
             printf("-----------------------------------------------------------------\n");
             break;
-        }
-
-        if (error)
-        {
-            clearTree(&tree);
-            return error;
         }
     }
 }

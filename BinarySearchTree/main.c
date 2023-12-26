@@ -1,24 +1,20 @@
 #include <stdio.h>
+#include <locale.h>
 
-#include "BinarySearchTree.h"
 #include "tests.h"
-#include "commands.h"
+#include "console.h"
+
+#define TESTS_FAILED -1
 
 int main()
 {
-    system("chcp 1251 > nul");
+    setlocale(LC_ALL, "Rus");
 
-    TestErrorCode testError = tests();
-    if (testError)
+    const bool testsPassed = runTests();
+    if (!testsPassed)
     {
-        return testError;
+        return TESTS_FAILED;
     }
 
-    comandError error = commands();
-    if (error)
-    {
-        printf("Произошла ошибка\n");
-        return error;
-    }
-    return 0;
+    return runProgram();
 }

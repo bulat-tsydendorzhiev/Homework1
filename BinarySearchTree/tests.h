@@ -1,15 +1,7 @@
 #pragma once
 
-typedef enum
-{
-    outOfMemory = -2,
-    testFailed,
-    testsPassed,
-    addTestFailed,
-    findKeyTestFailed,
-    getValueTestFailed,
-    deleteTestFailed,
-} TestErrorCode;
+#include <stdbool.h>
 
 // Tests to check the working of the binary search tree
-TestErrorCode tests(void);
+// return true if tests passed
+bool runTests(void);
