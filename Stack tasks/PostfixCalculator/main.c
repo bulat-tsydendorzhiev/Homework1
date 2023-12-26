@@ -1,38 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "postfixCalculatorTests.h"
+#include "tests.h"
 #include "postfixCalculator.h"
 
-#define MAX_LENGTH 100
+#define TESTS_FAILED -1
+#define MAX_LENGTH_OF_EXPRESSION 100
 
 int main(void)
 {
-	const ErrorTest errorTest = tests();
-	if (errorTest)
-	{
-		return errorTest;
-	}
+    const bool testsPassed = runTests();
+    if (!testsPassed)
+    {
+        return TESTS_FAILED;
+    }
 
-	printf("Input arithmetic expression in postfix form\n");
-	char* expression = malloc(sizeof(char) * MAX_LENGTH);
-	scanf_s("%[^\n]", expression, MAX_LENGTH - 1);
+    printf("Input arithmetic expression in postfix form: ");
+    char expression[MAX_LENGTH_OF_EXPRESSION] = "";
+    scanf_s("%[^\n]", expression, MAX_LENGTH_OF_EXPRESSION - 1);
 
-	ErrorCode errorCode = ok;
-	const int result = postfixCalculator(expression, &errorCode);
-	if (errorCode == inputError)
-	{
-		printf("Input error\n");
-		return errorCode;
-	}
-	else if (errorCode == divisionByZero)
-	{
-		printf("Division by zero. You can't divide by zero.\n");
-		return divisionByZero;
-	}
+    ErrorCode errorCode = ok;
+    const int result = calculatePostfixArithmeticExpression(expression, &errorCode);
+    switch (errorCode)
+    {
+    case ok:
+        printf("Calculated result = %d\n", result);
+        break;
+    case inputError:
+        printf("Input error\n");
+        break;
+    case divisionByZero:
+        printf("Division by zero. You can't divide by zero.\n");
+        break;
+    default:
+        printf("Error occurred\n");
+        break;
+    }
 
-	printf("%d\n", result);
-
-	free(expression);
-	return 0;
+    return errorCode;
 }

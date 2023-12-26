@@ -1,21 +1,14 @@
 #pragma once
+
 #include <stdbool.h>
 
-typedef enum ErrorCode
+typedef enum
 {
-	ok,
-	inputError,
-	divisionByZero
+    ok,
+    inputError,
+    divisionByZero = 4,
+    stackError
 } ErrorCode;
 
-// Function to determine whether a symbol is a digit
-bool isDigit(char symbol);
-
-// Function to determine whether a symbol is an arithmetic operation
-bool isArithmeticOperation(char symbol);
-
-// Function for calculating the value of an arithmetic operation
-int countExpression(const int firstNumber, const int secondNumber, const char arithmeticOperation, ErrorCode* errorCode);
-
-// Function to calculate arithmetic expression in postfix form
-int postfixCalculator(char* expression, ErrorCode* errorCode);
+// Calculate arithmetic expression in postfix form
+int calculatePostfixArithmeticExpression(const char* const expression, ErrorCode* const errorCode);

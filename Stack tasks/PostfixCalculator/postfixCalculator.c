@@ -5,76 +5,108 @@
 #include "postfixCalculator.h"
 #include "../Stack/Stack/IntStack.h"
 
-bool isDigit(char symbol)
+static bool isDigit(const char symbol)
 {
-	return symbol >= '0' && symbol <= '9';
+    return symbol >= '0' && symbol <= '9';
 }
 
-bool isArithmeticOperation(char symbol)
+static bool isArithmeticOperation(const char symbol)
 {
-	return symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/';
+    return symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/';
 }
 
-int countExpression(const int firstNumber, const int secondNumber, const char arithmeticOperation, ErrorCode* errorCode)
+static int calculateExpression(const int firstNumber, const int secondNumber, const char arithmeticOperation, ErrorCode* const errorCode)
 {
-	switch (arithmeticOperation)
-	{
-	case '+':
-		return firstNumber + secondNumber;
-	case '-':
-		return firstNumber - secondNumber;
-	case '*':
-		return firstNumber * secondNumber;
-	case '/':
-		if (secondNumber == 0)
-		{
-			*errorCode = divisionByZero;
-			return -1;
-		}
-		return firstNumber / secondNumber;
-	}
+    switch (arithmeticOperation)
+    {
+    case '+':
+        return firstNumber + secondNumber;
+    case '-':
+        return firstNumber - secondNumber;
+    case '*':
+        return firstNumber * secondNumber;
+    case '/':
+        if (secondNumber == 0)
+        {
+            *errorCode = divisionByZero;
+            return -1;
+        }
+        return firstNumber / secondNumber;
+    }
 }
 
-int postfixCalculator(char* expression, ErrorCode* errorCode)
+int calculatePostfixArithmeticExpression(const char* const expression, ErrorCode* const errorCode)
 {
-	IntStack* numbers = NULL;
-	IntErrorCode intErrorCode = okIntStack;
-	for (int i = 0; expression[i] != '\0'; ++i)
-	{
-		char symbol = expression[i];
-		if (symbol == ' ')
-		{
-			continue;
-		}
+    IntStack* numbers = NULL;
+    IntStackErrorCode stackErrorCode = okIntStack;
+    for (size_t i = 0; expression[i] != '\0'; ++i)
+    {
+        if (isDigit(expression[i - 1]) && expression[i] != ' ')
+        {
+            *errorCode = inputError;
+            clearIntStack(&numbers);
+            return inputError;
+        }
 
-		if (isDigit(symbol))
-		{
-			pushInt(&numbers, symbol - '0');
-		}
-		else if (isArithmeticOperation(symbol))
-		{
-			const int secondNumber = topInt(numbers, &intErrorCode);
-			popInt(&numbers);
-			const int firstNumber = topInt(numbers, &intErrorCode);
-			popInt(&numbers);
-			const int intermediateResult = countExpression(firstNumber, secondNumber, symbol, errorCode);
+        const char symbol = expression[i];
+        if (symbol == ' ')
+        {
+            continue;
+        }
 
-			if (errorCode == divisionByZero)
-			{
-				return divisionByZero;
-			}
+        if (isDigit(symbol))
+        {
+            stackErrorCode = pushInt(&numbers, symbol - '0');
+            if (stackErrorCode)
+            {
+                clearIntStack(&numbers);
+                return stackError;
+            }
+        }
+        else if (isArithmeticOperation(symbol))
+        {
+            const int secondNumber = topInt(numbers, &stackErrorCode);
+            if (stackErrorCode)
+            {
+                clearIntStack(&numbers);
+                *errorCode = stackError;
+                return stackError;
+            }
+            popInt(&numbers);
 
-			pushInt(&numbers, intermediateResult);
-		}
-		else
-		{
-			*errorCode = inputError;
-			clearIntStack(&numbers);
-			return inputError;
-		}
-	}
+            const int firstNumber = topInt(numbers, &stackErrorCode);
+            if (stackErrorCode)
+            {
+                clearIntStack(&numbers);
+                *errorCode = stackError;
+                return stackError;
+            }
+            popInt(&numbers);
 
-	const int result = topInt(numbers, &intErrorCode);
-	clearIntStack(&numbers);
-	return result;
+            const int intermediateResult = calculateExpression(firstNumber, secondNumber, symbol, errorCode);
+            if (*errorCode == divisionByZero)
+            {
+                clearIntStack(&numbers);
+                return divisionByZero;
+            }
+
+            stackErrorCode = pushInt(&numbers, intermediateResult);
+            if (stackErrorCode)
+            {
+                clearIntStack(&numbers);
+                return stackErrorCode;
+            }
+        }
+        else
+        {
+            *errorCode = inputError;
+            clearIntStack(&numbers);
+            return inputError;
+        }
+    }
+
+    const int result = topInt(numbers, &stackErrorCode);
+    *errorCode = stackErrorCode ? stackError : ok;
+    clearIntStack(&numbers);
+    return result;
 }
