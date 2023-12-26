@@ -1,24 +1,20 @@
 #include <stdio.h>
+#include <locale.h>
 
-#include "AVLTree.h"
-#include "AVLTreeTests.h"
-#include "commandsAVLTree.h"
+#include "tests.h"
+#include "console.h"
+
+#define TESTS_FAILED -1
 
 int main()
 {
-    system("chcp 1251 > nul");
+    setlocale(LC_ALL, "Rus");
 
-    const AVLTreeTestErrorCode errorTest = testsAVLTree();
-    if (errorTest)
+    const bool testsPassed = runTests();
+    if (!testsPassed)
     {
-        return errorTest;
+        return TESTS_FAILED;
     }
 
-    const CommandError commandError = commands();
-    if (commandError)
-    {
-        return commandError;
-    }
-
-    return 0;
+    return runProgram();
 }

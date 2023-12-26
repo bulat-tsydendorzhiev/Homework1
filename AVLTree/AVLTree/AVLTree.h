@@ -5,33 +5,39 @@
 typedef enum
 {
     okAVL,
-    outOfMemoryAVL,
+    outOfMemoryAVL = 2,
     keyNotFound
 } AVLTreeError;
+
+typedef enum 
+{
+    quit,
+    add,
+    get,
+    find,
+    delete,
+} Command;
 
 // AVL-tree
 typedef struct AVLTree AVLTree;
 
-// The function create a tree;
-// returns a pointer to the tree.
+// Create a tree
 AVLTree* createAVLTree(void);
 
-// The function adds (copies) a value to the tree;
-// get a pointer to a tree, key, value.
+// Add a value by key to the tree / replace a value by key with new value
 AVLTreeError addValue(AVLTree* tree, const char* const key, const char* const value);
 
-// The function returns a copy of the value by key;
-// get a pointer to a tree, key.
+// Return a pointer of the value by key
 char* getValueByKey(const AVLTree* const tree, const char* const key);
 
-// Check for key existence;
-// get a pointer to a tree, a key.
+// Check for key existence
 bool contains(const AVLTree* const tree, const char* const key);
 
-// Delete the value by key;
-// get a pointer to a tree, a key.
+// Delete the value by key
 AVLTreeError deleteValue(AVLTree* tree, const char* const key);
 
-// Delete tree;
-// get a pointer to pointer to a tree.
+// Delete tree
 void deleteTree(AVLTree** tree);
+
+// Print commands for user
+void printCommands(void);

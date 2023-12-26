@@ -127,15 +127,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="commandsAVLTree.c" />
+    <ClCompile Include="console.c" />
     <ClCompile Include="AVLTree.c" />
-    <ClCompile Include="AVLTreeTests.c" />
+    <ClCompile Include="tests.c" />
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AVLTree.h" />
-    <ClInclude Include="AVLTreeTests.h" />
-    <ClInclude Include="commandsAVLTree.h" />
+    <ClInclude Include="tests.h" />
+    <ClInclude Include="console.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,30 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
-#include "commandsAVLTree.h"
+#include "console.h"
 #include "AVLTree.h"
 
 #define VALUE_SIZE 100
-
-enum command
-{
-    quit,
-    add,
-    get,
-    find,
-    delete,
-};
-
-static void printComands(void)
-{
-    printf("Выберите одну из следующих команд:\n");
-    printf("0 - Выйти\n");
-    printf("1 - Добавить значение по заданному ключу в словарь.\n");
-    printf("2 - Получить значение по заданному ключу из словаря.\n");
-    printf("3 - Проверить наличие заданного ключа в словаре.\n");
-    printf("4 - Удалить заданный ключ и связанное с ним значение из словаря.\n");
-    printf("Ваш выбор: ");
-}
 
 static int getChoice(void)
 {
@@ -34,7 +15,7 @@ static int getChoice(void)
     return choice;
 }
 
-static CommandError readKey(char* key)
+static ConsoleError readKey(char* key)
 {
     printf("Введите ключ: ");
     if (scanf_s("%s", key, VALUE_SIZE) != 1)
@@ -42,10 +23,10 @@ static CommandError readKey(char* key)
         printf("Неверный ввод, попробуйте снова\n");
         return errorInput;
     }
-    return successfullCommand;
+    return success;
 }
 
-static CommandError readValue(char* value)
+static ConsoleError readValue(char* value)
 {
     printf("Введите значение: ");
     if (scanf_s("%s", value, VALUE_SIZE) != 1)
@@ -53,20 +34,20 @@ static CommandError readValue(char* value)
         printf("Неверный ввод, попробуйте снова\n");
         return errorInput;
     }
-    return successfullCommand;
+    return success;
 }
 
-static CommandError addCommand(AVLTree* const tree, const char* const key, const char* const value)
+static ConsoleError addCommand(AVLTree* const tree, const char* const key, const char* const value)
 {
     const AVLTreeError insertError = addValue(tree, key, value);
     if (insertError)
     {
-        return outOfMemoryCommands;
+        return consoleOutOfMemory;
     }
 
     printf("Ключ и значение добавлены\n");
     printf("\n");
-    return successfullCommand;
+    return success;
 }
 
 static void getCommand(AVLTree* const tree, const char* const key)
@@ -86,18 +67,11 @@ static void getCommand(AVLTree* const tree, const char* const key)
 static void findCommand(AVLTree* const tree, const char* const key)
 {
     const bool keyFound = contains(tree, key);
-    if (!keyFound)
-    {
-        printf("Не существует такого ключа\n");
-    }
-    else
-    {
-        printf("Такой ключ существует\n");
-    }
+    printf(keyFound ? "Такой ключ существует\n" : "Не существует такого ключа\n");
     printf("\n");
 }
 
-static CommandError deleteCommand(AVLTree* const tree, const char* const key)
+static ConsoleError deleteCommand(AVLTree* const tree, const char* const key)
 {
     const AVLTreeError errorDelete = deleteValue(tree, key);
     if (errorDelete == keyNotFound)
@@ -114,33 +88,32 @@ static CommandError deleteCommand(AVLTree* const tree, const char* const key)
     }
     printf("\n");
 
-    return errorDelete;
+    return errorDelete == outOfMemoryAVL ? consoleOutOfMemory : success;
 }
 
-CommandError commands(void)
+ConsoleError runProgram(void)
 {
     AVLTree* tree = createAVLTree();
     if (tree == NULL)
     {
-        return outOfMemoryCommands;
+        return consoleOutOfMemory;
     }
 
-    CommandError error = successfullCommand;
-    bool endOfProgram = false;
-    while (!endOfProgram)
+    while (true)
     {
-        char key[VALUE_SIZE] = "";
-        char value[VALUE_SIZE] = "";
-        printComands();
+        printCommands();
 
         const int choice = getChoice();
         printf((choice != 0) ? "-----------------------------------------------------------------\n" : "");
         switch (choice)
         {
         case quit:
-            endOfProgram = true;
-            break;
+            deleteTree(&tree);
+            return success;
         case add:
+        {
+            char key[VALUE_SIZE] = "";
+            char value[VALUE_SIZE] = "";
             if (readKey(key) == errorInput)
             {
                 break;
@@ -149,42 +122,57 @@ CommandError commands(void)
             {
                 break;
             }
-            error = addCommand(tree, key, value);
+
+            const ConsoleError errorAddCommand = addCommand(tree, key, value);
+            if (errorAddCommand)
+            {
+                deleteTree(&tree);
+                return errorAddCommand;
+            }
             break;
+        }
         case get:
+        {
+            char key[VALUE_SIZE] = "";
             if (readKey(key) == errorInput)
             {
                 break;
             }
+
             getCommand(tree, key);
             break;
+        }
         case find:
+        {
+            char key[VALUE_SIZE] = "";
             if (readKey(key) == errorInput)
             {
                 break;
             }
+
             findCommand(tree, key);
             break;
+        }
         case delete:
+        {
+            char key[VALUE_SIZE] = "";
             if (readKey(key) == errorInput)
             {
                 break;
             }
-            error = deleteCommand(tree, key);
+
+            const ConsoleError errorDelete = deleteCommand(tree, key);
+            if (errorDelete)
+            {
+                deleteTree(&tree);
+                return errorDelete;
+            }
             break;
+        }
         default:
             printf("Неизвестная команда. Попробуйте снова\n");
             printf("-----------------------------------------------------------------\n");
             break;
         }
-
-        if (error == outOfMemoryAVL)
-        {
-            deleteTree(&tree);
-            return error;
-        }
     }
-
-    deleteTree(&tree);
-    return successfullCommand;
 }

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "AVLTree.h"
 
@@ -40,9 +41,9 @@ static int getBalance(Node* root)
 static Node* rotateLeft(Node* root)
 {
     Node* pivot = root->rightSon;
-    Node* c = pivot->leftSon;
+    Node* pivotLeftSon = pivot->leftSon;
     pivot->leftSon = root;
-    root->rightSon = c;
+    root->rightSon = pivotLeftSon;
     updateHeight(root);
     updateHeight(pivot);
     return pivot;
@@ -51,21 +52,21 @@ static Node* rotateLeft(Node* root)
 static Node* rotateRight(Node* root)
 {
     Node* pivot = root->leftSon;
-    Node* c = pivot->rightSon;
+    Node* pivotRightSon = pivot->rightSon;
     pivot->rightSon = root;
-    root->leftSon = c;
+    root->leftSon = pivotRightSon;
     updateHeight(root);
     updateHeight(pivot);
     return pivot;
 }
 
-static Node* bigRotateLeft(Node* root)
+static Node* makeBigRotateLeft(Node* root)
 {
     root->rightSon = rotateRight(root->rightSon);
     return rotateLeft(root);
 }
 
-static Node* bigRotateRight(Node* root)
+static Node* makeBigRotateRight(Node* root)
 {
     root->leftSon = rotateLeft(root->leftSon);
     return rotateRight(root);
@@ -85,7 +86,7 @@ static Node* balance(Node* root)
         {
             return rotateLeft(root);
         }
-        return bigRotateLeft(root);
+        return makeBigRotateLeft(root);
     }
     else if (getBalance(root) == -2)
     {
@@ -93,7 +94,7 @@ static Node* balance(Node* root)
         {
             return rotateRight(root);
         }
-        return bigRotateRight(root);
+        return makeBigRotateRight(root);
     }
     return root;
 }
@@ -112,18 +113,16 @@ static Node* createNode(const char* const key, const char* const value)
     {
         return NULL;
     }
-    newNode->height = 0;
-    newNode->leftSon = NULL;
-    newNode->rightSon = NULL;
+
     return newNode;
 }
 
-static Node* insertRecursive(Node* const root, const char* const key, char* value, AVLTreeError* error)
+static Node* insertRecursive(Node* const root, const char* const key, char* value, AVLTreeError* const error)
 {
     if (root == NULL)
     {
         Node* newNode = createNode(key, value);
-        *error = newNode == NULL;
+        *error = newNode == NULL ? outOfMemoryAVL: okAVL;
         return newNode;
     }
 
@@ -131,7 +130,7 @@ static Node* insertRecursive(Node* const root, const char* const key, char* valu
     {
         free(root->value);
         root->value = _strdup(value);
-        *error = root->value == NULL;
+        *error = root->value == NULL ? outOfMemoryAVL : okAVL;
     }
     else if (strcmp(key, root->key) < 0)
     {
@@ -203,7 +202,7 @@ static void clearNode(Node** node)
     *node = NULL;
 }
 
-static Node* deleteNode(Node* root, const char* const key, AVLTreeError* error)
+static Node* deleteNode(Node* root, const char* const key, AVLTreeError* const error)
 {
     if (root == NULL)
     {
@@ -270,4 +269,15 @@ void deleteTree(AVLTree** tree)
     deleteTreeRecursive((*tree)->root);
     free(*tree);
     *tree = NULL;
+}
+
+void printCommands(void)
+{
+    printf("Выберите одну из следующих команд:\n");
+    printf("0 - Выйти\n");
+    printf("1 - Добавить значение по заданному ключу в словарь.\n");
+    printf("2 - Получить значение по заданному ключу из словаря.\n");
+    printf("3 - Проверить наличие заданного ключа в словаре.\n");
+    printf("4 - Удалить заданный ключ и связанное с ним значение из словаря.\n");
+    printf("Ваш выбор: ");
 }

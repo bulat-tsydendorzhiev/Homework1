@@ -21,10 +21,10 @@
     <ClCompile Include="AVLTree.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="AVLTreeTests.c">
+    <ClCompile Include="tests.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="commandsAVLTree.c">
+    <ClCompile Include="console.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,10 +32,10 @@
     <ClInclude Include="AVLTree.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="AVLTreeTests.h">
+    <ClInclude Include="tests.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="commandsAVLTree.h">
+    <ClInclude Include="console.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
