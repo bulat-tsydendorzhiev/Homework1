@@ -5,9 +5,11 @@
 typedef enum
 {
     okParseTree,
+    scanningError,
     outOfMemoryParseTree,
     fileErrorParseTree,
-    divisionByZero
+    divisionByZero,
+    unknownSymbol
 } ParseTreeError;
 
 typedef struct ParseTree ParseTree;

@@ -1,11 +1,7 @@
 #pragma once
 
-typedef enum
-{
-    testsPassed,
-    testFailed,
-    buildingError
-} TestErrorCode;
+#include <stdbool.h>
 
-// Tests for parse tree
-TestErrorCode tests(void);
+// Tests to check functionality of parse tree
+// return true if tests passed
+bool runTests(void);

@@ -4,33 +4,35 @@
 #include "parseTree.h"
 #include "tests.h"
 
-TestErrorCode tests(void)
+#define MAX_LENGTH_OF_TEST_FILE_NAME 10
+#define NUMBER_OF_TESTS 6
+
+bool runTests(void)
 {
-    const char testFilesNames[][10] = { "test1.txt", "test2.txt", "test3.txt", "test4.txt", "test5.txt" };
-    const int expectedCalculations[] = { 8, 126, -75, 128, -1 };
-    const int expectedErrorCodes[] = { okParseTree, okParseTree, okParseTree, okParseTree, divisionByZero };
+    const char testFilesNames[NUMBER_OF_TESTS][MAX_LENGTH_OF_TEST_FILE_NAME] = { "test1.txt", "test2.txt", "test3.txt", "test4.txt", "test5.txt", "test6.txt" };
+    const int expectedCalculations[NUMBER_OF_TESTS] = { 8, 126, -75, 128, divisionByZero, 2 };
+    const int expectedErrorCodes[NUMBER_OF_TESTS] = { okParseTree, okParseTree, okParseTree, okParseTree, divisionByZero, okParseTree };
 
-    const size_t numberOfTests = sizeof(testFilesNames) / sizeof(testFilesNames[0]);
-
-    for (size_t i = 0; i < numberOfTests; ++i)
+    for (size_t i = 0; i < NUMBER_OF_TESTS; ++i)
     {
         ParseTree* testTree = createParseTree();
         const ParseTreeError errorBuild = buildParseTree(&testTree, testFilesNames[i]);
         if (errorBuild)
         {
+            clearParseTree(&testTree);
             printf("Out of memory during tests\n");
-            return buildingError;
+            return false;
         }
 
         ParseTreeError errorCode = okParseTree;
         const int result = calculateParseTree(testTree, &errorCode);
+        clearParseTree(&testTree);
         if (result != expectedCalculations[i] || errorCode != expectedErrorCodes[i])
         {
-            printf("Test %d doesn't passed\n", (int)i + 1);
-            clearParseTree(&testTree);
-            return testFailed;
+            printf("%d\n", result);
+            printf("Test %Iu doesn't passed\n", i + 1);
+            return false;
         }
-        clearParseTree(&testTree);
     }
-    return testsPassed;
+    return true;
 }
