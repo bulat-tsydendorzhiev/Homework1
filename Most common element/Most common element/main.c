@@ -72,10 +72,11 @@ void quickSort(int* const array, const int left, const int right)
 
 int searchMostFrequent(const int* const array, const int arrayLength)
 {
-    int answer = array[0], maxCount = 1;
+    int answer = array[0];
+    int maxCount = 1;
     int count = 1;
 
-    for (int i = 1; i < arrayLength; ++i)
+    for (size_t i = 1; i < arrayLength; ++i)
     {
         if (array[i - 1] == array[i])
         {
