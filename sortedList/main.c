@@ -14,5 +14,4 @@ int main()
         return !testPassed;
     }
     return runProgram();
-    return 0;
 }

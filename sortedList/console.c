@@ -39,7 +39,7 @@ ConsoleErrorCodes runProgram(void)
                 deleteSortedList(&sortedList);
                 return listError;
             }
-            printf("Successfull adding\n");
+            printf("Successful adding\n");
             break;
         }
         case deleteValueFromList:
