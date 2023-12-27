@@ -4,9 +4,9 @@
 
 typedef enum
 {
-	okBST,
-	keyNotFoundBST,
-	outOfMemoryBST
+    okBST,
+    keyNotFoundBST,
+    outOfMemoryBST
 } BinarySearchTreeErrorCode;
 
 typedef enum
