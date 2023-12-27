@@ -1,31 +1,24 @@
-#include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
-#include "list.h"
+#include "List.h"
 
 typedef struct Node
 {
     char* value;
-    int frequency;
+    size_t amountOfValue;
     struct Node* next;
 } Node;
 
 struct List
 {
     Node* head;
-    int length;
+    size_t length;
 };
 
 List* createList(void)
 {
     List* newList = (List*)calloc(1, sizeof(List));
-    if (newList == NULL)
-    {
-        return NULL;
-    }
-    newList->head = NULL;
-    newList->length = 0;
     return newList;
 }
 
@@ -34,7 +27,7 @@ bool listIsEmpty(List* list)
     return list->head == NULL;
 }
 
-int addValueToList(List* const list, const char* const value, const int frequency)
+ListError addValueToList(List* const list, const char* const value, const size_t amountOfValue)
 {
     Node* current = list->head;
     Node* previous = NULL;
@@ -50,16 +43,16 @@ int addValueToList(List* const list, const char* const value, const int frequenc
         current = (Node*)calloc(1, sizeof(Node));
         if (current == NULL)
         {
-            return -1;
+            return outOfMemory;
         }
 
         current->value = _strdup(value);
         if (current->value == NULL)
         {
-            return -1;
+            free(current);
+            return outOfMemory;
         }
-        current->frequency = 0;
-        current->next = NULL;
+        current->amountOfValue = 0;
 
         if (previous == NULL)
         {
@@ -70,13 +63,18 @@ int addValueToList(List* const list, const char* const value, const int frequenc
             previous->next = current;
         }
     }
-    current->frequency += frequency;
+    current->amountOfValue += amountOfValue;
 
-    return current->frequency == 1;
+    return current->amountOfValue == 1 ? uniqueValue: notUniqueValue;
 }
 
 bool listContains(List* const list, const char* const value)
 {
+    if (list == NULL || value == NULL)
+    {
+        return false;
+    }
+
     Node* current = list->head;
     while (current != NULL && strcmp(current->value, value) != 0)
     {
@@ -85,17 +83,17 @@ bool listContains(List* const list, const char* const value)
     return current != NULL;
 }
 
-int getLength(List* list)
+size_t getLength(const List* const list)
 {
     return list->length;
 }
 
-int getFrequency(List* list)
+size_t getAmountOfValue(const List* const list)
 {
-    return list->head->frequency;
+    return list->head->amountOfValue;
 }
 
-char* getHeadValue(List* const list)
+const char* getHeadValue(const List* const list)
 {
     return (listIsEmpty(list)) ? NULL : list->head->value;
 }
@@ -127,12 +125,12 @@ void deleteList(List** list)
     *list = NULL;
 }
 
-void printList(List* list)
+void printList(const List* const list)
 {
     Node* current = list->head;
     while (current != NULL)
     {
-        printf("%s: %d\n", current->value, current->frequency);
+        printf("%s: %Iu\n", current->value, current->amountOfValue);
         current = current->next;
     }
 }

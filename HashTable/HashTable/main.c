@@ -2,22 +2,16 @@
 
 #include "tests.h"
 #include "console.h"
+#include "List.h"
+
+#define TESTS_FAILED -1
 
 int main()
 {
-    system("chcp 1251 > nul");
-    const bool testError = tests();
-    if (testError)
+    const bool testsPassed = runTests();
+    if (!testsPassed)
     {
-        printf("Tests had failed\n");
-        return testError;
+        return TESTS_FAILED;
     }
-
-    ConsoleError error = console();
-    if (error)
-    {
-        printf("Error occured\n");
-    }
-
-    return 0;
+    return runProgram();
 }

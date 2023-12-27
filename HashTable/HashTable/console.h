@@ -2,11 +2,10 @@
 
 typedef enum
 {
-    ok,
+    success,
     hashTableError,
     openFileError
 } ConsoleError;
 
-// Console
-// return 0 if everything is alright; 1 if hash table has out of memory error; 2 if error occured during file opening
-ConsoleError console(void);
+// Print the frequency of occurrence of words in a file and also load factor, average length of buckets, max length of bucket of hash table
+ConsoleError runProgram(void);

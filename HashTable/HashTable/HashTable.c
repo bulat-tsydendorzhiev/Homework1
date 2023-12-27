@@ -1,146 +1,133 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <limits.h>
 
-#include "hashTable.h"
-#include "list.h"
+#include "HashTable.h"
+#include "List.h"
 
 typedef List Bucket;
 
+#define MOD INT_MAX
+
 struct HashTable
 {
-    int size;
-    int numberOfElements;
+    size_t size;
+    size_t numberOfElements;
     Bucket** buckets;
 };
 
-static bool createBuckets(HashTable* table)
+static Bucket** createBuckets(const size_t tableSize)
 {
-    table->buckets = (Bucket**)calloc(table->size, sizeof(Bucket*));
-    if (table->buckets == NULL)
+    Bucket** newBuckets = (Bucket**)calloc(tableSize, sizeof(Bucket*));
+    if (newBuckets == NULL)
     {
-        return true;
+        return NULL;
     }
 
-    for (size_t i = 0; i < table->size; ++i)
+    for (size_t i = 0; i < tableSize; ++i)
     {
-        table->buckets[i] = createList();
-        if (table->buckets[i] == NULL)
+        newBuckets[i] = createList();
+        if (newBuckets[i] == NULL)
         {
-            return true;
+            for (size_t j = 0; j < i; ++j)
+            {
+                deleteList(&newBuckets[j]);
+            }
+            return NULL;
         }
     }
-    return false;
+    return newBuckets;
 }
 
 HashTable* createHashTable(void)
 {
-    HashTable* table = calloc(1, sizeof(HashTable));
+    HashTable* table = (HashTable*)calloc(1, sizeof(HashTable));
     if (table == NULL)
     {
         return NULL;
     }
+
     table->size = 4;
-    const bool errorCreateOfBuckets = createBuckets(table);
-    if (errorCreateOfBuckets)
+    table->buckets = createBuckets(table->size);
+    if (table->buckets == NULL)
     {
+        free(table);
         return NULL;
     }
     return table;
 }
 
-static int hashFunction(const char* const value)
+static size_t calculateHash(const char* const value)
 {
-    int hashValue = 0;
-    int power31 = 1;
+    size_t hashValue = 0;
+    size_t power31 = 1;
     for (size_t i = 0; value[i] != '\0'; ++i)
     {
-        hashValue = (hashValue + (value[i] - 'a' + 1) * power31) % INT_MAX;
-        power31 = (power31 * 31) % INT_MAX;
+        hashValue = (hashValue + (value[i] - 'a' + 1) * power31) % MOD;
+        power31 = (power31 * 31) % MOD;
     }
-    return abs(hashValue);
+    return hashValue;
 }
 
-static Bucket* createTempBucket(HashTable* table)
+static bool rehash(HashTable* table)
 {
-    Bucket* tempBucket = createList();
-    if (tempBucket == NULL)
+    const size_t newLength = table->size * 2;
+    Bucket** newBuckets = createBuckets(table->size * 2);
+    if (newBuckets == NULL)
     {
-        return NULL;
+        return false;
     }
 
-    for (size_t i = 0; i < table->size; i++)
+    for (size_t i = 0; i < table->size; ++i)
     {
         while (!listIsEmpty(table->buckets[i]))
         {
-            const int errorAddition = addValueToList(tempBucket, getHeadValue(table->buckets[i]), getFrequency(table->buckets[i]));
-            if (errorAddition < 0)
+            const char* tableBucketValue = getHeadValue(table->buckets[i]);
+            const ListError errorAddition = addValueToList(newBuckets[calculateHash(tableBucketValue) % newLength], tableBucketValue, getAmountOfValue(table->buckets[i]));
+            if (errorAddition == outOfMemory)
             {
-                return NULL;
+                return false;
             }
             deleteHeadValue(table->buckets[i]);
         }
         deleteList(&table->buckets[i]);
     }
 
-    return tempBucket;
-}
-
-static bool rehash(HashTable* table)
-{
-    Bucket* tempBucket = createTempBucket(table);
-    if (tempBucket == NULL)
-    {
-        return;
-    }
-
-    table->size = table->size << 1;
-    createBuckets(table);
-    while (!listIsEmpty(tempBucket))
-    {
-        char* value = getHeadValue(tempBucket);
-        const int errorAdition = addValueToList(table->buckets[hashFunction(value) % table->size], value, getFrequency(tempBucket));
-        if (errorAdition < 0)
-        {
-            return true;
-        }
-        deleteHeadValue(tempBucket);
-    }
-    deleteList(&tempBucket);
-    return 0;
+    table->size = newLength;
+    table->buckets = newBuckets;
+    return true;
 }
 
 bool addValue(HashTable* table, const char* const value)
 {
-    const int addNewValue = addValueToList(table->buckets[hashFunction(value) % table->size], value, 1);
-    if (addNewValue > 0)
+    const ListError errorAdding = addValueToList(table->buckets[calculateHash(value) % table->size], value, 1);
+    if (errorAdding == uniqueValue)
     {
         ++table->numberOfElements;
     }
-    else if (addNewValue < 0)
+    else if (errorAdding == outOfMemory)
     {
-        return true;
+        return false;
     }
 
     if (getLoadFactor(table) >= 1.0)
     {
-        const int errorRehash = rehash(table);
-        if (errorRehash)
+        const bool successfulRehash = rehash(table);
+        if (!successfulRehash)
         {
-            deleteHashTable(&table);
-            return true;
+            return false;
         }
     }
-    return false;
+    return true;
 }
 
 bool tableContains(const HashTable* const table, const char* const value)
 {
-    return listContains(table->buckets[hashFunction(value) % table->size], value);
+    return listContains(table->buckets[calculateHash(value) % table->size], value);
 }
 
 void printHashTable(const HashTable* const table)
 {
-    for (size_t i = 0; i < table->size; i++)
+    for (size_t i = 0; i < table->size; ++i)
     {
         if (!listIsEmpty(table->buckets[i]))
         {
@@ -151,7 +138,7 @@ void printHashTable(const HashTable* const table)
 
 void deleteHashTable(HashTable** table)
 {
-    for (size_t i = 0; i < (*table)->size; i++)
+    for (size_t i = 0; i < (*table)->size; ++i)
     {
         deleteList(&(*table)->buckets[i]);
     }
@@ -164,9 +151,9 @@ float getLoadFactor(const HashTable* const table)
     return (float)table->numberOfElements / table->size;
 }
 
-int getMaxBucketLength(const HashTable* const table)
+size_t getMaxBucketLength(const HashTable* const table)
 {
-    int maxLength = 0;
+    size_t maxLength = 0;
     for (size_t i = 0; i < table->size; i++)
     {
         maxLength = max(maxLength, getLength(table->buckets[i]));
@@ -178,7 +165,7 @@ float getAverageBucketLength(const HashTable* const table)
 {
     int sumOfLengths = 0;
     int notEmptyBucketNumber = 0;
-    for (size_t i = 0; i < table->size; i++)
+    for (size_t i = 0; i < table->size; ++i)
     {
         sumOfLengths += getLength(table->buckets[i]);
         notEmptyBucketNumber += !listIsEmpty(table->buckets[i]);

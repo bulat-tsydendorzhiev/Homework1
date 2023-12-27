@@ -1,11 +1,12 @@
 #pragma once
 
 #include <stdbool.h>
+#include <stdlib.h>
 
 // Hash table
 typedef struct HashTable HashTable;
 
-// Create a hash table
+// Create a hash table with capacity equals 4
 HashTable* createHashTable(void);
 
 // Add value in hash table
@@ -27,7 +28,7 @@ void deleteHashTable(HashTable** table);
 float getLoadFactor(const HashTable* const table);
 
 // Return length of bucket with max length
-int getMaxBucketLength(const HashTable* const table);
+size_t getMaxBucketLength(const HashTable* const table);
 
 // Return average length of buckets
 float getAverageBucketLength(const HashTable* const table);

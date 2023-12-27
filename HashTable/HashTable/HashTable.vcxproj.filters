@@ -24,7 +24,7 @@
     <ClCompile Include="main.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="list.c">
+    <ClCompile Include="List.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="console.c">
@@ -38,7 +38,7 @@
     <ClInclude Include="tests.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="list.h">
+    <ClInclude Include="List.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="console.h">

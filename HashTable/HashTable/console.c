@@ -2,7 +2,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "hashTable.h"
+#include "HashTable.h"
 #include "console.h"
 
 static void correctWord(char* word, const int wordLength)
@@ -30,8 +30,8 @@ static ConsoleError loadData(HashTable* const table, const char* const filename)
         correctWord(word, wordLength);
         if (wordLength > 0)
         {
-            const bool errorAdd = addValue(table, word);
-            if (errorAdd)
+            const bool successfulAdding = addValue(table, word);
+            if (!successfulAdding)
             {
                 fclose(file);
                 return hashTableError;
@@ -40,10 +40,10 @@ static ConsoleError loadData(HashTable* const table, const char* const filename)
     }
 
     fclose(file);
-    return ok;
+    return success;
 }
 
-ConsoleError console(void)
+ConsoleError runProgram(void)
 {
     HashTable* table = createHashTable();
     if (table == NULL)
@@ -67,8 +67,8 @@ ConsoleError console(void)
 
     printf("Load factor = %f\n", getLoadFactor(table));
     printf("Average length of buckets = %f\n", getAverageBucketLength(table));
-    printf("Max length of bucket = %d\n", getMaxBucketLength(table));
+    printf("Max length of bucket = %Iu\n", getMaxBucketLength(table));
 
     deleteHashTable(&table);
-    return ok;
+    return success;
 }
