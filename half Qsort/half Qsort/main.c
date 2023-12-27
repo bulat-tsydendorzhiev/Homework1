@@ -10,9 +10,9 @@ typedef enum
     success,
     incorrectInput,
     outOfMemory
-}ErrroCode;
+} ErrorCode;
 
-int readAndCheckData(size_t* const arrayLength)
+ErrorCode readAndCheckData(size_t* const arrayLength)
 {
     printf("Input array length: ");
     int scanResult = scanf_s("%Iu", arrayLength);
@@ -31,7 +31,7 @@ int readAndCheckData(size_t* const arrayLength)
 
 void createArrayOfRandomNumbers(int* array, const size_t length)
 {
-    for (int i = 0; i < length; ++i)
+    for (size_t i = 0; i < length; ++i)
     {
         array[i] = rand() % 1000;
     }
@@ -39,7 +39,7 @@ void createArrayOfRandomNumbers(int* array, const size_t length)
 
 void printArray(int* array, const size_t arrayLength)
 {
-    for (int i = 0; i < arrayLength; ++i)
+    for (size_t i = 0; i < arrayLength; ++i)
     {
         printf("%d ", array[i]);
     }
@@ -88,23 +88,21 @@ bool isCorrectArray(const int* const array, const size_t arrayLength, const int 
 
 void runTests(bool* testResults)
 {
-    int testArray1[] = { 3,1,4,1,5,9 };
+    int testArray1[] = { 3, 1, 4, 1, 5, 9 };
     halfQsort(testArray1, 6);
     testResults[0] = isCorrectArray(testArray1, 6, 3);
 
-    int testArray2[] = { 5,4,3,2,1 };
+    int testArray2[] = { 5, 4, 3, 2, 1 };
     halfQsort(testArray2, 5);
     testResults[1] = isCorrectArray(testArray2, 5, 5);
 
-    int testArray3[] = { 1,2,3,4,5 };
+    int testArray3[] = { 1, 2, 3, 4, 5 };
     halfQsort(testArray3, 5);
     testResults[2] = isCorrectArray(testArray3, 5, 1);
 
     int testArray4[] = { 1 };
     halfQsort(testArray4, 1);
     testResults[3] = isCorrectArray(testArray4, 1, 1);
-
-    return 0;
 }
 
 int main()
@@ -127,7 +125,8 @@ int main()
     }
 
     size_t arrayLength = 0;
-    const int errorInput = readAndCheckData(&arrayLength);
+    printf("Enter number (less than 100): ");
+    const ErrorCode errorInput = readAndCheckData(&arrayLength);
     if (errorInput)
     {
         printf("Array length cannot be negative number\n");
