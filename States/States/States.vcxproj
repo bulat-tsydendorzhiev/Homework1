@@ -127,16 +127,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="algorithm.c" />
-    <ClCompile Include="console.c" />
-    <ClCompile Include="dataInit.c" />
+    <ClCompile Include="Graph.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="tests.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="algorithm.h" />
-    <ClInclude Include="console.h" />
-    <ClInclude Include="dataInit.h" />
+    <ClInclude Include="Graph.h" />
     <ClInclude Include="tests.h" />
   </ItemGroup>
   <ItemGroup>

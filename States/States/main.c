@@ -1,22 +1,42 @@
 #include <stdio.h>
 
 #include "tests.h"
-#include "console.h"
+#include "Graph.h"
+
+typedef enum
+{
+    testsFailed = -1,
+    success,
+    openningFileError = 3
+};
 
 int main()
 {
-    const bool testError = tests();
-    if (testError)
+    const bool testsPassed = runTests();
+    if (!testsPassed)
     {
-        return testError;
+        return testsFailed;
     }
 
-    const int errorOccured = console();
-    if (errorOccured)
+    FILE* file = NULL;
+    fopen_s(&file, "mainFile.txt", "r");
+    if (file == NULL)
     {
-        printf("Error occurred\n");
-        return errorOccured;
+        return openningFileError;
     }
 
-    return 0;
+    Graph* graph = NULL;
+    const GraphErrorCode errorInit = initGraph(file, &graph);
+    if (errorInit)
+    {
+        fclose(file);
+        return errorInit;
+    }
+    fclose(file);
+
+    distributeCities(graph);
+    printStates(graph);
+
+    deleteGraph(&graph);
+    return success;
 }
