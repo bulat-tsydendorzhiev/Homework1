@@ -16,7 +16,7 @@ static void printTestsResults(bool* const testsResults, bool* const finalResult)
     }
 }
 
-static bool* executeTestsForCounting(bool* const testsResults)
+static void executeTestsForCounting(bool* const testsResults)
 {
     const bool testCases[][3] = { {5, 2, 3},
                              {10, 3, 4},
@@ -38,7 +38,7 @@ static bool* executeTestsForCounting(bool* const testsResults)
 
 bool tests(void)
 {
-    bool* testsResults = calloc(5, sizeof(bool));
+    bool* testsResults = (bool*)calloc(5, sizeof(bool));
     if (testsResults == NULL)
     {
         printf("Out of memory error\n");
