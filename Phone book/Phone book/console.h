@@ -6,5 +6,5 @@ typedef enum
     scanError
 } ConsoleError;
 
-// Console
-int runProgram(void);
+// Work with user
+ConsoleError runProgram(void);

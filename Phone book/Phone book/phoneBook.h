@@ -13,23 +13,23 @@ typedef enum
     success,
     outOfMemory = 2,
     openFileError,
-	copyError
+    copyError
 } ErrorCode;
 
 typedef enum
 {
-	exitCommand,
-	addContactCommand,
-	printContactsCommand,
-	findPhoneNumberByNameCommand,
-	findNameByPhoneNumberCommand,
-	saveContactsCommand
+    exitCommand,
+    addContactCommand,
+    printContactsCommand,
+    findPhoneNumberByNameCommand,
+    findNameByPhoneNumberCommand,
+    saveContactsCommand
 } Command;
 
 typedef struct PhoneBook
 {
-	char name[MAX_NAME_LENGTH];
-	char phoneNumber[MAX_PHONE_NUMBER_LENGTH];
+    char name[MAX_NAME_LENGTH];
+    char phoneNumber[MAX_PHONE_NUMBER_LENGTH];
 } PhoneBook;
 
 // Get data from a file
@@ -37,7 +37,7 @@ ErrorCode initData(PhoneBook phoneBook[MAX_CONTACTS_NUMBER], const char* const f
 
 // Add contact in phone book
 ErrorCode addContact(PhoneBook phoneBook[MAX_CONTACTS_NUMBER], const char name[MAX_NAME_LENGTH], const char phoneNumber[MAX_PHONE_NUMBER_LENGTH],
-	size_t* const numberOfContacts);
+    size_t* const numberOfContacts);
 
 // Print all contacts in phone book
 void printContacts(const PhoneBook phoneBook[MAX_CONTACTS_NUMBER], const size_t numberOfContacts);
