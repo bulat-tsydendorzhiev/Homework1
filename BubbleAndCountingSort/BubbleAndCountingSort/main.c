@@ -41,7 +41,7 @@ void countingSort(int* arrayOfNumbers, const int length)
 {
     int maxElement = INT_MIN;
     int minElement = INT_MAX;
-    for (int i = 0; i < length; ++i)
+    for (size_t i = 0; i < length; ++i)
     {
         if (arrayOfNumbers[i] > maxElement)
         {
@@ -53,11 +53,10 @@ void countingSort(int* arrayOfNumbers, const int length)
         }
     }
 
-    const int newArrayLength = maxElement - minElement + 1;
+    const size_t newArrayLength = maxElement - minElement + 1;
     int* amountOfNumbers = (int*)calloc(newArrayLength, sizeof(int));
     if (amountOfNumbers == NULL)
     {
-        free(amountOfNumbers);
         return;
     }
 
@@ -165,8 +164,9 @@ int main()
     for (size_t i = 0; i < LENGTH_FOR_COMPARE; ++i)
     {
         testArray1[i] = rand();
-        testArray2[i] = rand();
     }
+
+    testArray2 = testArray1;
 
     printMeasureSortingTime(testArray1, testArray2, LENGTH_FOR_COMPARE);
     return SUCCESS;
