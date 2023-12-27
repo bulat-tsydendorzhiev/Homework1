@@ -31,7 +31,8 @@ int iterativeFibonacci(const int number, bool* const errorOccured)
         return -1;
     }
     
-    int currentNumber = 0, previousNumber = 1;
+    int currentNumber = 0;
+    int previousNumber = 1;
     for (size_t i = 0; i < number; ++i)
     {
         currentNumber = currentNumber + previousNumber;
