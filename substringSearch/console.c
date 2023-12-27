@@ -4,25 +4,23 @@
 #include "dataInit.h"
 #include "substringSearch.h"
 
-int runProgram(void)
+ErrorCode runProgram(void)
 {
-    size_t stringLength = 0;
-    const char* const string = getStringFromFile("mainFile.txt", &stringLength);
+    char* string = getStringFromFile("text.txt");
     if (string == NULL)
     {
         return outOfMemory;
     }
 
     printf("Enter substring: ");
-    size_t substringLength = 0;
-    const char* const substring = getString(&substringLength);
+    char* substring = getString();
     if (substring == NULL)
     {
         free(string);
         return outOfMemory;
     }
 
-    const int index = substringSearch(string, stringLength, substring, substringLength);
+    const int index = substringSearch(string, substring);
     if (index == -1)
     {
         printf("There is no such substring in string\n");

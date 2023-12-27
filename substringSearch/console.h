@@ -8,5 +8,5 @@ typedef enum
     outOfMemory = 2
 } ErrorCode;
 
-// Console
-int runProgram(void);
+// Work with user: user enter substring and print 
+ErrorCode runProgram(void);

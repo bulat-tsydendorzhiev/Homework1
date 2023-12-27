@@ -2,9 +2,9 @@
 
 #include "dataInit.h"
 
-char* getString(size_t* length)
+char* getString(void)
 {
-    *length = 0;
+    size_t length = 0;
     size_t capacity = 1;
     char* string = (char*)calloc(capacity, sizeof(char));
     if (string == NULL)
@@ -15,8 +15,9 @@ char* getString(size_t* length)
     char character = getchar();
     while (character != '\n')
     {
-        string[(*length)++] = character;
-        if (*length >= capacity)
+        string[length] = character;
+        ++length;
+        if (length >= capacity)
         {
             char* temp = (char*)realloc(string, 2 * capacity * sizeof(char));
             if (temp == NULL)
@@ -28,13 +29,18 @@ char* getString(size_t* length)
         }
         character = getchar();
     }
-    string[*length] = '\0';
+    string[length] = '\0';
 
     return string;
 }
 
-char* getStringFromFile(const char* const fileName, size_t* length)
+char* getStringFromFile(const char* const fileName)
 {
+    if (fileName == NULL)
+    {
+        return NULL;
+    }
+
     FILE* file = NULL;
     fopen_s(&file, fileName, "r");
     if (file == NULL)
@@ -42,7 +48,7 @@ char* getStringFromFile(const char* const fileName, size_t* length)
         return NULL;
     }
 
-    *length = 0;
+    size_t length = 0;
     size_t capacity = 1;
     char* string = (char*)calloc(capacity, sizeof(char));
     if (string == NULL)
@@ -54,12 +60,14 @@ char* getStringFromFile(const char* const fileName, size_t* length)
     char character = getc(file);
     while (!feof(file))
     {
-        string[(*length)++] = character;
-        if (*length >= capacity)
+        string[length] = character;
+        ++length;
+        if (length >= capacity)
         {
             char* temp = (char*)realloc(string, 2 * capacity * sizeof(char));
             if (temp == NULL)
             {
+                fclose(file);
                 return NULL;
             }
             string = temp;
@@ -67,7 +75,7 @@ char* getStringFromFile(const char* const fileName, size_t* length)
         }
         character = getc(file);
     }
-    string[*length] = '\0';
+    string[length] = '\0';
 
     fclose(file);
     return string;
