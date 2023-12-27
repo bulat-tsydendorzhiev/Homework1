@@ -6,5 +6,5 @@ typedef enum
     outOfMemory = 2
 } ErrorCode;
 
-// Console
+// Work with user: user enters string and the program prints whether a string is a real number
 ErrorCode runProgram(void);

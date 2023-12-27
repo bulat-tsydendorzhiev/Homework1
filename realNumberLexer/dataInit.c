@@ -2,9 +2,9 @@
 
 #include "dataInit.h"
 
-char* getString(size_t* const length)
+char* getString(void)
 {
-    *length = 0;
+    size_t length = 0;
     size_t capacity = 1;
     char* string = (char*)calloc(capacity, sizeof(char));
     if (string == NULL)
@@ -15,8 +15,9 @@ char* getString(size_t* const length)
     char character = getchar();
     while (character != '\n')
     {
-        string[(*length)++] = character;
-        if (*length >= capacity)
+        string[length] = character;
+        ++length;
+        if (length >= capacity)
         {
             char* temp = (char*)realloc(string, 2 * capacity * sizeof(char));
             if (temp == NULL)
@@ -28,7 +29,7 @@ char* getString(size_t* const length)
         }
         character = getchar();
     }
-    string[*length] = '\0';
+    string[length] = '\0';
 
     return string;
 }
