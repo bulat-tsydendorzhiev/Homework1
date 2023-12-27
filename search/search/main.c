@@ -11,14 +11,14 @@
 
 void swap(int* number1, int* number2)
 {
-    *number1 ^= *number2;
-    *number2 ^= *number1;
-    *number1 ^= *number2;
+    const int temp = *number1;
+    *number1 = *number2;
+    *number2 = temp;
 }
 
 void insertionSort(int* const array, int left, int right)
 {
-    for (int i = left; i <= right; ++i)
+    for (size_t i = left; i <= right; ++i)
     {
         const int value = array[i];
         int j = i;
@@ -39,8 +39,8 @@ void quickSort(int* const array, const int left, const int right)
         return;
     }
     const int pivot = array[(left + right) / 2];
-    int i = left;
-    int j = right;
+    size_t i = left;
+    size_t j = right;
 
     while (i <= j)
     {
@@ -179,9 +179,9 @@ int* createArrayOfRandomNumbers(const int arrayLength)
     {
         return NULL;
     }
+    srand(time(NULL));
     for (size_t i = 0; i < arrayLength; i++)
     {
-        srand(time(NULL));
         newArray[i] = rand() % RANGE_OF_RANDOM_NUMBERS;
     }
     return newArray;
@@ -195,7 +195,8 @@ int main(void)
         return TESTS_FAILED;
     }
 
-    int arrayLength = 0, amountOfRandomNumbers = 0;
+    int arrayLength = 0;
+    int amountOfRandomNumbers = 0;
     const bool successfullRead = readData(&arrayLength, &amountOfRandomNumbers);
     if (!successfullRead)
     {
