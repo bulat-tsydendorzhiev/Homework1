@@ -6,9 +6,10 @@ typedef enum
 {
     success,
     scanError,
-    outOfMemory
+    outOfMemory,
+    openningFileError,
+    nullFileName
 } ErrorCode;
 
-// Read array from file;
-// return one of error codes
-int readArrayFromFile(const char* const fileName, int** const array, size_t* const arrayLength);
+// Read array from file
+ErrorCode readArrayFromFile(const char* const fileName, int** const array, size_t* const arrayLength);

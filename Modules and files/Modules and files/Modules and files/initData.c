@@ -2,17 +2,23 @@
 
 #include "initData.h"
 
-int readArrayFromFile(const char* const fileName, int** const array, size_t* const arrayLength)
+ErrorCode readArrayFromFile(const char* const fileName, int** const array, size_t* const arrayLength)
 {
+    if (fileName == NULL)
+    {
+        return nullFileName;
+    }
+
     FILE* file = NULL;
     fopen_s(&file, fileName, "r");
     if (file == NULL)
     {
-        return NULL;
+        return openningFileError;
     }
 
     if (fscanf_s(file, "%Iu", arrayLength) != 1)
     {
+        fclose(file);
         return scanError;
     }
 

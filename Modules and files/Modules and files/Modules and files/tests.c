@@ -41,7 +41,7 @@ static bool runSortTest(void)
     return true;
 }
 
-static runTestForSearching(void)
+static bool runTestForSearching(void)
 {
     const char testFiles[][10] = {"test1.txt", "test2.txt", "test3.txt", "test4.txt"};
     const int expectedResults[] = {1, 1, 1, 1};

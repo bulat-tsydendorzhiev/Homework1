@@ -18,7 +18,7 @@ int main()
 
     int* array = NULL;
     size_t arrayLength = 0;
-    const int errorCode = readArrayFromFile(FILE_NAME, &array , &arrayLength);
+    const ErrorCode errorCode = readArrayFromFile(FILE_NAME, &array , &arrayLength);
     if (errorCode)
     {
         return errorCode;
