@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <locale.h>
 
-#define BINARY_REPRESENTATION_SIZE 32
+#define BINARY_REPRESENTATION_SIZE (sizeof(int) * 8)
 
 typedef enum
 {
@@ -52,7 +52,7 @@ void sumTwoBinaryNumbersInColumn(const int binaryNumber1[BINARY_REPRESENTATION_S
 {
     int carry = 0;
 
-    for (int i = 31; i >= 0; --i)
+    for (int i = BINARY_REPRESENTATION_SIZE - 1; i >= 0; --i)
     {
         const int bit1 = binaryNumber1[i];
         const int bit2 = binaryNumber2[i];
@@ -65,7 +65,7 @@ void sumTwoBinaryNumbersInColumn(const int binaryNumber1[BINARY_REPRESENTATION_S
 
 void printBinaryNumber(const int binaryNumber[BINARY_REPRESENTATION_SIZE])
 {
-    for (size_t i = 0; i < 32; ++i)
+    for (size_t i = 0; i < BINARY_REPRESENTATION_SIZE; ++i)
     {
         printf("%d", binaryNumber[i]);
     }
