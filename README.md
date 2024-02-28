@@ -1,2 +1,2 @@
 # Homework
-for first year university homework
+for first semester university homework
