@@ -1,0 +1,7 @@
+﻿  main.c
+C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\lessons\palindrom\palindrom\main.c(36,16): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\lessons\palindrom\palindrom\main.c(44,16): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\lessons\palindrom\palindrom\main.c(52,16): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\lessons\palindrom\palindrom\main.c(60,16): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\lessons\palindrom\palindrom\main.c(70,8): warning C4101: string: неиспользованная локальная переменная
+  palindrom.vcxproj -> C:\Users\Bulat\Desktop\ВАЖНОЕ\учеба\для проги\lessons\palindrom\x64\Debug\palindrom.exe
